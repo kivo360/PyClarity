@@ -1,0 +1,14 @@
+_commit: 000e2d6
+_src_path: gh:kivo360/faststrate
+author_email: kevin@geodexes.com
+author_name: Kevin Hill
+project_description: A Python package for clarity and transparency in data processing
+    and analysis.
+project_name: pyclarity
+project_type: package
+project_url: https://github.com/kevinhill/PyClarity
+python_version: '3.12'
+typing: strict
+with_conventional_commits: true
+with_rust_extensions: false
+with_typer_cli: true
