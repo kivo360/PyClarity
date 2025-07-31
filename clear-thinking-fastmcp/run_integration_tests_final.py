@@ -251,13 +251,11 @@ class FinalIntegrationTestRunner:
         input_data = ImpactPropagationInput(
             problem=self.test_problem,
             scenario="Migration from monolith to microservices",
-            change_description="Migration from monolith to microservices",
-            initial_impact_area="Application Architecture",
             session_id=self.session_id
         )
         
         assert input_data.problem == self.test_problem
-        assert input_data.change_description == "Migration from monolith to microservices"
+        assert input_data.scenario == "Migration from monolith to microservices"
         assert input_data.session_id == self.session_id
     
     def test_iterative_validation_integration(self):
@@ -269,14 +267,13 @@ class FinalIntegrationTestRunner:
         
         input_data = IterativeValidationInput(
             problem=self.test_problem,
-            hypothesis="Microservices will improve system scalability",
-            validation_methods=["Performance Testing", "Load Testing"],
+            scenario="Microservices will improve system scalability",
             session_id=self.session_id
         )
         
         assert input_data.problem == self.test_problem
-        assert input_data.hypothesis.startswith("Microservices")
-        assert len(input_data.validation_methods) >= 1
+        assert input_data.scenario.startswith("Microservices")
+        assert input_data.session_id == self.session_id
     
     def test_multi_perspective_integration(self):
         """Test Multi-Perspective Analysis tool integration"""
@@ -287,14 +284,13 @@ class FinalIntegrationTestRunner:
         
         input_data = MultiPerspectiveInput(
             problem=self.test_problem,
-            analysis_dimensions=["Technical", "Business", "User Experience"],
-            stakeholder_groups=["Development Team", "Product Management"],
+            scenario="Evaluating microservices architecture from multiple viewpoints",
             session_id=self.session_id
         )
         
         assert input_data.problem == self.test_problem
-        assert len(input_data.analysis_dimensions) >= 2
-        assert len(input_data.stakeholder_groups) >= 1
+        assert input_data.scenario.startswith("Evaluating")
+        assert input_data.session_id == self.session_id
     
     def test_all_imports(self):
         """Test that all 16 tools can be imported"""
