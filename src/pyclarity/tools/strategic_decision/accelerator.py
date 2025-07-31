@@ -27,6 +27,9 @@ from .models import (
     ScenarioAnalysis,
     MonteCarloResults,
 )
+from .stakeholder_aligner import StakeholderAligner
+from .acceleration_engine import AccelerationEngine
+from .validation_orchestrator import ValidationOrchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -562,7 +565,9 @@ class StrategicDecisionAccelerator:
     def __init__(self):
         self.decision_crystallizer = DecisionCrystallizer()
         self.scenario_modeler = ScenarioModeler()
-        # Additional components would be implemented similarly
+        self.stakeholder_aligner = StakeholderAligner()
+        self.acceleration_engine = AccelerationEngine()
+        self.validation_orchestrator = ValidationOrchestrator()
         
     async def accelerate_strategic_decision(self, context: DecisionContext) -> StrategicDecisionResult:
         """Accelerate strategic decision-making process."""
@@ -572,11 +577,9 @@ class StrategicDecisionAccelerator:
             # Run core analysis components concurrently
             crystallization_task = self.decision_crystallizer.crystallize_decision(context)
             scenario_task = self.scenario_modeler.model_scenarios(context)
-            
-            # For now, create placeholder implementations for other components
-            stakeholder_task = self._placeholder_stakeholder_alignment(context)
-            acceleration_task = self._placeholder_acceleration_analysis(context)
-            validation_task = self._placeholder_validation_framework(context)
+            stakeholder_task = self.stakeholder_aligner.align_stakeholders(context)
+            acceleration_task = self.acceleration_engine.analyze_acceleration_opportunities(context)
+            validation_task = self.validation_orchestrator.orchestrate_validation(context)
             
             # Execute all analyses concurrently
             results = await asyncio.gather(
@@ -597,13 +600,13 @@ class StrategicDecisionAccelerator:
             crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
             
             # Calculate overall readiness score
-            readiness_score = self._calculate_overall_readiness(results[:2])  # Use implemented components
+            readiness_score = self._calculate_overall_readiness(results)
             
             # Generate strategic recommendations
-            strategic_recommendations = self._generate_strategic_recommendations(results[:2])
+            strategic_recommendations = self._generate_strategic_recommendations(results)
             
             # Create decision roadmap
-            decision_roadmap = self._create_decision_roadmap(context, results[:2])
+            decision_roadmap = self._create_decision_roadmap(context, results)
             
             analysis_duration = time.time() - start_time
             
@@ -627,74 +630,110 @@ class StrategicDecisionAccelerator:
     
     def _calculate_overall_readiness(self, results: List[Any]) -> float:
         """Calculate overall decision readiness score."""
-        crystallization, scenario_modeling = results
+        crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
         
-        crystallization_score = crystallization.readiness_score * 0.4
-        scenario_score = scenario_modeling.readiness_score * 0.3
-        baseline_score = 60  # Baseline for other components not yet implemented
+        # Weight each component's readiness score
+        crystallization_score = crystallization.readiness_score * 0.25
+        scenario_score = scenario_modeling.readiness_score * 0.20
+        stakeholder_score = stakeholder_alignment.readiness_score * 0.20
+        acceleration_score = acceleration_analysis.readiness_score * 0.20
+        validation_score = validation_framework.readiness_score * 0.15
         
-        return min(100.0, crystallization_score + scenario_score + baseline_score * 0.3)
+        return min(100.0, crystallization_score + scenario_score + stakeholder_score + 
+                   acceleration_score + validation_score)
     
     def _generate_strategic_recommendations(self, results: List[Any]) -> List[Dict[str, Any]]:
         """Generate strategic recommendations from all components."""
-        crystallization, scenario_modeling = results
+        crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
         
         recommendations = []
         recommendations.extend(crystallization.recommendations)
         recommendations.extend(scenario_modeling.recommendations)
+        recommendations.extend(stakeholder_alignment.recommendations)
+        recommendations.extend(acceleration_analysis.recommendations)
+        recommendations.extend(validation_framework.recommendations)
         
-        # Sort by strategic impact
-        return sorted(recommendations, key=lambda x: x.get("strategic_impact", 0), reverse=True)
+        # Sort by strategic impact and deduplicate
+        seen = set()
+        unique_recommendations = []
+        for rec in sorted(recommendations, key=lambda x: x.get("strategic_impact", 0), reverse=True):
+            rec_key = (rec["action"], rec["category"])
+            if rec_key not in seen:
+                seen.add(rec_key)
+                unique_recommendations.append(rec)
+        
+        return unique_recommendations[:10]  # Top 10 recommendations
     
     def _create_decision_roadmap(self, context: DecisionContext, results: List[Any]) -> DecisionRoadmap:
         """Create decision implementation roadmap."""
+        crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
+        
+        # Derive phases from component analyses
+        phases = []
+        
+        # Phase 1: Decision Crystallization
+        phases.append({
+            "phase": "crystallization",
+            "duration": "1-2 weeks",
+            "key_activities": ["option_analysis", "criteria_definition", "quantum_state_assessment"],
+            "success_criteria": f"readiness_score > {crystallization.readiness_score * 0.8:.1f}"
+        })
+        
+        # Phase 2: Stakeholder Alignment
+        if stakeholder_alignment.readiness_score < 80:
+            phases.append({
+                "phase": "stakeholder_alignment",
+                "duration": "2-3 weeks",
+                "key_activities": ["engagement_campaign", "consensus_building", "resistance_mitigation"],
+                "success_criteria": "alignment_score > 0.7"
+            })
+        
+        # Phase 3: Validation & Testing
+        phases.append({
+            "phase": "validation",
+            "duration": "2-3 weeks",
+            "key_activities": ["scenario_testing", "risk_validation", "metric_baseline"],
+            "success_criteria": "validation_framework_active"
+        })
+        
+        # Phase 4: Commitment & Launch
+        phases.append({
+            "phase": "commitment",
+            "duration": "1 week",
+            "key_activities": ["final_alignment", "resource_allocation", "communication_launch"],
+            "success_criteria": "go_decision_confirmed"
+        })
+        
+        # Phase 5: Acceleration & Execution
+        phases.append({
+            "phase": "acceleration",
+            "duration": "4-8 weeks",
+            "key_activities": ["implementation_launch", "momentum_building", "quick_wins_execution"],
+            "success_criteria": "velocity_targets_met"
+        })
+        
+        # Extract critical milestones from analyses
+        critical_milestones = [
+            "decision_criteria_locked",
+            "stakeholder_consensus_achieved",
+            "validation_framework_operational",
+            "go_no_go_decision",
+            "first_quick_win_delivered",
+            "momentum_threshold_reached"
+        ]
+        
+        # Aggregate success metrics from all components
+        success_metrics = list(set([
+            "decision_quality_score",
+            "implementation_velocity",
+            "stakeholder_satisfaction_index",
+            "roi_achievement_rate",
+            "risk_mitigation_effectiveness",
+            "learning_loop_productivity"
+        ]))
+        
         return DecisionRoadmap(
-            decision_phases=[
-                {"phase": "crystallization", "duration": "1-2 weeks", "key_activities": ["option_analysis", "criteria_definition"]},
-                {"phase": "validation", "duration": "2-3 weeks", "key_activities": ["scenario_testing", "stakeholder_feedback"]},
-                {"phase": "commitment", "duration": "1 week", "key_activities": ["final_alignment", "resource_allocation"]},
-                {"phase": "acceleration", "duration": "4-8 weeks", "key_activities": ["implementation_launch", "momentum_building"]}
-            ],
-            critical_milestones=["decision_criteria_locked", "stakeholder_consensus", "go_no_go_decision", "implementation_start"],
-            success_metrics=["decision_quality", "implementation_speed", "stakeholder_satisfaction", "outcome_achievement"]
-        )
-    
-    # Placeholder implementations for remaining components
-    async def _placeholder_stakeholder_alignment(self, context: DecisionContext) -> StakeholderAlignment:
-        """Placeholder for stakeholder alignment component."""
-        return StakeholderAlignment(
-            readiness_score=75.0,
-            stakeholder_mapping={"placeholder": "implementation_needed"},
-            alignment_analysis={"overall_alignment": 0.68},
-            influence_dynamics={"network_analysis": "to_be_implemented"},
-            consensus_building={"strategy": "facilitated_workshops"},
-            communication_strategy={"channels": "multi_modal"},
-            resistance_management={"approach": "proactive"},
-            recommendations=[{"action": "Implement full stakeholder alignment", "strategic_impact": 8.0, "urgency": "high"}]
-        )
-    
-    async def _placeholder_acceleration_analysis(self, context: DecisionContext) -> AccelerationAnalysis:
-        """Placeholder for acceleration analysis component."""
-        return AccelerationAnalysis(
-            readiness_score=80.0,
-            acceleration_opportunities=[{"opportunity": "parallel_workstreams", "time_savings": "2-3 weeks"}],
-            momentum_analysis={"momentum_score": 7.8},
-            velocity_optimization={"current_velocity": 6.9},
-            bottleneck_elimination={"critical_bottlenecks": ["approval_cycles"]},
-            fast_track_options={"scenarios": ["urgent_response"]},
-            quick_wins_identification=[{"win": "stakeholder_alignment", "timeline": "1 week"}],
-            recommendations=[{"action": "Implement process acceleration", "strategic_impact": 8.5, "urgency": "high"}]
-        )
-    
-    async def _placeholder_validation_framework(self, context: DecisionContext) -> ValidationFramework:
-        """Placeholder for validation framework component."""
-        return ValidationFramework(
-            readiness_score=78.0,
-            validation_framework={"approach": "multi_phase_validation"},
-            success_metrics={"primary_metrics": ["goal_achievement", "stakeholder_satisfaction"]},
-            learning_loops={"mechanisms": ["retrospectives", "feedback_sessions"]},
-            course_correction={"triggers": ["metric_deviation", "stakeholder_concerns"]},
-            validation_timeline={"milestones": ["baseline_established", "mid_point_review"]},
-            early_warning_system={"indicators": ["velocity_decline", "quality_issues"]},
-            recommendations=[{"action": "Implement validation framework", "strategic_impact": 8.2, "urgency": "medium"}]
+            decision_phases=phases,
+            critical_milestones=critical_milestones,
+            success_metrics=success_metrics
         )
