@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Any, Optional, Set
 from enum import Enum
 
-from .base import BaseClearThinkingModel
+from .base import CognitiveToolBase, CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class PatternCategory(str, Enum):
@@ -123,7 +123,7 @@ class DesignAnalysis:
     principle_adherence: Dict[DesignPrinciple, float]
 
 
-class DesignPatternsModel(BaseClearThinkingModel):
+class DesignPatternsModel(CognitiveToolBase):
     """
     Design Patterns cognitive model for software architecture and design decisions.
     

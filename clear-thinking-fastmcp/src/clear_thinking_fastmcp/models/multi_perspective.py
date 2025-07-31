@@ -12,7 +12,7 @@ from typing import List, Dict, Optional, Literal, Any
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from enum import Enum
 
-from .base import ClearThinkingBaseModel
+from .base import CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class PerspectiveType(str, Enum):
@@ -238,10 +238,11 @@ class IntegrationOpportunity(BaseModel):
     )
 
 
-class MultiPerspectiveInput(ClearThinkingBaseModel):
+class MultiPerspectiveInput(CognitiveInputBase):
     """Input for Multi-Perspective Analysis."""
     
     scenario: str = Field(
+        default="",
         description="The situation or decision requiring multi-perspective analysis"
     )
     
@@ -300,7 +301,7 @@ class MultiPerspectiveInput(ClearThinkingBaseModel):
         }
 
 
-class MultiPerspectiveAnalysis(ClearThinkingBaseModel):
+class MultiPerspectiveAnalysis(CognitiveOutputBase):
     """Complete Multi-Perspective Analysis output."""
     
     input_scenario: str = Field(

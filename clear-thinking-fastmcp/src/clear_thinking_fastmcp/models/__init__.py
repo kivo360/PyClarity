@@ -29,15 +29,15 @@ from .sequential_thinking import (
     SequentialThinkingInput,
     SequentialThinkingOutput,
     ThoughtStep,
-    RevisionPoint
+    ThoughtRevision
 )
 
 from .collaborative_reasoning import (
     CollaborativeReasoningInput,
     CollaborativeReasoningOutput,
     PersonaType,
-    PersonaContribution,
-    DebateRound
+    PersonaPerspective,
+    CollaborativeDialogue
 )
 
 __all__ = [
@@ -58,14 +58,14 @@ __all__ = [
     "SequentialThinkingInput",
     "SequentialThinkingOutput",
     "ThoughtStep",
-    "RevisionPoint",
+    "ThoughtRevision",
     
     # Collaborative Reasoning
     "CollaborativeReasoningInput",
     "CollaborativeReasoningOutput",
     "PersonaType",
-    "PersonaContribution",
-    "DebateRound",
+    "PersonaPerspective",
+    "CollaborativeDialogue",
 ]
 
 __version__ = "2.0.0"

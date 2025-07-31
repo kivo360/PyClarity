@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Any, Optional, Tuple
 from enum import Enum
 
-from .base import BaseClearThinkingModel
+from .base import CognitiveToolBase, CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class VisualRepresentationType(str, Enum):
@@ -112,7 +112,7 @@ class VisualProblemSolving:
     solution_confidence: float
 
 
-class VisualReasoningModel(BaseClearThinkingModel):
+class VisualReasoningModel(CognitiveToolBase):
     """
     Visual Reasoning cognitive model for spatial and diagrammatic thinking.
     

@@ -62,6 +62,7 @@ class ReasoningStyle(str, Enum):
     PESSIMISTIC = "pessimistic"
     SYSTEMATIC = "systematic"
     INTUITIVE = "intuitive"
+    CRITICAL = "critical"
 
 
 class ConsensusStrategy(str, Enum):

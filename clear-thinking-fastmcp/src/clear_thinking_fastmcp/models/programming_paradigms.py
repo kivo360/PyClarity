@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Any, Optional, Set
 from enum import Enum
 
-from .base import BaseClearThinkingModel
+from .base import CognitiveToolBase, CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class ProgrammingParadigm(str, Enum):
@@ -126,7 +126,7 @@ class CodeStructureAnalysis:
     paradigm_consistency_score: float
 
 
-class ProgrammingParadigmsModel(BaseClearThinkingModel):
+class ProgrammingParadigmsModel(CognitiveToolBase):
     """
     Programming Paradigms cognitive model for paradigm analysis and selection.
     

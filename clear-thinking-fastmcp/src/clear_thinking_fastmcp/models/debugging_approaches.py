@@ -10,7 +10,7 @@ from typing import List, Dict, Any, Optional, Set
 from enum import Enum
 from datetime import datetime
 
-from .base import BaseClearThinkingModel
+from .base import CognitiveToolBase, CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class DebuggingStrategy(str, Enum):
@@ -170,7 +170,7 @@ class DebuggingRecommendation:
     risk_factors: List[str]
 
 
-class DebuggingApproachesModel(BaseClearThinkingModel):
+class DebuggingApproachesModel(CognitiveToolBase):
     """
     Debugging Approaches cognitive model for systematic troubleshooting.
     

@@ -197,15 +197,15 @@ class DecisionOption(BaseModel):
     
     @validator('scores')
     def validate_scores(cls, v):
-        """Validate scores are normalized"""
+        """Validate scores are reasonable (supports both 0-1 and 0-10 scales)"""
         if not v:
             raise ValueError("Scores dictionary cannot be empty")
         
         for criterion, score in v.items():
             if not isinstance(score, (int, float)):
                 raise ValueError(f"Score for '{criterion}' must be numeric")
-            if not 0.0 <= score <= 1.0:
-                raise ValueError(f"Score for '{criterion}' must be between 0.0 and 1.0")
+            if not 0.0 <= score <= 10.0:
+                raise ValueError(f"Score for '{criterion}' must be between 0.0 and 10.0")
         
         return v
     
@@ -285,8 +285,8 @@ class DecisionMatrix(BaseModel):
             for j, score in enumerate(row):
                 if not isinstance(score, (int, float)):
                     raise ValueError(f"Score at [{i}][{j}] must be numeric")
-                if not 0.0 <= score <= 1.0:
-                    raise ValueError(f"Score at [{i}][{j}] must be between 0.0 and 1.0")
+                if not 0.0 <= score <= 10.0:
+                    raise ValueError(f"Score at [{i}][{j}] must be between 0.0 and 10.0")
         
         return v
     
@@ -708,8 +708,8 @@ class DecisionFrameworkOutput(CognitiveOutputBase):
             score = ranking.get('score')
             if not isinstance(score, (int, float)):
                 raise ValueError(f"Ranking {i} score must be numeric")
-            if not 0.0 <= score <= 1.0:
-                raise ValueError(f"Ranking {i} score must be between 0.0 and 1.0")
+            if not 0.0 <= score <= 10.0:
+                raise ValueError(f"Ranking {i} score must be between 0.0 and 10.0")
             
             # Validate rank is positive integer
             rank = ranking.get('rank')

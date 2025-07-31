@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Any, Optional, Set, Tuple
 from enum import Enum
 
-from .base import BaseClearThinkingModel
+from .base import CognitiveToolBase, CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class ArgumentType(str, Enum):
@@ -180,7 +180,7 @@ class DebateStructure:
     quality_assessment: Dict[str, float]
 
 
-class StructuredArgumentationModel(BaseClearThinkingModel):
+class StructuredArgumentationModel(CognitiveToolBase):
     """
     Structured Argumentation cognitive model for logic analysis and construction.
     

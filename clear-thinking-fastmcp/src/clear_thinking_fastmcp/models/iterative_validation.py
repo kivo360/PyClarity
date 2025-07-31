@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field, field_validator, ConfigDict
 from enum import Enum
 from datetime import datetime
 
-from .base import ClearThinkingBaseModel
+from .base import CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class ValidationStatus(str, Enum):
@@ -268,10 +268,11 @@ class ValidationCycle(BaseModel):
     )
 
 
-class IterativeValidationInput(ClearThinkingBaseModel):
+class IterativeValidationInput(CognitiveInputBase):
     """Input for Iterative Validation Cycle analysis."""
     
     scenario: str = Field(
+        default="",
         description="The problem or question requiring iterative validation"
     )
     
@@ -334,7 +335,7 @@ class IterativeValidationInput(ClearThinkingBaseModel):
         }
 
 
-class IterativeValidationAnalysis(ClearThinkingBaseModel):
+class IterativeValidationAnalysis(CognitiveOutputBase):
     """Complete Iterative Validation Cycle analysis output."""
     
     input_scenario: str = Field(

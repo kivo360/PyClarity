@@ -12,7 +12,7 @@ from typing import List, Dict, Optional, Literal, Any
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from enum import Enum
 
-from .base import ClearThinkingBaseModel
+from .base import CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class ReadinessLevel(str, Enum):
@@ -203,7 +203,7 @@ class ProgressionPlan(BaseModel):
     )
 
 
-class SequentialReadinessInput(ClearThinkingBaseModel):
+class SequentialReadinessInput(CognitiveInputBase):
     """Input for Sequential Readiness Framework analysis."""
     
     scenario: str = Field(
@@ -271,7 +271,7 @@ class SequentialReadinessInput(ClearThinkingBaseModel):
         }
 
 
-class SequentialReadinessAnalysis(ClearThinkingBaseModel):
+class SequentialReadinessAnalysis(CognitiveOutputBase):
     """Complete Sequential Readiness Framework analysis output."""
     
     input_scenario: str = Field(

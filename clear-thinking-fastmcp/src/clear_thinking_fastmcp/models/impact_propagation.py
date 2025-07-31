@@ -12,7 +12,7 @@ from typing import List, Dict, Optional, Literal, Any
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from enum import Enum
 
-from .base import ClearThinkingBaseModel
+from .base import CognitiveInputBase, CognitiveOutputBase, ComplexityLevel
 
 
 class ImpactType(str, Enum):
@@ -290,10 +290,11 @@ class InterventionPoint(BaseModel):
     )
 
 
-class ImpactPropagationInput(ClearThinkingBaseModel):
+class ImpactPropagationInput(CognitiveInputBase):
     """Input for Impact Propagation Mapping analysis."""
     
     scenario: str = Field(
+        default="",
         description="The change or event to analyze for impact propagation"
     )
     
@@ -359,7 +360,7 @@ class ImpactPropagationInput(ClearThinkingBaseModel):
         }
 
 
-class ImpactPropagationAnalysis(ClearThinkingBaseModel):
+class ImpactPropagationAnalysis(CognitiveOutputBase):
     """Complete Impact Propagation Mapping analysis output."""
     
     input_scenario: str = Field(

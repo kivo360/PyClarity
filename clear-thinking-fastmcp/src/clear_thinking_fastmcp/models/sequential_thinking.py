@@ -14,7 +14,7 @@ Agent: pydantic-model-engineer
 Status: ACTIVE - Sequential Thinking implementation complete
 """
 
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import List, Dict, Any, Optional, Union, Literal
 from enum import Enum
 from datetime import datetime
@@ -176,16 +176,20 @@ class ThoughtStep(BaseModel):
     )
     
     # Apply validators
-    _validate_confidence = validator('confidence_score', allow_reuse=True)(
-        CognitiveValidators.validate_confidence_score
-    )
+    @field_validator('confidence_score')
+    @classmethod
+    def validate_confidence(cls, v):
+        """Validate confidence score"""
+        return CognitiveValidators.validate_confidence_score(cls, v)
     
-    @validator('content')
+    @field_validator('content')
+    @classmethod
     def validate_content(cls, v):
         """Validate thought step content is meaningful"""
         return CognitiveValidators.validate_string_not_empty(cls, v, "content")
     
-    @validator('dependencies')
+    @field_validator('dependencies')
+    @classmethod
     def validate_dependencies(cls, v):
         """Validate dependencies list"""
         if v and len(set(v)) != len(v):
@@ -248,7 +252,8 @@ class ThoughtRevision(BaseModel):
         description="When this revision was made"
     )
     
-    @validator('original_content', 'revised_content')
+    @field_validator('original_content', 'revised_content')
+    @classmethod
     def validate_content_fields(cls, v):
         """Validate content fields are meaningful"""
         return CognitiveValidators.validate_string_not_empty(cls, v, "content")
@@ -318,12 +323,14 @@ class ThoughtBranch(BaseModel):
         description="When this branch was created"
     )
     
-    @validator('branch_name')
+    @field_validator('branch_name')
+    @classmethod
     def validate_branch_name(cls, v):
         """Validate branch name is meaningful"""
         return CognitiveValidators.validate_string_not_empty(cls, v, "branch_name")
     
-    @validator('steps')
+    @field_validator('steps')
+    @classmethod
     def validate_steps_order(cls, v):
         """Validate steps are properly ordered"""
         if v:
@@ -425,7 +432,8 @@ class SequentialThinkingInput(CognitiveInputBase):
         example=["logical consistency", "empirical support", "practical feasibility"]
     )
     
-    @validator('step_types_priority')
+    @field_validator('step_types_priority')
+    @classmethod
     def validate_step_types_priority(cls, v):
         """Validate step types priority list"""
         if v is not None:
@@ -439,8 +447,9 @@ class SequentialThinkingInput(CognitiveInputBase):
             return unique_types
         return v
     
-    @validator('domain_constraints', 'evidence_sources', 'validation_criteria')
-    def validate_string_lists(cls, v, field):
+    @field_validator('domain_constraints', 'evidence_sources', 'validation_criteria')
+    @classmethod
+    def validate_string_lists(cls, v):
         """Validate string list fields"""
         if v is not None:
             cleaned = [item.strip() for item in v if item.strip()]
@@ -541,15 +550,20 @@ class SequentialThinkingOutput(CognitiveOutputBase):
     )
     
     # Apply validators
-    _validate_conclusion_confidence = validator('conclusion_confidence', allow_reuse=True)(
-        CognitiveValidators.validate_confidence_score
-    )
+    @field_validator('conclusion_confidence')
+    @classmethod
+    def validate_conclusion_confidence(cls, v):
+        """Validate conclusion confidence score"""
+        return CognitiveValidators.validate_confidence_score(cls, v)
     
-    _validate_quality_score = validator('reasoning_quality_score', allow_reuse=True)(
-        CognitiveValidators.validate_confidence_score
-    )
+    @field_validator('reasoning_quality_score')
+    @classmethod
+    def validate_quality_score(cls, v):
+        """Validate reasoning quality score"""
+        return CognitiveValidators.validate_confidence_score(cls, v)
     
-    @validator('reasoning_chain')
+    @field_validator('reasoning_chain')
+    @classmethod
     def validate_reasoning_chain(cls, v):
         """Validate reasoning chain structure and order"""
         if not v:
@@ -568,12 +582,14 @@ class SequentialThinkingOutput(CognitiveOutputBase):
         
         return v
     
-    @validator('final_conclusion')
+    @field_validator('final_conclusion')
+    @classmethod
     def validate_final_conclusion(cls, v):
         """Validate final conclusion is comprehensive"""
         return CognitiveValidators.validate_string_not_empty(cls, v, "final_conclusion")
     
-    @validator('branches_explored')
+    @field_validator('branches_explored')
+    @classmethod
     def validate_branches_explored(cls, v):
         """Validate branch exploration data"""
         if v:
@@ -583,11 +599,11 @@ class SequentialThinkingOutput(CognitiveOutputBase):
                 raise ValueError("Branch IDs must be unique")
         return v
     
-    @root_validator
-    def validate_consistency(cls, values):
+    @model_validator(mode='after')
+    def validate_consistency(self):
         """Validate consistency across fields"""
-        reasoning_chain = values.get('reasoning_chain', [])
-        branches_explored = values.get('branches_explored', [])
+        reasoning_chain = self.reasoning_chain
+        branches_explored = self.branches_explored or []
         
         # Count step types
         step_type_counts = {}
@@ -595,7 +611,7 @@ class SequentialThinkingOutput(CognitiveOutputBase):
             step_type = step.step_type.value
             step_type_counts[step_type] = step_type_counts.get(step_type, 0) + 1
         
-        values['step_type_distribution'] = step_type_counts
+        self.step_type_distribution = step_type_counts
         
         # Calculate branch statistics if branches exist
         if branches_explored:
@@ -603,14 +619,14 @@ class SequentialThinkingOutput(CognitiveOutputBase):
             active_branches = sum(1 for branch in branches_explored if branch.is_active)
             avg_branch_confidence = sum(branch.branch_confidence for branch in branches_explored) / len(branches_explored)
             
-            values['branch_statistics'] = {
+            self.branch_statistics = {
                 'total_branches': len(branches_explored),
                 'active_branches': active_branches,
                 'total_branch_steps': total_steps_in_branches,
                 'average_branch_confidence': round(avg_branch_confidence, 3)
             }
         
-        return values
+        return self
     
     def get_highest_confidence_steps(self, n: int = 3) -> List[ThoughtStep]:
         """Get N highest confidence reasoning steps"""

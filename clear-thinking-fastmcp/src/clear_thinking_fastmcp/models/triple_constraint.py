@@ -11,7 +11,7 @@ from typing import List, Dict, Optional, Literal, Any
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from enum import Enum
 
-from .base import ClearThinkingBaseModel
+from .base import CognitiveToolBase, CognitiveInputBase, CognitiveOutputBase
 
 
 class ConstraintDimension(str, Enum):
@@ -134,7 +134,7 @@ class OptimizationRecommendation(BaseModel):
     )
 
 
-class TripleConstraintInput(ClearThinkingBaseModel):
+class TripleConstraintInput(CognitiveInputBase):
     """Input for Triple Constraint Thinking analysis."""
     
     scenario: str = Field(
@@ -190,7 +190,7 @@ class TripleConstraintInput(ClearThinkingBaseModel):
         }
 
 
-class TripleConstraintAnalysis(ClearThinkingBaseModel):
+class TripleConstraintAnalysis(CognitiveOutputBase):
     """Complete Triple Constraint Thinking analysis output."""
     
     input_scenario: str = Field(
