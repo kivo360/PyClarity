@@ -90,6 +90,36 @@ def command_name(
 ### Commit Convention
 Project uses Conventional Commits with Commitizen for automated versioning and changelog generation. All commits must follow the conventional commit format.
 
+#### Conventional Commit Format
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+#### Types
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing tests or correcting existing tests
+- **build**: Changes that affect the build system or external dependencies
+- **ci**: Changes to CI configuration files and scripts
+- **chore**: Other changes that don't modify src or test files
+- **revert**: Reverts a previous commit
+
+#### Examples
+```
+feat(auth): add OAuth2 authentication
+fix(cli): resolve argument parsing issue
+docs: update installation instructions
+test(models): add unit tests for validation logic
+```
+
 ### Key Configuration Files
 - `pyproject.toml`: Central configuration for all tools (dependencies, build, testing, linting)
 - `.pre-commit-config.yaml`: Code quality automation rules

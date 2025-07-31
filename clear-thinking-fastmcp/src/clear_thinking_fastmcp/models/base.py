@@ -7,7 +7,7 @@ Agent: pydantic-model-engineer
 Status: ACTIVE - Base model implementation complete
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, ConfigDict
 from typing import List, Dict, Any, Optional, Union
 from enum import Enum
 from datetime import datetime
@@ -18,20 +18,21 @@ import json
 class CognitiveToolBase(BaseModel):
     """Base model for all cognitive tools with FastMCP compatibility"""
     
-    class Config:
+    model_config = ConfigDict(
         # Enable JSON serialization for complex types
         json_encoders = {
             datetime: lambda v: v.isoformat(),
             uuid.UUID: lambda v: str(v),
-        }
+        },
         # Validate on assignment
-        validate_assignment = True
+        validate_assignment = True,
         # Use enum values in serialization
-        use_enum_values = True
-        # Allow population by field name or alias
-        allow_population_by_field_name = True
+        use_enum_values = True,
+        # Allow population by field name or alias (V2 name)
+        populate_by_name = True,
         # Exclude None values by default
         exclude_none = True
+    )
 
 
 class CognitiveInputBase(CognitiveToolBase):
