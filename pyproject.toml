@@ -39,6 +39,7 @@ dependencies = [
   "loguru>=0.7.3",
   "anthropic>=0.60.0",
   "groq>=0.30.0",
+  "reward-kit[trl]>=0.4.1",
 ]
 
 [project.scripts]  # https://docs.astral.sh/uv/concepts/projects/config/#command-line-interfaces
