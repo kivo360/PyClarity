@@ -6,28 +6,27 @@ First Principles, Opportunity Cost, Error Propagation, Rubber Duck Debugging,
 Pareto Principle, and Occam's Razor approaches.
 """
 
+from .analyzer import MentalModelsAnalyzer
 from .models import (
     # Enums
     ComplexityLevel,
-    MentalModelType,
-    # Supporting models
-    MentalModelInsight,
     MentalModelAssumption,
     # Main models
     MentalModelContext,
+    # Supporting models
+    MentalModelInsight,
     MentalModelResult,
+    MentalModelType,
     # Utilities
     MentalModelUtils,
 )
-
-from .analyzer import MentalModelsAnalyzer
 
 __all__ = [
     # Enums
     "ComplexityLevel",
     "MentalModelType",
     # Supporting models
-    "MentalModelInsight", 
+    "MentalModelInsight",
     "MentalModelAssumption",
     # Main models
     "MentalModelContext",

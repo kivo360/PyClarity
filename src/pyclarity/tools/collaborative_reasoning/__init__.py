@@ -6,30 +6,29 @@ stakeholder perspective analysis, consensus building, conflict resolution,
 role-based decision making, and team dynamics modeling.
 """
 
+from .analyzer import CollaborativeReasoningAnalyzer
 from .models import (
+    CollaborativeDialogue,
+    # Main models
+    CollaborativeReasoningContext,
+    CollaborativeReasoningResult,
     # Enums
     ComplexityLevel,
-    PersonaType,
-    ReasoningStyle,
+    ConsensusResult,
     ConsensusStrategy,
     DialogueStyle,
     # Supporting models
     Persona,
     PersonaPerspective,
-    CollaborativeDialogue,
-    ConsensusResult,
-    # Main models
-    CollaborativeReasoningContext,
-    CollaborativeReasoningResult,
+    PersonaType,
+    ReasoningStyle,
 )
-
-from .analyzer import CollaborativeReasoningAnalyzer
 
 __all__ = [
     # Enums
     "ComplexityLevel",
     "PersonaType",
-    "ReasoningStyle", 
+    "ReasoningStyle",
     "ConsensusStrategy",
     "DialogueStyle",
     # Supporting models

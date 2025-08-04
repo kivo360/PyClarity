@@ -1,6 +1,7 @@
 """PyClarity CLI with MCP server support."""
 
 import asyncio
+
 import typer
 from rich import print as rprint
 from rich.console import Console
@@ -23,14 +24,14 @@ def server(
 ) -> None:
     """Start the PyClarity MCP server."""
     from pyclarity.server.mcp_server import start_server
-    
-    console.print(f"[bold green]Starting PyClarity MCP Server[/bold green]")
+
+    console.print("[bold green]Starting PyClarity MCP Server[/bold green]")
     console.print(f"Host: {host}")
     console.print(f"Port: {port}")
     console.print(f"Debug: {debug}")
     console.print("Available cognitive tools:")
     console.print("  • Mental Models")
-    console.print("  • Sequential Thinking") 
+    console.print("  • Sequential Thinking")
     console.print("  • Decision Framework")
     console.print("  • Scientific Method")
     console.print("  • Design Patterns")
@@ -41,7 +42,7 @@ def server(
     console.print("  • Metacognitive Monitoring")
     console.print("  • Collaborative Reasoning")
     console.print("  • Impact Propagation")
-    
+
     try:
         asyncio.run(start_server(host=host, port=port, debug=debug))
     except KeyboardInterrupt:
@@ -55,15 +56,15 @@ def server(
 def list_tools() -> None:
     """List all available cognitive tools."""
     from pyclarity.tools import __all__
-    
+
     console.print("[bold blue]PyClarity Cognitive Tools[/bold blue]")
     console.print("\n[bold]Analyzers:[/bold]")
-    
+
     analyzers = [tool for tool in __all__ if tool.endswith("Analyzer")]
     for analyzer in sorted(analyzers):
         tool_name = analyzer.replace("Analyzer", "").replace("_", " ").title()
         console.print(f"  • {tool_name}")
-    
+
     console.print(f"\n[dim]Total: {len(analyzers)} cognitive tools available[/dim]")
 
 
@@ -77,7 +78,7 @@ def analyze(
     console.print(f"[bold blue]Analyzing with {tool}[/bold blue]")
     console.print(f"Problem: {problem}")
     console.print(f"Complexity: {complexity}")
-    
+
     # This would integrate with the actual analyzers
     console.print("[yellow]Analysis functionality coming soon![/yellow]")
     console.print("[dim]For now, use the MCP server mode: pyclarity server[/dim]")

@@ -614,7 +614,7 @@ Return the optimized features in the same JSON format."""
 
 
 def main():
-    """Main entry point"""
+    """Run the enhanced LLM optimizer."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Enhanced LLM Feature Optimizer")

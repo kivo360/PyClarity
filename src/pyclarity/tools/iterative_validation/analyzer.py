@@ -5,44 +5,44 @@ Implements systematic hypothesis-test-learn-refine cycles for continuous improve
 """
 
 import asyncio
-from typing import List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional
 
 from ..base import BaseCognitiveAnalyzer
 from .models import (
+    ComplexityLevel,
+    ConfidenceLevel,
+    Hypothesis,
     IterativeValidationContext,
     IterativeValidationResult,
-    Hypothesis,
+    Learning,
+    LearningType,
+    Refinement,
     TestDesign,
     TestResults,
-    Learning,
-    Refinement,
+    TestType,
     ValidationCycle,
     ValidationStatus,
-    TestType,
-    ConfidenceLevel,
-    LearningType,
-    ComplexityLevel
 )
 
 
 class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
     """
     Analyzer for iterative validation cycles.
-    
+
     Guides through systematic hypothesis formation, testing, learning extraction,
     and refinement for continuous improvement in any domain.
     """
-    
+
     async def analyze(
-        self, 
+        self,
         context: IterativeValidationContext
     ) -> IterativeValidationResult:
         """
         Perform iterative validation analysis.
-        
+
         Args:
             context: The validation scenario and parameters
-            
+
         Returns:
             IterativeValidationResult with complete validation analysis
         """
@@ -51,17 +51,17 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             initial_hypothesis = await self._generate_initial_hypothesis(context)
         else:
             initial_hypothesis = context.initial_hypothesis
-        
+
         # Initialize validation cycles
         validation_cycles = context.previous_cycles or []
         current_hypothesis = initial_hypothesis
         cumulative_learnings = []
         confidence_progression = {}
         key_pivots = []
-        
+
         # Determine number of cycles based on complexity and constraints
         max_cycles = context.max_iterations or self._determine_max_cycles(context)
-        
+
         # Run validation cycles
         for cycle_num in range(len(validation_cycles) + 1, max_cycles + 1):
             # Design test for current hypothesis
@@ -70,14 +70,14 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 context,
                 validation_cycles
             )
-            
+
             # Simulate test execution and results
             test_results = await self._simulate_test_results(
                 current_hypothesis,
                 test_design,
                 context
             )
-            
+
             # Extract learnings from results
             learnings = await self._extract_learnings(
                 current_hypothesis,
@@ -85,14 +85,14 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 context
             )
             cumulative_learnings.extend(learnings)
-            
+
             # Generate refinements based on learnings
             refinements = await self._generate_refinements(
                 current_hypothesis,
                 learnings,
                 context
             )
-            
+
             # Create validation cycle
             cycle = ValidationCycle(
                 cycle_number=cycle_num,
@@ -105,16 +105,16 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 duration=f"Cycle {cycle_num} duration"
             )
             validation_cycles.append(cycle)
-            
+
             # Track confidence progression
             confidence_progression[cycle_num] = test_results.confidence_in_results
-            
+
             # Check for pivots
             if self._is_pivot(current_hypothesis, refinements):
                 key_pivots.append(
                     f"Cycle {cycle_num}: {refinements[0].refinement_description}"
                 )
-            
+
             # Refine hypothesis for next cycle
             if refinements and cycle_num < max_cycles:
                 current_hypothesis = await self._refine_hypothesis(
@@ -122,25 +122,25 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                     refinements,
                     learnings
                 )
-            
+
             # Check if target confidence reached
-            if (context.target_confidence and 
+            if (context.target_confidence and
                 test_results.confidence_in_results == context.target_confidence):
                 break
-        
+
         # Analyze convergence
         convergence_analysis = await self._analyze_convergence(
             validation_cycles,
             confidence_progression
         )
-        
+
         # Identify remaining uncertainties
         remaining_uncertainties = await self._identify_uncertainties(
             current_hypothesis,
             cumulative_learnings,
             context
         )
-        
+
         # Generate recommendations
         recommended_next_steps = await self._generate_recommendations(
             current_hypothesis,
@@ -148,30 +148,30 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             remaining_uncertainties,
             context
         )
-        
+
         # Analyze success and failure factors
         success_factors = await self._identify_success_factors(validation_cycles)
         failure_points = await self._identify_failure_points(validation_cycles)
-        
+
         # Extract methodology insights
         methodology_insights = await self._extract_methodology_insights(
             validation_cycles,
             context
         )
-        
+
         # Calculate overall confidence
         confidence_score = self._calculate_overall_confidence(
             confidence_progression,
             cumulative_learnings
         )
-        
+
         # Generate overall assessment
         overall_assessment = await self._generate_overall_assessment(
             validation_cycles,
             convergence_analysis,
             confidence_score
         )
-        
+
         return IterativeValidationResult(
             input_scenario=context.scenario,
             validation_cycles=validation_cycles,
@@ -188,7 +188,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             overall_assessment=overall_assessment,
             confidence_score=confidence_score
         )
-    
+
     async def _generate_initial_hypothesis(
         self,
         context: IterativeValidationContext
@@ -196,7 +196,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
         """Generate initial hypothesis from scenario."""
         # Extract key elements from scenario
         scenario_analysis = f"Analyzing: {context.scenario}"
-        
+
         # Generate hypothesis based on domain and scenario
         if "pricing" in context.scenario.lower():
             statement = "The proposed pricing model will achieve target adoption rates"
@@ -234,7 +234,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 "Key metrics show improvement",
                 "Stakeholder satisfaction is achieved"
             ]
-        
+
         return Hypothesis(
             statement=statement,
             assumptions=assumptions,
@@ -247,12 +247,12 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 "Success criteria may need refinement"
             ]
         )
-    
+
     async def _design_test(
         self,
         hypothesis: Hypothesis,
         context: IterativeValidationContext,
-        previous_cycles: List[ValidationCycle]
+        previous_cycles: list[ValidationCycle]
     ) -> TestDesign:
         """Design test for hypothesis validation."""
         # Select appropriate test type
@@ -264,7 +264,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             test_type = TestType.PROTOTYPE
         else:
             test_type = TestType.EXPERIMENT
-        
+
         # Define methodology based on test type
         methodology_map = {
             TestType.A_B_TEST: "Split testing with control and variant groups",
@@ -273,18 +273,18 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             TestType.PILOT: "Limited rollout to test in real conditions",
             TestType.USER_TEST: "Direct user testing with feedback collection"
         }
-        
+
         methodology = methodology_map.get(
             test_type,
             "Systematic testing approach"
         )
-        
+
         # Define metrics based on success criteria
         metrics = [
             f"Metric for: {criterion}"
             for criterion in hypothesis.success_criteria[:3]
         ]
-        
+
         return TestDesign(
             test_type=test_type,
             methodology=methodology,
@@ -303,7 +303,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             ],
             success_threshold="Defined success threshold"
         )
-    
+
     async def _simulate_test_results(
         self,
         hypothesis: Hypothesis,
@@ -321,19 +321,19 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
         else:
             confidence = ConfidenceLevel.MEDIUM
             success_rate = 0.7
-        
+
         # Generate test results
         key_findings = [
             f"Primary metric achieved {success_rate*100:.0f}% of target",
             "User feedback indicates positive reception",
             "Some assumptions validated, others need revision"
         ]
-        
+
         metrics_achieved = {
             metric: f"{success_rate*100:.0f}% of target"
             for metric in test_design.metrics
         }
-        
+
         return TestResults(
             raw_data={
                 "sample_size": 100,
@@ -354,16 +354,16 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 "Single market segment tested"
             ]
         )
-    
+
     async def _extract_learnings(
         self,
         hypothesis: Hypothesis,
         test_results: TestResults,
         context: IterativeValidationContext
-    ) -> List[Learning]:
+    ) -> list[Learning]:
         """Extract learnings from test results."""
         learnings = []
-        
+
         # Analyze primary findings
         if any("achieved" in finding for finding in test_results.key_findings):
             learnings.append(Learning(
@@ -382,7 +382,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                     "Iterate on weak performing areas"
                 ]
             ))
-        
+
         # Analyze unexpected observations
         if test_results.unexpected_observations:
             learnings.append(Learning(
@@ -401,18 +401,18 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                     "Update market research"
                 ]
             ))
-        
+
         return learnings
-    
+
     async def _generate_refinements(
         self,
         hypothesis: Hypothesis,
-        learnings: List[Learning],
+        learnings: list[Learning],
         context: IterativeValidationContext
-    ) -> List[Refinement]:
+    ) -> list[Refinement]:
         """Generate refinements based on learnings."""
         refinements = []
-        
+
         for learning in learnings:
             if learning.learning_type == LearningType.PARTIAL:
                 refinements.append(Refinement(
@@ -438,9 +438,9 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                         "Design tests for new opportunities"
                     ]
                 ))
-        
+
         return refinements
-    
+
     def _determine_max_cycles(self, context: IterativeValidationContext) -> int:
         """Determine maximum cycles based on complexity."""
         if context.complexity_level == ComplexityLevel.SIMPLE:
@@ -449,11 +449,11 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             return 5
         else:
             return 3
-    
+
     def _is_pivot(
         self,
         hypothesis: Hypothesis,
-        refinements: List[Refinement]
+        refinements: list[Refinement]
     ) -> bool:
         """Check if refinements constitute a major pivot."""
         return any(
@@ -461,19 +461,19 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             "major change" in r.rationale.lower()
             for r in refinements
         )
-    
+
     async def _refine_hypothesis(
         self,
         current: Hypothesis,
-        refinements: List[Refinement],
-        learnings: List[Learning]
+        refinements: list[Refinement],
+        learnings: list[Learning]
     ) -> Hypothesis:
         """Create refined hypothesis for next cycle."""
         # Update statement based on refinements
         refined_statement = current.statement
         if refinements:
             refined_statement = f"Refined: {current.statement} with adjustments"
-        
+
         # Update assumptions based on learnings
         refined_assumptions = current.assumptions.copy()
         for learning in learnings:
@@ -488,7 +488,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 refined_assumptions.append(
                     f"New insight: {learning.key_insight}"
                 )
-        
+
         # Update confidence based on learnings
         confidence_map = {
             LearningType.CONFIRMATION: ConfidenceLevel.HIGH,
@@ -496,31 +496,31 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             LearningType.REFUTATION: ConfidenceLevel.LOW,
             LearningType.UNEXPECTED: ConfidenceLevel.MEDIUM
         }
-        
+
         new_confidence = confidence_map.get(
             learnings[0].learning_type if learnings else LearningType.PARTIAL,
             current.confidence_level
         )
-        
+
         return Hypothesis(
             statement=refined_statement,
             assumptions=refined_assumptions[:5],  # Keep manageable
             success_criteria=current.success_criteria,
             confidence_level=new_confidence,
-            rationale=f"Refined based on cycle learnings",
+            rationale="Refined based on cycle learnings",
             risks=current.risks,
             related_hypotheses=current.related_hypotheses
         )
-    
+
     async def _analyze_convergence(
         self,
-        cycles: List[ValidationCycle],
-        confidence_progression: Dict[int, ConfidenceLevel]
+        cycles: list[ValidationCycle],
+        confidence_progression: dict[int, ConfidenceLevel]
     ) -> str:
         """Analyze convergence toward validated solution."""
         if not cycles:
             return "No cycles completed yet"
-        
+
         # Analyze confidence trend
         confidence_values = list(confidence_progression.values())
         if all(c == ConfidenceLevel.HIGH for c in confidence_values[-2:]):
@@ -529,57 +529,57 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             trend = "Positive convergence trend"
         else:
             trend = "Limited convergence observed"
-        
+
         # Analyze learning stability
         recent_learnings = cycles[-1].learnings if cycles else []
         learning_types = [l.learning_type for l in recent_learnings]
-        
+
         if LearningType.CONFIRMATION in learning_types:
             stability = "hypothesis stabilizing"
         elif LearningType.UNEXPECTED in learning_types:
             stability = "new directions emerging"
         else:
             stability = "continued iteration needed"
-        
+
         return f"{trend} with {stability}. {len(cycles)} cycles completed with progressive refinement."
-    
+
     async def _identify_uncertainties(
         self,
         hypothesis: Hypothesis,
-        learnings: List[Learning],
+        learnings: list[Learning],
         context: IterativeValidationContext
-    ) -> List[str]:
+    ) -> list[str]:
         """Identify remaining uncertainties."""
         uncertainties = []
-        
+
         # Check unvalidated assumptions
         validated_assumptions = set()
         for learning in learnings:
             if learning.learning_type == LearningType.CONFIRMATION:
                 validated_assumptions.update(learning.supporting_evidence)
-        
+
         for assumption in hypothesis.assumptions:
             if assumption not in validated_assumptions:
                 uncertainties.append(f"Assumption not fully validated: {assumption}")
-        
+
         # Add domain-specific uncertainties
         if "market" in context.scenario.lower():
             uncertainties.append("Long-term market dynamics remain uncertain")
         if "technical" in context.scenario.lower():
             uncertainties.append("Scalability under real-world conditions")
-        
+
         return uncertainties[:5]  # Top uncertainties
-    
+
     async def _generate_recommendations(
         self,
         hypothesis: Hypothesis,
-        cycles: List[ValidationCycle],
-        uncertainties: List[str],
+        cycles: list[ValidationCycle],
+        uncertainties: list[str],
         context: IterativeValidationContext
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate next step recommendations."""
         recommendations = []
-        
+
         # Based on confidence level
         if hypothesis.confidence_level == ConfidenceLevel.HIGH:
             recommendations.append("Proceed to full implementation with monitoring")
@@ -590,111 +590,111 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
         else:
             recommendations.append("Reconsider fundamental assumptions")
             recommendations.append("Explore alternative approaches")
-        
+
         # Address specific uncertainties
         for uncertainty in uncertainties[:2]:
             recommendations.append(f"Design targeted test for: {uncertainty}")
-        
+
         return recommendations
-    
+
     async def _identify_success_factors(
         self,
-        cycles: List[ValidationCycle]
-    ) -> List[str]:
+        cycles: list[ValidationCycle]
+    ) -> list[str]:
         """Identify factors contributing to success."""
         success_factors = []
-        
+
         for cycle in cycles:
             # Check for positive outcomes
             if any(l.learning_type == LearningType.CONFIRMATION for l in cycle.learnings):
                 success_factors.append(
                     f"Cycle {cycle.cycle_number}: Effective {cycle.test_design.test_type} methodology"
                 )
-            
+
             # Check for useful unexpected findings
             if any(l.learning_type == LearningType.UNEXPECTED for l in cycle.learnings):
                 success_factors.append(
                     f"Cycle {cycle.cycle_number}: Openness to unexpected discoveries"
                 )
-        
+
         # General success factors
         success_factors.extend([
             "Systematic approach to validation",
             "Clear success criteria definition",
             "Iterative refinement based on evidence"
         ])
-        
+
         return success_factors[:5]
-    
+
     async def _identify_failure_points(
         self,
-        cycles: List[ValidationCycle]
-    ) -> List[str]:
+        cycles: list[ValidationCycle]
+    ) -> list[str]:
         """Identify where validations struggled."""
         failure_points = []
-        
+
         for cycle in cycles:
             # Check for refutations
             if any(l.learning_type == LearningType.REFUTATION for l in cycle.learnings):
                 failure_points.append(
                     f"Cycle {cycle.cycle_number}: Hypothesis refuted"
                 )
-            
+
             # Check for low confidence
             if cycle.test_results.confidence_in_results in [ConfidenceLevel.LOW, ConfidenceLevel.VERY_LOW]:
                 failure_points.append(
                     f"Cycle {cycle.cycle_number}: Low confidence in results"
                 )
-            
+
             # Check limitations
             if len(cycle.test_results.limitations) > 3:
                 failure_points.append(
                     f"Cycle {cycle.cycle_number}: Significant test limitations"
                 )
-        
+
         return failure_points
-    
+
     async def _extract_methodology_insights(
         self,
-        cycles: List[ValidationCycle],
+        cycles: list[ValidationCycle],
         context: IterativeValidationContext
-    ) -> List[str]:
+    ) -> list[str]:
         """Extract insights about the validation process."""
         insights = []
-        
+
         # Test type effectiveness
         test_types_used = [c.test_design.test_type for c in cycles]
         if len(set(test_types_used)) > 1:
             insights.append("Multiple test types provided complementary insights")
-        
+
         # Cycle efficiency
         if len(cycles) <= 2 and cycles[-1].test_results.confidence_in_results == ConfidenceLevel.HIGH:
             insights.append("Efficient validation achieved with minimal cycles")
         elif len(cycles) > 4:
             insights.append("Complex validation required extended iteration")
-        
+
         # Learning patterns
         learning_types = [l.learning_type for c in cycles for l in c.learnings]
         if LearningType.UNEXPECTED in learning_types:
             insights.append("Process enabled discovery of unanticipated opportunities")
-        
+
         # Domain-specific insights
         if context.domain_context:
             insights.append(
                 f"Domain-specific approach for {context.domain_context} proved effective"
             )
-        
+
         return insights
-    
+
     def _calculate_overall_confidence(
         self,
-        progression: Dict[int, ConfidenceLevel],
-        learnings: List[Learning]
+        progression: dict[int, ConfidenceLevel],
+        learnings: list[Learning]
     ) -> float:
         """Calculate overall confidence score."""
         if not progression:
             return 0.5
-        
+
         # Map confidence levels to scores
         confidence_scores = {
             ConfidenceLevel.VERY_LOW: 0.2,
@@ -703,24 +703,24 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             ConfidenceLevel.HIGH: 0.8,
             ConfidenceLevel.VERY_HIGH: 0.95
         }
-        
+
         # Weight recent cycles more heavily
         weights = [0.1, 0.2, 0.3, 0.4]  # Recent cycles weighted more
         weighted_sum = 0
         weight_total = 0
-        
+
         cycles = sorted(progression.keys())
         for i, cycle in enumerate(cycles[-4:]):  # Last 4 cycles
             weight = weights[min(i, len(weights)-1)]
             score = confidence_scores.get(progression[cycle], 0.5)
             weighted_sum += weight * score
             weight_total += weight
-        
+
         return weighted_sum / weight_total if weight_total > 0 else 0.5
-    
+
     async def _generate_overall_assessment(
         self,
-        cycles: List[ValidationCycle],
+        cycles: list[ValidationCycle],
         convergence: str,
         confidence: float
     ) -> str:
@@ -732,11 +732,11 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             success_level = "moderately successful"
         else:
             success_level = "partially successful"
-        
+
         # Count key metrics
         total_learnings = sum(len(c.learnings) for c in cycles)
         total_refinements = sum(len(c.refinements) for c in cycles)
-        
+
         assessment = (
             f"The iterative validation process was {success_level} "
             f"with {len(cycles)} cycles completed. {convergence} "
@@ -744,7 +744,7 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
             f"{total_refinements} refinements, achieving a final confidence "
             f"score of {confidence:.2f}. "
         )
-        
+
         if confidence >= 0.7:
             assessment += (
                 "The validated approach is ready for implementation with "
@@ -755,5 +755,5 @@ class IterativeValidationAnalyzer(BaseCognitiveAnalyzer):
                 "Additional validation cycles are recommended before "
                 "full-scale implementation."
             )
-        
+
         return assessment
