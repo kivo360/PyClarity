@@ -1,0 +1,108 @@
+{
+  "iteration": 10,
+  "timestamp": "2025-08-04T02:06:54.652967",
+  "features": {
+    "core": [
+      {
+        "id": "F001",
+        "name": "Visual Chain-of-Thought Designer",
+        "description": "Drag-and-drop interface for creating visual reasoning chains (Refined in iteration 10)",
+        "priority": "high",
+        "complexity": "medium",
+        "dependencies": [
+          "F002",
+          "F003"
+        ],
+        "user_value": 9,
+        "technical_risk": 3,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      },
+      {
+        "id": "F002",
+        "name": "Dynamic Prompt Rewriter",
+        "description": "AI-powered prompt optimization engine (Refined in iteration 10)",
+        "priority": "high",
+        "complexity": "high",
+        "dependencies": [],
+        "user_value": 8,
+        "technical_risk": 4,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      },
+      {
+        "id": "F003",
+        "name": "Self-Consistency Validator",
+        "description": "Multi-chain validation with voting mechanism (Refined in iteration 10)",
+        "priority": "high",
+        "complexity": "medium",
+        "dependencies": [],
+        "user_value": 8,
+        "technical_risk": 2,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      },
+      {
+        "id": "F0016",
+        "name": "Intelligent Caching System",
+        "description": "Cache successful patterns for reuse",
+        "priority": "high",
+        "complexity": "medium",
+        "dependencies": [
+          "F002"
+        ],
+        "user_value": 7,
+        "technical_risk": 2,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      }
+    ],
+    "supporting": [
+      {
+        "id": "F004",
+        "name": "Framework Template Library",
+        "description": "Pre-built templates for 50+ frameworks (Refined in iteration 10)",
+        "priority": "medium",
+        "complexity": "low",
+        "dependencies": [],
+        "user_value": 7,
+        "technical_risk": 1,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      },
+      {
+        "id": "F005",
+        "name": "Export API",
+        "description": "RESTful API for integrations (Refined in iteration 10)",
+        "priority": "medium",
+        "complexity": "medium",
+        "dependencies": [
+          "F001",
+          "F002",
+          "F003"
+        ],
+        "user_value": 6,
+        "technical_risk": 2,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      }
+    ],
+    "future": [
+      {
+        "id": "F006",
+        "name": "Collaborative Editing",
+        "description": "Real-time multi-user editing (Refined in iteration 10)",
+        "priority": "low",
+        "complexity": "high",
+        "dependencies": [
+          "F001"
+        ],
+        "user_value": 5,
+        "technical_risk": 5,
+        "quality_score": 0.7350000000000001,
+        "iteration_added": 10
+      }
+    ]
+  },
+  "last_iteration": 10
+}

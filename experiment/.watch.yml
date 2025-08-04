@@ -1,0 +1,17 @@
+# Watchy configuration file
+# Adjust the following entries based on your project setup.
+
+cmd: npm run dev           # Command to run/restart when files change
+
+watch:                     # Directories (or files) to monitor
+  - src
+  - public
+
+exts:                      # File extensions that trigger a restart
+  - js
+  - ts
+
+ignore:                    # Paths to ignore (e.g. build artifacts)
+  - dist
+  - build
+

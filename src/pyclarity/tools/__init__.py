@@ -99,6 +99,97 @@ from .structured_argumentation import (
     StrengthLevel,
 )
 
+# Missing imports that have implementations
+from .collaborative_reasoning import (
+    CollaborativeReasoningAnalyzer,
+    CollaborativeReasoningContext,
+    CollaborativeReasoningResult,
+    PersonaType,
+    ConsensusStrategy,
+    ReasoningStyle,
+    DialogueStyle,
+)
+
+from .metacognitive_monitoring import (
+    MetacognitiveMonitoringAnalyzer,
+    MetacognitiveMonitoringContext,
+    MetacognitiveMonitoringResult,
+    BiasType,
+    MetaStrategies,
+    MonitoringDepth,
+    MonitoringFrequency,
+)
+
+# Temporarily comment out impact_propagation due to generic type issues
+# from .impact_propagation import (
+#     ImpactPropagationAnalyzer,
+#     ImpactPropagationContext,
+#     ImpactPropagationResult,
+#     ImpactType,
+#     PropagationPath,
+#     Node,
+#     PropagationSpeed,
+#     EffectMagnitude,
+# )
+
+# New FastMCP tools
+from .iterative_validation import (
+    IterativeValidationAnalyzer,
+    IterativeValidationContext,
+    IterativeValidationResult,
+    ValidationStatus,
+    TestType,
+    ConfidenceLevel,
+    LearningType,
+    Hypothesis,
+    TestDesign,
+    TestResults,
+    Learning,
+    Refinement,
+    ValidationCycle,
+)
+
+from .multi_perspective import (
+    MultiPerspectiveAnalyzer,
+    MultiPerspectiveContext,
+    MultiPerspectiveResult,
+    StakeholderType,
+    ConflictSeverity,
+    IntegrationApproach,
+    Perspective,
+    ViewpointAnalysis,
+    SynergyConflict,
+    IntegrationStrategy,
+)
+
+from .sequential_readiness import (
+    SequentialReadinessAnalyzer,
+    SequentialReadinessContext,
+    SequentialReadinessResult,
+    ReadinessLevel,
+    TransitionType,
+    GapSeverity,
+    InterventionType,
+    ReadinessState,
+    StateTransition,
+    ReadinessGap,
+    Intervention,
+    Dependency,
+)
+
+from .triple_constraint import (
+    TripleConstraintAnalyzer,
+    TripleConstraintContext,
+    TripleConstraintResult,
+    ConstraintDimension,
+    ConstraintPriority,
+    TradeoffImpact,
+    OptimizationStrategy,
+    Constraint,
+    Tradeoff,
+    Scenario,
+)
+
 __all__ = [
     # Sequential Thinking
     "SequentialThinkingAnalyzer",
@@ -183,6 +274,87 @@ __all__ = [
     "LogicalFallacy",
     "EvidenceType",
     "StrengthLevel",
+    
+    # Collaborative Reasoning
+    "CollaborativeReasoningAnalyzer",
+    "CollaborativeReasoningContext", 
+    "CollaborativeReasoningResult",
+    "PersonaType",
+    "ConsensusStrategy",
+    "ReasoningStyle",
+    "DialogueStyle",
+    
+    # Metacognitive Monitoring
+    "MetacognitiveMonitoringAnalyzer",
+    "MetacognitiveMonitoringContext",
+    "MetacognitiveMonitoringResult", 
+    "BiasType",
+    "MetaStrategies",
+    "MonitoringDepth",
+    "MonitoringFrequency",
+    
+    # Impact Propagation - temporarily disabled
+    # "ImpactPropagationAnalyzer",
+    # "ImpactPropagationContext",
+    # "ImpactPropagationResult",
+    # "ImpactType",
+    # "PropagationPath",
+    # "Node",
+    # "PropagationSpeed",
+    # "EffectMagnitude",
+    
+    # Iterative Validation
+    "IterativeValidationAnalyzer",
+    "IterativeValidationContext",
+    "IterativeValidationResult",
+    "ValidationStatus",
+    "TestType",
+    "ConfidenceLevel",
+    "LearningType",
+    "Hypothesis",
+    "TestDesign",
+    "TestResults",
+    "Learning",
+    "Refinement",
+    "ValidationCycle",
+    
+    # Multi-Perspective
+    "MultiPerspectiveAnalyzer",
+    "MultiPerspectiveContext",
+    "MultiPerspectiveResult",
+    "StakeholderType",
+    "ConflictSeverity",
+    "IntegrationApproach",
+    "Perspective",
+    "ViewpointAnalysis",
+    "SynergyConflict",
+    "IntegrationStrategy",
+    
+    # Sequential Readiness
+    "SequentialReadinessAnalyzer",
+    "SequentialReadinessContext",
+    "SequentialReadinessResult",
+    "ReadinessLevel",
+    "TransitionType",
+    "GapSeverity",
+    "InterventionType",
+    "ReadinessState",
+    "StateTransition",
+    "ReadinessGap",
+    "Intervention",
+    "Dependency",
+    
+    # Triple Constraint
+    "TripleConstraintAnalyzer",
+    "TripleConstraintContext",
+    "TripleConstraintResult",
+    "ConstraintDimension",
+    "ConstraintPriority",
+    "TradeoffImpact",
+    "OptimizationStrategy",
+    "Constraint",
+    "Tradeoff",
+    "Scenario",
 ]
 
 __version__ = "0.1.0"

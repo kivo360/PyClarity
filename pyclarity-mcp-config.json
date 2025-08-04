@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "pyclarity": {
+      "command": "uv",
+      "args": [
+        "run",
+        "pyclarity",
+        "server"
+      ],
+      "cwd": "/path/to/PyClarity",
+      "env": {
+        "PYTHONPATH": "/path/to/PyClarity/src"
+      }
+    }
+  }
+}

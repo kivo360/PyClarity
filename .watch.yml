@@ -1,0 +1,4 @@
+cmd: "echo \"Hello from watchy!\""
+watch: "."
+exts: [py]
+ignore: [.git, .venv, node_modules, __pycache__, json]

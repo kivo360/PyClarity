@@ -1,0 +1,35 @@
+# Optimizer Configuration
+experiment:
+  max_iterations: 100
+  convergence_threshold: 0.95
+  checkpoint_frequency: 5
+  min_iterations: 5
+  
+llm:
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 2000
+  
+chunking:
+  method: "semantic"
+  chunk_size: 1000
+  overlap: 200
+  
+evaluation:
+  weights:
+    completeness: 0.3
+    clarity: 0.2
+    feasibility: 0.2
+    user_value: 0.2
+    coherence: 0.1
+    
+features:
+  target_count: 20
+  categories:
+    - core
+    - supporting
+    - future
+  priority_levels:
+    - high
+    - medium
+    - low
