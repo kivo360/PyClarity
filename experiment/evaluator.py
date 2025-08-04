@@ -374,6 +374,9 @@ class FeatureEvaluator:
                 deps = feature.get("dependencies", [])
                 graph[feature_id].extend(deps)
         
+        # Convert to regular dict to avoid modification during iteration
+        graph = dict(graph)
+        
         # Simple cycle detection (DFS)
         visited = set()
         rec_stack = set()
@@ -382,7 +385,7 @@ class FeatureEvaluator:
             visited.add(node)
             rec_stack.add(node)
             
-            for neighbor in graph[node]:
+            for neighbor in graph.get(node, []):
                 if neighbor not in visited:
                     if has_cycle(neighbor):
                         return True
@@ -392,7 +395,12 @@ class FeatureEvaluator:
             rec_stack.remove(node)
             return False
         
-        for node in graph:
+        # Get all nodes to check
+        all_nodes = set(graph.keys())
+        for deps in graph.values():
+            all_nodes.update(deps)
+        
+        for node in all_nodes:
             if node not in visited:
                 if has_cycle(node):
                     return True

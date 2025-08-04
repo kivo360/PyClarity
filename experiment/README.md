@@ -4,33 +4,36 @@ This is a self-improving loop that generates and refines feature lists for our A
 
 ## LLM-Powered Optimizer
 
-For advanced optimization using Groq's LLaMA 3.3 70B model, use the LLM-powered optimizer:
+For advanced optimization using Groq's LLMs, we offer two versions:
 
-### Quick Setup
+### Standard LLM Optimizer
+Uses consistent temperature and single model:
 ```bash
-# Check environment setup
-./setup_env.sh
-
 # Set your Groq API key (get one at https://console.groq.com)
 export GROQ_API_KEY='your-api-key-here'
 
-# Run the optimizer
+# Run the standard optimizer
 ./run_llm_optimizer.sh
 ```
 
-### Custom Configuration
+### Enhanced Optimizer (Recommended)
+Features dynamic variance mechanisms for better exploration:
 ```bash
-# More iterations with shorter sleep
-./run_llm_optimizer.sh --iterations 10 --sleep 10
+# Run the enhanced optimizer with high variance
+./run_enhanced.sh
 
-# Start fresh (delete previous results)
-./run_llm_optimizer.sh --reset
-
-# Help
-./run_llm_optimizer.sh --help
+# Custom settings
+./run_enhanced.sh --iterations 10 --sleep 12 --reset
 ```
 
-See `LLM_SETUP.md` for detailed instructions.
+**Enhanced Features:**
+- 🌡️ Dynamic temperature (0.5-1.0)
+- 🎲 Multi-model rotation (3 models)
+- 🎯 Strategic variation per iteration
+- 🔥 Anti-stuck mechanisms
+- 📈 15-25% variance between iterations
+
+See `LLM_SETUP.md` for setup and `VARIANCE_GUIDE.md` for variance mechanisms.
 
 ## Quick Start
 
