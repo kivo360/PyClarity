@@ -82,8 +82,17 @@ ruff check src/ --statistics
 ruff check src/ --select F,E
 ```
 
+### Remaining Issues
+
+The codebase still has non-critical issues that can be addressed over time:
+- **239 unused imports** (F401) - Many are false positives from type annotations
+- **115 deprecated imports** (UP035) - Should update `typing.Dict` → `dict`, etc.
+- **5 unused variables** (F841) - Local variables that can be removed
+- **1 duplicate import** (F811) - One remaining duplicate to clean up
+
 ### Next Steps
 
-1. Fix the 6 critical errors identified
-2. Consider adding back specific rules if team needs them
-3. Document any project-specific conventions separately
+1. Consider ignoring F401 for type annotations or use `from __future__ import annotations`
+2. Gradually update deprecated typing imports when touching files
+3. Add back specific rules if team needs them (e.g., security checks)
+4. Document any project-specific conventions separately
