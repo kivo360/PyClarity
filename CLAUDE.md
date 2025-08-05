@@ -319,6 +319,192 @@ from pyclarity import tools
 print(dir(tools))  # Check submodule exports
 ```
 
+## External Library Research
+
+### MANDATORY: Always Check Documentation for Non-Standard Libraries
+
+**CRITICAL RULE: For ANY library that is:**
+- Not part of Python's standard library
+- Less than 20 years old or still actively evolving (e.g., FastMCP, Pydantic, FastAPI)
+- Has had major version changes in the last 5 years
+- You haven't used in the last 3 months
+- Has complex APIs or configuration
+
+**YOU MUST:**
+1. **ALWAYS** check current documentation before writing any code
+2. **NEVER** rely on training data or memory for API details
+3. **VERIFY** version-specific features and breaking changes
+
+### Local Documentation Resources
+
+This project includes downloaded documentation for key libraries:
+- **FastMCP**: Check `@docs/library-docs/fastmcp/llms-full.txt` (23,000+ lines of comprehensive docs)
+- Always check local `@docs/` directories FIRST before using online resources
+- Local docs are often more comprehensive and faster to access
+
+### Library Research Protocol
+
+For any non-standard library usage:
+1. **Check local docs first** - Look in `@docs/library-docs/` for the library
+2. **Use Context7** - For general libraries not in local docs
+3. **Use DeepWiki** - For GitHub repositories
+4. **Verify versions** - Check pyproject.toml for exact versions in use
+
+### Example: Researching "How to use FastMCP client to run tests"
+
+```python
+# Step 1: Check local documentation first
+local_docs = Read("@docs/library-docs/fastmcp/llms-full.txt")
+search_results = Grep(
+    pattern="client.*test|test.*client|Client.*test|testing.*client",
+    path="@docs/library-docs/fastmcp/llms-full.txt",
+    output_mode="content",
+    -B=5,  # 5 lines before match
+    -A=10  # 10 lines after match
+)
+
+# Step 2: If not found locally, check project's test files for examples
+test_examples = Glob(pattern="**/test_*client*.py")
+for test_file in test_examples:
+    content = Read(test_file)
+    # Look for client usage patterns
+
+# Step 3: Check pyproject.toml for exact version
+pyproject = Read("pyproject.toml")
+fastmcp_version = extract_version(pyproject, "fastmcp")
+
+# Step 4: If still need more info, use online resources
+if not sufficient_info:
+    # For GitHub repos
+    deepwiki_info = await deepwiki.askQuestion({
+        repoName: "jlowin/fastmcp",
+        question: f"How to use client for testing with version {fastmcp_version}"
+    })
+    
+    # For general libraries
+    lib_id = await context7.resolveLibraryId({ libraryName: "fastmcp" })
+    docs = await context7.getLibraryDocs({
+        context7CompatibleLibraryID: lib_id,
+        topic: "client testing"
+    })
+
+# Step 5: Cross-reference with actual code usage
+existing_usage = Grep(
+    pattern="from fastmcp.*[Cc]lient|FastMCPClient",
+    path="src/",
+    output_mode="files_with_matches"
+)
+```
+
+### Practical Search Example Output
+
+When searching for "How to use FastMCP client to run tests", the process would:
+
+1. **Local FastMCP docs search** might find:
+   ```
+   # From @docs/library-docs/fastmcp/llms-full.txt
+   ## Testing with FastMCP Client
+   
+   The FastMCP client provides testing utilities...
+   
+   from fastmcp.client import FastMCPClient
+   from fastmcp.testing import TestClient
+   
+   async def test_my_tool():
+       client = TestClient(server)
+       result = await client.call_tool("my_tool", {"param": "value"})
+       assert result.content == "expected"
+   ```
+
+2. **Project test examples** might show:
+   ```python
+   # From tests/test_server.py
+   from fastmcp.testing import TestClient
+   from pyclarity.server import app
+   
+   async def test_sequential_thinking():
+       async with TestClient(app) as client:
+           result = await client.call_tool(
+               "sequential_thinking",
+               {"query": "test query"}
+           )
+   ```
+
+3. **Version-specific features** from pyproject.toml:
+   ```toml
+   fastmcp = "^2.11.0"  # Check changelog for 2.11 testing features
+   ```
+
+### Actual Tool Call Sequence
+
+Here's the exact sequence of tool calls for researching library usage:
+
+```typescript
+// When user asks: "How do I use FastMCP client to run tests?"
+
+// 1. Search memory for previous FastMCP patterns
+await mcp__openmemory__search-memories({ 
+    query: "FastMCP client testing patterns" 
+});
+
+// 2. Check local documentation with multiple search patterns
+const searchPatterns = [
+    "client.*test", "TestClient", "testing.*client", 
+    "client.*mock", "test.*setup", "pytest.*fastmcp"
+];
+
+for (const pattern of searchPatterns) {
+    await Grep({
+        pattern: pattern,
+        path: "/Users/kevinhill/Coding/Tooling/PyClarity/docs/library-docs/fastmcp/llms-full.txt",
+        output_mode: "content",
+        -B: 5,
+        -A: 15,
+        -i: true  // case insensitive
+    });
+}
+
+// 3. Find actual test examples in the project
+await Glob({ pattern: "**/test*.py" });
+await Grep({
+    pattern: "FastMCP|TestClient|@pytest.fixture.*client",
+    path: "tests/",
+    output_mode: "content",
+    -B: 10,
+    -A: 20
+});
+
+// 4. Check version and dependencies
+await Read({ file_path: "pyproject.toml" });
+await Grep({
+    pattern: "fastmcp.*=|pytest.*=",
+    path: "pyproject.toml",
+    output_mode: "content"
+});
+
+// 5. If more info needed, check online
+if (need_more_info) {
+    await mcp__deepwiki-mcp__ask_question({
+        repoName: "jlowin/fastmcp",
+        question: "How to write tests using FastMCP client with pytest"
+    });
+}
+
+// 6. Store findings for future reference
+await mcp__openmemory__add-memory({
+    content: "FastMCP Testing Pattern: Use TestClient from fastmcp.testing, " +
+             "async context manager pattern, await client.call_tool() for testing"
+});
+```
+
+### Examples of Libraries Requiring Documentation Check
+- **FastMCP** - Core server framework (LOCAL DOCS AVAILABLE)
+- **Pydantic** - Data validation with v2 changes
+- **FastAPI** - If integrated with FastMCP
+- **Typer** - CLI framework
+- **Rich** - Terminal formatting
+- **Any library in pyproject.toml** - All have specific versions
+
 ## Agent OS Documentation
 
 ### Product Context
