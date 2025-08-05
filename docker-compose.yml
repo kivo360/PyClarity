@@ -20,7 +20,7 @@ services:
   # Firegeo Next.js App with Modern Watch
   firegeo-app:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile.firegeo
       target: development
     container_name: pyclarity-firegeo
@@ -36,43 +36,43 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./app
+          path: ./frontend/app
           target: /workspaces/app
           ignore:
             - node_modules/
             - .next/
         - action: sync
-          path: ./components
+          path: ./frontend/components
           target: /workspaces/components
           ignore:
             - node_modules/
         - action: sync
-          path: ./lib
+          path: ./frontend/lib
           target: /workspaces/lib
           ignore:
             - node_modules/
         - action: sync
-          path: ./config
+          path: ./frontend/config
           target: /workspaces/config
           ignore:
             - node_modules/
         - action: sync
-          path: ./public
+          path: ./frontend/public
           target: /workspaces/public
           ignore:
             - node_modules/
         - action: rebuild
-          path: package.json
+          path: ./frontend/package.json
         - action: rebuild
-          path: bun.lockb
+          path: ./frontend/bun.lockb
         - action: sync+restart
-          path: next.config.js
+          path: ./frontend/next.config.js
           target: /workspaces/next.config.js
         - action: sync+restart
-          path: tailwind.config.js
+          path: ./frontend/tailwind.config.js
           target: /workspaces/tailwind.config.js
         - action: sync+restart
-          path: tsconfig.json
+          path: ./frontend/tsconfig.json
           target: /workspaces/tsconfig.json
 
   # Python Backend (for MCP server)

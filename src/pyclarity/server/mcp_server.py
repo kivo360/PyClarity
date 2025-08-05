@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field
 
 from pyclarity.auth.middleware import AuthMiddleware
 from pyclarity.config import MCPConfig
-from pyclarity.tools.registry import ToolRegistry
+from pyclarity.tools.registry import BaseTool, ToolRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +34,46 @@ class ToolResponse(BaseModel):
     result: Any = Field(None, description="Tool execution result")
     error: str | None = Field(None, description="Error message if execution failed")
     session_id: str | None = Field(None, description="Session ID for tracking")
+
+
+class AnalyzerAdapter(BaseTool):
+    """Adapter class to make analyzers compatible with the tool registry"""
+
+    def __init__(self, analyzer, tool_name: str, description: str = ""):
+        super().__init__()
+        self.analyzer = analyzer
+        self.name = tool_name
+        self.description = description or getattr(analyzer, "tool_description", "")
+        self.requires_auth = True
+        self.parameter_schema = {
+            "type": "object",
+            "properties": {
+                "problem": {"type": "string", "description": "Problem to analyze"},
+                "complexity_level": {
+                    "type": "string",
+                    "enum": ["simple", "moderate", "complex", "very_complex"],
+                },
+            },
+            "required": ["problem"],
+        }
+
+    async def analyze(self, **kwargs) -> Any:
+        """Execute the analyzer with the given parameters"""
+        try:
+            # Create context from parameters
+            from pyclarity.tools.base import BaseCognitiveContext, ComplexityLevel
+
+            complexity = kwargs.get("complexity_level", "moderate")
+            context = BaseCognitiveContext(
+                problem=kwargs.get("problem", ""), complexity_level=ComplexityLevel(complexity)
+            )
+
+            # Execute the analyzer
+            result = await self.analyzer.analyze(context)
+            return result
+        except Exception as e:
+            logger.error(f"Error executing analyzer {self.name}: {e}")
+            raise
 
 
 class PyClarityMCPServer:
@@ -58,14 +98,37 @@ class PyClarityMCPServer:
             from pyclarity.tools.decision_framework.analyzer import DecisionFrameworkAnalyzer
             from pyclarity.tools.mental_models.analyzer import MentalModelsAnalyzer
             from pyclarity.tools.sequential_thinking.analyzer import (
-                ProgressiveSequentialThinkingAnalyzer,
+                SequentialThinkingAnalyzer,
             )
 
+            # Create adapters for the analyzers
+            sequential_analyzer = SequentialThinkingAnalyzer()
+            decision_analyzer = DecisionFrameworkAnalyzer()
+            mental_models_analyzer = MentalModelsAnalyzer()
+
+            # Register tools with adapters
             self.tools.register_tool(
-                "progressive_thinking", ProgressiveSequentialThinkingAnalyzer()
+                "sequential_thinking",
+                AnalyzerAdapter(
+                    sequential_analyzer,
+                    "Sequential Thinking",
+                    "Step-by-step problem decomposition and reasoning",
+                ),
             )
-            self.tools.register_tool("decision_framework", DecisionFrameworkAnalyzer())
-            self.tools.register_tool("mental_models", MentalModelsAnalyzer())
+            self.tools.register_tool(
+                "decision_framework",
+                AnalyzerAdapter(
+                    decision_analyzer, "Decision Framework", "Structured decision-making analysis"
+                ),
+            )
+            self.tools.register_tool(
+                "mental_models",
+                AnalyzerAdapter(
+                    mental_models_analyzer,
+                    "Mental Models",
+                    "Mental models analysis for complex problems",
+                ),
+            )
 
             logger.info("Default tools registered successfully")
         except ImportError as e:

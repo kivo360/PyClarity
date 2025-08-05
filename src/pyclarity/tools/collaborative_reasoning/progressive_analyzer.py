@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 from pyclarity.db.base import BaseSessionStore, SessionData
-from pyclarity.db.collaborative_store import BaseCollaborativeStore, CollaborativeData, PersonaContribution
+from pyclarity.db.collaborative_store import BaseCollaborativeStore, PerspectiveData, ConflictData, CollaborativeSynthesis
 from pyclarity.tools.collaborative_reasoning.models import (
     CollaborationPattern,
     PersonaType,
