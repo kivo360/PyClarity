@@ -45,7 +45,14 @@ run_in_ephemeral_container() {
     # Run the command in a new container that will exit after completion
     docker compose --profile test run --rm testcontainer bash -c "
         echo '📦 Installing dependencies...'
-        uv sync
+        cd /workspaces
+        uv sync --reinstall
+        
+        echo '🧪 Loading environment variables...'
+        if [ -f .env ]; then
+            export \$(cat .env | grep -v '^#' | xargs)
+            echo 'Environment variables loaded from .env file'
+        fi
         
         echo '🧪 Running test command...'
         $command
@@ -77,7 +84,7 @@ run_in_persistent_container() {
     # Install dependencies and run command
     docker compose exec $container_name bash -c "
         echo '📦 Installing dependencies...'
-        uv sync
+        uv sync --reinstall
         
         echo '🧪 Running command...'
         $command
@@ -103,7 +110,7 @@ create_snapshot() {
     # Install dependencies and create snapshot
     docker compose --profile snapshot exec snapshotcontainer bash -c "
         echo '📦 Installing dependencies...'
-        uv sync
+        uv sync --reinstall
         
         echo '📸 Creating snapshot...'
         # Create a snapshot of the current state
@@ -158,6 +165,14 @@ main() {
         "demo_llm")
             check_containers
             run_in_ephemeral_container "python demo_custom_llm_providers.py" "Custom LLM Providers Demo"
+            ;;
+        "test_mcp")
+            check_containers
+            run_in_ephemeral_container "python test_mcp_server.py" "MCP Server Test"
+            ;;
+        "test_db")
+            check_containers
+            run_in_ephemeral_container "python test_database.py" "Database Connectivity Test"
             ;;
         "all")
             check_containers

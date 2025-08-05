@@ -7,7 +7,8 @@ from fastmcp import FastMCP
 from rich import print as rprint
 from rich.console import Console
 
-from pyclarity.server.mcp_server import create_server
+from pyclarity.config import MCPConfig
+from pyclarity.server.mcp_server import PyClarityMCPServer
 
 app = typer.Typer(help="PyClarity - Cognitive Tools for Strategic Thinking")
 console = Console()
@@ -52,15 +53,35 @@ def server(
     console.print("  • Impact Propagation")
 
     try:
-        mcp: FastMCP = create_server()
-        if transport == "http":
-            mcp.run(transport="http", host=host, port=port)
-        elif transport == "streamable-http":
-            mcp.run(transport="streamable-http", host=host, port=port)
-        elif transport == "stdio":
-            mcp.run(transport="stdio")
-        else:
-            raise typer.BadParameter(f"Invalid transport: {transport}")
+        # Create and start the MCP server
+        config = MCPConfig()
+        config.server.host = host
+        config.server.port = port
+        config.server.debug = debug
+
+        server = PyClarityMCPServer(config)
+
+        console.print("[bold green]Starting PyClarity MCP Server[/bold green]")
+        console.print(f"Host: {host}")
+        console.print(f"Port: {port}")
+        console.print(f"Debug: {debug}")
+        console.print("Available cognitive tools:")
+        console.print("  • Mental Models")
+        console.print("  • Sequential Thinking")
+        console.print("  • Decision Framework")
+        console.print("  • Scientific Method")
+        console.print("  • Design Patterns")
+        console.print("  • Programming Paradigms")
+        console.print("  • Debugging Approaches")
+        console.print("  • Visual Reasoning")
+        console.print("  • Structured Argumentation")
+        console.print("  • Metacognitive Monitoring")
+        console.print("  • Collaborative Reasoning")
+        console.print("  • Impact Propagation")
+
+        # Start the server
+        asyncio.run(server.start(host=host, port=port))
+
     except KeyboardInterrupt:
         console.print("[yellow]Server stopped by user[/yellow]")
     except Exception as e:

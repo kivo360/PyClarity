@@ -1,86 +1,134 @@
 services:
-
-  # Development container - mounts code for live development
-  devcontainer:
-    build:
-      target: dev
-    volumes:
-      - .:/workspaces
-      - command-history-volume:/home/user/.history/
-      - uv-cache-volume:/opt/venv
-      - uv-cache-volume:/home/user/.cache/uv
-    environment:
-      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
-      - PYTHONPATH=/workspaces/src
-    working_dir: /workspaces
-    depends_on:
-      postgres:
-        condition: service_healthy
-    # Keep running for development
-    command: tail -f /dev/null
-
-  # Test container - runs tests then dies
-  testcontainer:
-    build:
-      target: dev
-    volumes:
-      - .:/workspaces
-      - command-history-volume:/home/user/.history/
-      - uv-cache-volume:/opt/venv
-      - uv-cache-volume:/home/user/.cache/uv
-    environment:
-      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
-      - PYTHONPATH=/workspaces/src
-    working_dir: /workspaces
-    depends_on:
-      postgres:
-        condition: service_healthy
-    # This container will run tests and exit
-    command: echo "Test container ready - use run_tests_in_container.sh to execute tests"
-    profiles:
-      - test
-
-  # Snapshot container - for creating reproducible test environments
-  snapshotcontainer:
-    build:
-      target: dev
-    volumes:
-      - .:/workspaces
-      - command-history-volume:/home/user/.history/
-      - uv-cache-volume:/opt/venv
-      - uv-cache-volume:/home/user/.cache/uv
-    environment:
-      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
-      - PYTHONPATH=/workspaces/src
-    working_dir: /workspaces
-    depends_on:
-      postgres:
-        condition: service_healthy
-    # Keep running for snapshot operations
-    command: tail -f /dev/null
-    profiles:
-      - snapshot
-
+  # PostgreSQL Database
   postgres:
-    image: pgvector/pgvector:0.8.0-pg17-bookworm
-    restart: unless-stopped
+    image: postgres:17
+    container_name: pyclarity-postgres
     environment:
+      POSTGRES_DB: pyclarity
       POSTGRES_USER: pyclarity
       POSTGRES_PASSWORD: pyclarity
-      POSTGRES_DB: pyclarity
-    # Remove port exposure to avoid conflicts - containers will use internal networking
-    # ports:
-    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pyclarity"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U pyclarity -d pyclarity"]
+      interval: 10s
       timeout: 5s
       retries: 5
 
+  # Firegeo Next.js App with Modern Watch
+  firegeo-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.firegeo
+      target: development
+    container_name: pyclarity-firegeo
+    ports:
+      - "3040:3000"
+    environment:
+      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /workspaces/app
+          ignore:
+            - node_modules/
+            - .next/
+        - action: sync
+          path: ./components
+          target: /workspaces/components
+          ignore:
+            - node_modules/
+        - action: sync
+          path: ./lib
+          target: /workspaces/lib
+          ignore:
+            - node_modules/
+        - action: sync
+          path: ./config
+          target: /workspaces/config
+          ignore:
+            - node_modules/
+        - action: sync
+          path: ./public
+          target: /workspaces/public
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: bun.lockb
+        - action: sync+restart
+          path: next.config.js
+          target: /workspaces/next.config.js
+        - action: sync+restart
+          path: tailwind.config.js
+          target: /workspaces/tailwind.config.js
+        - action: sync+restart
+          path: tsconfig.json
+          target: /workspaces/tsconfig.json
+
+  # Python Backend (for MCP server)
+  python-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: pyclarity-backend
+    volumes:
+      - .:/workspaces
+      - uv-cache-volume:/home/user/.cache/uv
+      - ./.env:/workspaces/.env
+    environment:
+      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+      - PYTHONPATH=/workspaces/src
+    working_dir: /workspaces
+    depends_on:
+      postgres:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /workspaces/src
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - .pytest_cache/
+        - action: rebuild
+          path: pyproject.toml
+        - action: sync+restart
+          path: .env
+          target: /workspaces/.env
+
+  # Test Container (Ephemeral)
+  test-container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: pyclarity-test
+    volumes:
+      - .:/workspaces
+      - uv-cache-volume:/home/user/.cache/uv
+      - ./.env:/workspaces/.env
+    environment:
+      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+      - PYTHONPATH=/workspaces/src
+    working_dir: /workspaces
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
-  command-history-volume:
   postgres_data:
+    driver: local
   uv-cache-volume:
+    driver: local

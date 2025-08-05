@@ -1,0 +1,89 @@
+# Multi-stage build for Firegeo Next.js app with Bun
+FROM oven/bun:1 AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /workspaces
+
+# Install dependencies using Bun (much faster than npm)
+COPY package.json ./
+# Use bun install instead of npm install for faster installation
+RUN bun install
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /workspaces
+COPY --from=deps /workspaces/node_modules ./node_modules
+COPY . .
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN bun run build
+
+# Production image, copy all the files and run next
+FROM base AS production
+WORKDIR /workspaces
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /workspaces/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /workspaces/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /workspaces/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+# set hostname to localhost
+ENV HOSTNAME "0.0.0.0"
+
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+CMD ["node", "server.js"]
+
+# Development stage
+FROM base AS development
+WORKDIR /workspaces
+
+# Create non-root user for development
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Install dependencies using Bun
+COPY package.json ./
+# Use bun install instead of npm install for faster installation
+RUN bun install
+
+# Copy source code with proper ownership
+COPY --chown=nextjs:nodejs . .
+
+# Ensure the workspace directory and all subdirectories are owned by the nextjs user
+RUN chown -R nextjs:nodejs /workspaces
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /workspaces/.next && chown nextjs:nodejs /workspaces/.next
+RUN mkdir -p /workspaces/node_modules && chown nextjs:nodejs /workspaces/node_modules
+
+# Switch to non-root user
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+# Start development server with Bun
+CMD ["bun", "run", "dev"] 
