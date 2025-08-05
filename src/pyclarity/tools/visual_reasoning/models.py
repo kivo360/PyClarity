@@ -86,7 +86,7 @@ class VisualElement(BaseModel):
     relationships: list[str] = Field(
         default_factory=list,
         description="IDs of related elements",
-        max_items=20
+        max_length=20
     )
 
     metadata: dict[str, Any] = Field(
@@ -130,8 +130,8 @@ class SpatialMapping(BaseModel):
     elements: list[VisualElement] = Field(
         ...,
         description="Visual elements in the mapping",
-        min_items=1,
-        max_items=100
+        min_length=1,
+        max_length=100
     )
 
     relationships: dict[str, list[SpatialRelationship]] = Field(
@@ -142,7 +142,7 @@ class SpatialMapping(BaseModel):
     spatial_constraints: list[str] = Field(
         default_factory=list,
         description="Spatial constraints and rules",
-        max_items=50
+        max_length=50
     )
 
     coordinate_system: str = Field(
@@ -182,8 +182,8 @@ class PatternRecognition(BaseModel):
     pattern_elements: list[str] = Field(
         ...,
         description="Element IDs involved in the pattern",
-        min_items=1,
-        max_items=50
+        min_length=1,
+        max_length=50
     )
 
     pattern_description: str = Field(
@@ -196,7 +196,7 @@ class PatternRecognition(BaseModel):
     pattern_rules: list[str] = Field(
         default_factory=list,
         description="Rules that define the pattern",
-        max_items=10
+        max_length=10
     )
 
     similarity_score: float = Field(
@@ -209,7 +209,7 @@ class PatternRecognition(BaseModel):
     variations_detected: list[str] = Field(
         default_factory=list,
         description="Variations of the pattern detected",
-        max_items=8
+        max_length=8
     )
 
 
@@ -229,8 +229,8 @@ class DiagramAnalysis(BaseModel):
     elements: list[VisualElement] = Field(
         ...,
         description="Visual elements in the diagram",
-        min_items=1,
-        max_items=200
+        min_length=1,
+        max_length=200
     )
 
     spatial_mapping: SpatialMapping = Field(
@@ -241,13 +241,13 @@ class DiagramAnalysis(BaseModel):
     patterns_identified: list[PatternRecognition] = Field(
         default_factory=list,
         description="Patterns identified in the diagram",
-        max_items=20
+        max_length=20
     )
 
     key_insights: list[str] = Field(
         default_factory=list,
         description="Key insights from the analysis",
-        max_items=15
+        max_length=15
     )
 
     interpretation: str = Field(
@@ -288,25 +288,25 @@ class VisualProblemSolving(BaseModel):
     solution_steps: list[str] = Field(
         default_factory=list,
         description="Steps in the visual solution",
-        max_items=20
+        max_length=20
     )
 
     visual_aids_used: list[str] = Field(
         default_factory=list,
         description="Visual aids utilized in solving",
-        max_items=10
+        max_length=10
     )
 
     spatial_reasoning_applied: list[str] = Field(
         default_factory=list,
         description="Spatial reasoning techniques applied",
-        max_items=10
+        max_length=10
     )
 
     pattern_matching_used: list[PatternRecognition] = Field(
         default_factory=list,
         description="Pattern matching techniques used",
-        max_items=10
+        max_length=10
     )
 
     solution_confidence: float = Field(
@@ -330,8 +330,8 @@ class VisualReasoningContext(BaseModel):
     visual_elements_data: list[dict[str, Any]] = Field(
         ...,
         description="Data for visual elements to analyze",
-        min_items=1,
-        max_items=100
+        min_length=1,
+        max_length=100
     )
 
     representation_type: VisualRepresentationType = Field(
@@ -348,7 +348,7 @@ class VisualReasoningContext(BaseModel):
     analysis_goals: list[str] = Field(
         default_factory=list,
         description="Goals for the visual analysis",
-        max_items=10
+        max_length=10
     )
 
     include_pattern_recognition: bool = Field(
@@ -443,19 +443,19 @@ class VisualReasoningResult(BaseModel):
     key_insights: list[str] = Field(
         default_factory=list,
         description="Key insights from visual analysis",
-        max_items=20
+        max_length=20
     )
 
     recommendations: list[str] = Field(
         default_factory=list,
         description="Recommendations based on analysis",
-        max_items=15
+        max_length=15
     )
 
     visual_reasoning_techniques: list[str] = Field(
         default_factory=list,
         description="Visual reasoning techniques applied",
-        max_items=10
+        max_length=10
     )
 
     confidence_scores: dict[str, float] = Field(

@@ -5,13 +5,12 @@ FastMCP-based server providing cognitive tools for strategic thinking and decisi
 Integrates with Claude Desktop and other MCP clients to provide analysis capabilities.
 """
 
-import asyncio
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fastmcp import FastMCP
 
-from .tool_handlers import CognitiveToolHandler
+from pyclarity.server.tool_handlers import CognitiveToolHandler
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +51,7 @@ def create_server() -> FastMCP:
         "Iterative Validation",
         "Multi-Perspective Analysis",
         "Sequential Readiness Assessment",
-        "Triple Constraint Optimization"
+        "Triple Constraint Optimization",
     ]
 
     for tool in tools:
@@ -72,7 +71,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         complexity_level: str = "moderate",
         focus_areas: list[str] | None = None,
         constraints: list[str] | None = None,
-        domain_expertise: str | None = None
+        domain_expertise: str | None = None,
     ) -> dict[str, Any]:
         """
         Analyze problems using structured mental model frameworks.
@@ -102,7 +101,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             complexity_level=complexity_level,
             focus_areas=focus_areas,
             constraints=constraints,
-            domain_expertise=domain_expertise
+            domain_expertise=domain_expertise,
         )
 
     # Sequential Thinking Tool
@@ -113,7 +112,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         reasoning_depth: int = 5,
         enable_branching: bool = True,
         enable_revision: bool = True,
-        branch_strategy: str = "adaptive"
+        branch_strategy: str = "adaptive",
     ) -> dict[str, Any]:
         """
         Apply structured sequential thinking with branching and revision.
@@ -138,7 +137,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             reasoning_depth=reasoning_depth,
             enable_branching=enable_branching,
             enable_revision=enable_revision,
-            branch_strategy=branch_strategy
+            branch_strategy=branch_strategy,
         )
 
     # Decision Framework Tool
@@ -150,7 +149,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         options: list[dict] | None = None,
         decision_methods: list[str] | None = None,
         stakeholder_weights: dict[str, float] | None = None,
-        time_constraints: str | None = None
+        time_constraints: str | None = None,
     ) -> dict[str, Any]:
         """
         Systematic decision-making using multi-criteria analysis.
@@ -177,7 +176,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             options=options,
             decision_methods=decision_methods,
             stakeholder_weights=stakeholder_weights,
-            time_constraints=time_constraints
+            time_constraints=time_constraints,
         )
 
     # Scientific Method Tool
@@ -189,7 +188,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         domain_knowledge: str | None = None,
         max_hypotheses: int = 3,
         evidence_sources: list[str] | None = None,
-        significance_threshold: float = 0.05
+        significance_threshold: float = 0.05,
     ) -> dict[str, Any]:
         """
         Apply scientific method for hypothesis-driven problem solving.
@@ -216,7 +215,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             domain_knowledge=domain_knowledge,
             max_hypotheses=max_hypotheses,
             evidence_sources=evidence_sources,
-            significance_threshold=significance_threshold
+            significance_threshold=significance_threshold,
         )
 
     # Add remaining tools with similar pattern...
@@ -228,7 +227,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         complexity_level: str = "moderate",
         problem_domain: str | None = None,
         system_scale: str | None = None,
-        constraints: list[str] | None = None
+        constraints: list[str] | None = None,
     ) -> dict[str, Any]:
         """Apply design pattern analysis for architectural solutions."""
         return await handler.handle_design_patterns(
@@ -236,7 +235,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             complexity_level=complexity_level,
             problem_domain=problem_domain,
             system_scale=system_scale,
-            constraints=constraints
+            constraints=constraints,
         )
 
     @mcp.tool()
@@ -245,7 +244,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         complexity_level: str = "moderate",
         current_paradigms: list[str] | None = None,
         target_paradigms: list[str] | None = None,
-        project_constraints: list[str] | None = None
+        project_constraints: list[str] | None = None,
     ) -> dict[str, Any]:
         """Analyze programming paradigm selection and application."""
         return await handler.handle_programming_paradigms(
@@ -253,7 +252,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             complexity_level=complexity_level,
             current_paradigms=current_paradigms,
             target_paradigms=target_paradigms,
-            project_constraints=project_constraints
+            project_constraints=project_constraints,
         )
 
     @mcp.tool()
@@ -264,7 +263,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         error_symptoms: list[str] | None = None,
         system_complexity: str | None = None,
         available_tools: list[str] | None = None,
-        time_constraints: str | None = None
+        time_constraints: str | None = None,
     ) -> dict[str, Any]:
         """Systematic debugging methodology and approach selection."""
         return await handler.handle_debugging_approaches(
@@ -274,7 +273,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             error_symptoms=error_symptoms,
             system_complexity=system_complexity,
             available_tools=available_tools,
-            time_constraints=time_constraints
+            time_constraints=time_constraints,
         )
 
     @mcp.tool()
@@ -282,14 +281,14 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         problem: str,
         visual_elements: list[dict] | None = None,
         representation_type: str = "diagram",
-        analysis_focus: list[str] | None = None
+        analysis_focus: list[str] | None = None,
     ) -> dict[str, Any]:
         """Visual problem representation and spatial reasoning analysis."""
         return await handler.handle_visual_reasoning(
             problem=problem,
             visual_elements=visual_elements,
             representation_type=representation_type,
-            analysis_focus=analysis_focus
+            analysis_focus=analysis_focus,
         )
 
     @mcp.tool()
@@ -299,7 +298,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         main_claim: str | None = None,
         premises: list[str] | None = None,
         evidence_sources: list[str] | None = None,
-        counter_arguments: list[str] | None = None
+        counter_arguments: list[str] | None = None,
     ) -> dict[str, Any]:
         """Logical argumentation structure and fallacy analysis."""
         return await handler.handle_structured_argumentation(
@@ -308,7 +307,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             main_claim=main_claim,
             premises=premises,
             evidence_sources=evidence_sources,
-            counter_arguments=counter_arguments
+            counter_arguments=counter_arguments,
         )
 
     @mcp.tool()
@@ -318,7 +317,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         reasoning_target: str | None = None,
         monitoring_focus: list[str] | None = None,
         monitoring_depth: str = "standard",
-        intervention_threshold: float = 0.7
+        intervention_threshold: float = 0.7,
     ) -> dict[str, Any]:
         """Self-awareness and reasoning quality monitoring."""
         return await handler.handle_metacognitive_monitoring(
@@ -327,7 +326,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             reasoning_target=reasoning_target,
             monitoring_focus=monitoring_focus,
             monitoring_depth=monitoring_depth,
-            intervention_threshold=intervention_threshold
+            intervention_threshold=intervention_threshold,
         )
 
     @mcp.tool()
@@ -337,7 +336,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         collaboration_objective: str | None = None,
         perspectives_needed: list[str] | None = None,
         max_rounds: int = 3,
-        consensus_threshold: float = 0.7
+        consensus_threshold: float = 0.7,
     ) -> dict[str, Any]:
         """Multi-perspective collaborative problem-solving."""
         return await handler.handle_collaborative_reasoning(
@@ -346,7 +345,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             collaboration_objective=collaboration_objective,
             perspectives_needed=perspectives_needed,
             max_rounds=max_rounds,
-            consensus_threshold=consensus_threshold
+            consensus_threshold=consensus_threshold,
         )
 
     # Temporarily disabled due to dependency issues
@@ -378,7 +377,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         test_preferences: list[str] | None = None,
         max_iterations: int = 5,
         target_confidence: float | None = None,
-        previous_cycles: list[dict] | None = None
+        previous_cycles: list[dict] | None = None,
     ) -> dict[str, Any]:
         """
         Hypothesis-test-learn-refine cycles for continuous improvement.
@@ -405,7 +404,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             test_preferences=test_preferences,
             max_iterations=max_iterations,
             target_confidence=target_confidence,
-            previous_cycles=previous_cycles
+            previous_cycles=previous_cycles,
         )
 
     @mcp.tool()
@@ -417,7 +416,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         known_constraints: list[str] | None = None,
         desired_outcome: str | None = None,
         time_horizon: str | None = None,
-        cultural_context: str | None = None
+        cultural_context: str | None = None,
     ) -> dict[str, Any]:
         """
         Analyze from multiple stakeholder viewpoints to find integration paths.
@@ -446,7 +445,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             known_constraints=known_constraints,
             desired_outcome=desired_outcome,
             time_horizon=time_horizon,
-            cultural_context=cultural_context
+            cultural_context=cultural_context,
         )
 
     @mcp.tool()
@@ -459,7 +458,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         key_constraints: list[str] | None = None,
         timeline_flexibility: str = "medium",
         risk_tolerance: str = "medium",
-        organizational_readiness: str = "medium"
+        organizational_readiness: str = "medium",
     ) -> dict[str, Any]:
         """
         Assess readiness progression through sequential states or phases.
@@ -490,7 +489,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             key_constraints=key_constraints,
             timeline_flexibility=timeline_flexibility,
             risk_tolerance=risk_tolerance,
-            organizational_readiness=organizational_readiness
+            organizational_readiness=organizational_readiness,
         )
 
     @mcp.tool()
@@ -504,7 +503,7 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
         risk_tolerance: str = "medium",
         timeline_flexibility: str = "medium",
         primary_stakeholders: list[str] | None = None,
-        organizational_readiness: str = "medium"
+        organizational_readiness: str = "medium",
     ) -> dict[str, Any]:
         """
         Optimize trade-offs between competing constraints (scope/time/cost).
@@ -537,15 +536,11 @@ def _register_cognitive_tools(mcp: FastMCP, handler: CognitiveToolHandler) -> No
             risk_tolerance=risk_tolerance,
             timeline_flexibility=timeline_flexibility,
             primary_stakeholders=primary_stakeholders,
-            organizational_readiness=organizational_readiness
+            organizational_readiness=organizational_readiness,
         )
 
 
-async def start_server(
-    host: str = "localhost",
-    port: int = 8000,
-    debug: bool = False
-) -> None:
+async def start_server(host: str = "localhost", port: int = 8000, debug: bool = False) -> FastMCP:
     """
     Start the PyClarity MCP server.
 
@@ -564,4 +559,4 @@ async def start_server(
 
     # Start the server
     logger.info(f"Starting PyClarity MCP server on {host}:{port}")
-    await mcp.run(host=host, port=port)
+    return mcp

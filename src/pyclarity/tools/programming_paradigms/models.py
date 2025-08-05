@@ -82,49 +82,49 @@ class ParadigmProfile(BaseModel):
     key_characteristics: list[ParadigmCharacteristic] = Field(
         default_factory=list,
         description="Key characteristics of the paradigm",
-        max_items=8
+        max_length=8
     )
 
     strengths: list[str] = Field(
         default_factory=list,
         description="Strengths of the paradigm",
-        max_items=8
+        max_length=8
     )
 
     weaknesses: list[str] = Field(
         default_factory=list,
         description="Weaknesses of the paradigm",
-        max_items=8
+        max_length=8
     )
 
     suitable_domains: list[ProblemDomain] = Field(
         default_factory=list,
         description="Domains where this paradigm excels",
-        max_items=8
+        max_length=8
     )
 
     languages: list[str] = Field(
         default_factory=list,
         description="Languages that support this paradigm",
-        max_items=10
+        max_length=10
     )
 
     concepts: list[str] = Field(
         default_factory=list,
         description="Core concepts of the paradigm",
-        max_items=8
+        max_length=8
     )
 
     best_practices: list[str] = Field(
         default_factory=list,
         description="Best practices for the paradigm",
-        max_items=10
+        max_length=10
     )
 
     antipatterns: list[str] = Field(
         default_factory=list,
         description="Common antipatterns to avoid",
-        max_items=8
+        max_length=8
     )
 
     learning_curve: str = Field(
@@ -169,37 +169,37 @@ class ParadigmAnalysis(BaseModel):
     matching_characteristics: list[ParadigmCharacteristic] = Field(
         default_factory=list,
         description="Characteristics that match the context",
-        max_items=8
+        max_length=8
     )
 
     benefits_for_context: list[str] = Field(
         default_factory=list,
         description="Benefits for this specific context",
-        max_items=8
+        max_length=8
     )
 
     challenges_for_context: list[str] = Field(
         default_factory=list,
         description="Challenges for this specific context",
-        max_items=8
+        max_length=8
     )
 
     implementation_guidance: list[str] = Field(
         default_factory=list,
         description="Implementation guidance",
-        max_items=8
+        max_length=8
     )
 
     code_structure_recommendations: list[str] = Field(
         default_factory=list,
         description="Code structure recommendations",
-        max_items=8
+        max_length=8
     )
 
     performance_considerations: list[str] = Field(
         default_factory=list,
         description="Performance considerations",
-        max_items=6
+        max_length=6
     )
 
 
@@ -214,15 +214,15 @@ class ParadigmComparison(BaseModel):
     paradigms: list[ProgrammingParadigm] = Field(
         ...,
         description="Paradigms being compared",
-        min_items=2,
-        max_items=8
+        min_length=2,
+        max_length=8
     )
 
     comparison_criteria: list[str] = Field(
         ...,
         description="Criteria for comparison",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     scores: dict[str, dict[str, float]] = Field(
@@ -238,7 +238,7 @@ class ParadigmComparison(BaseModel):
     hybrid_opportunities: list[str] = Field(
         default_factory=list,
         description="Opportunities for combining paradigms",
-        max_items=8
+        max_length=8
     )
 
     decision_matrix: dict[str, dict[str, str]] = Field(
@@ -263,8 +263,8 @@ class ParadigmMix(BaseModel):
     secondary_paradigms: list[ProgrammingParadigm] = Field(
         ...,
         description="Secondary paradigms",
-        min_items=1,
-        max_items=4
+        min_length=1,
+        max_length=4
     )
 
     integration_strategy: str = Field(
@@ -277,25 +277,25 @@ class ParadigmMix(BaseModel):
     synergies: list[str] = Field(
         default_factory=list,
         description="Synergies between paradigms",
-        max_items=8
+        max_length=8
     )
 
     conflicts: list[str] = Field(
         default_factory=list,
         description="Potential conflicts",
-        max_items=6
+        max_length=6
     )
 
     implementation_patterns: list[str] = Field(
         default_factory=list,
         description="Implementation patterns",
-        max_items=8
+        max_length=8
     )
 
     use_cases: list[str] = Field(
         default_factory=list,
         description="Use cases for this mix",
-        max_items=8
+        max_length=8
     )
 
     complexity_impact: str = Field(
@@ -317,7 +317,7 @@ class CodeStructureAnalysis(BaseModel):
     detected_paradigms: list[ProgrammingParadigm] = Field(
         default_factory=list,
         description="Detected paradigms in the code",
-        max_items=6
+        max_length=6
     )
 
     paradigm_purity: dict[str, float] = Field(
@@ -328,25 +328,25 @@ class CodeStructureAnalysis(BaseModel):
     structural_patterns: list[str] = Field(
         default_factory=list,
         description="Identified structural patterns",
-        max_items=8
+        max_length=8
     )
 
     paradigm_violations: list[str] = Field(
         default_factory=list,
         description="Paradigm violations found",
-        max_items=8
+        max_length=8
     )
 
     improvement_suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions for improvement",
-        max_items=8
+        max_length=8
     )
 
     refactoring_opportunities: list[str] = Field(
         default_factory=list,
         description="Refactoring opportunities",
-        max_items=8
+        max_length=8
     )
 
     paradigm_consistency_score: float = Field(
@@ -382,19 +382,19 @@ class ProgrammingParadigmsContext(BaseModel):
     requirements: list[str] = Field(
         default_factory=list,
         description="Functional and non-functional requirements",
-        max_items=15
+        max_length=15
     )
 
     constraints: list[str] = Field(
         default_factory=list,
         description="Technical constraints",
-        max_items=10
+        max_length=10
     )
 
     team_experience: list[ProgrammingParadigm] = Field(
         default_factory=list,
         description="Paradigms the team is experienced with",
-        max_items=8
+        max_length=8
     )
 
     performance_requirements: str | None = Field(
@@ -418,7 +418,7 @@ class ProgrammingParadigmsContext(BaseModel):
     target_languages: list[str] = Field(
         default_factory=list,
         description="Target programming languages",
-        max_items=5
+        max_length=5
     )
 
     existing_codebase: str | None = Field(
@@ -485,25 +485,25 @@ class ProgrammingParadigmsResult(BaseModel):
     implementation_roadmap: list[str] = Field(
         default_factory=list,
         description="Implementation roadmap suggestions",
-        max_items=10
+        max_length=10
     )
 
     learning_path_recommendations: list[str] = Field(
         default_factory=list,
         description="Learning path recommendations for the team",
-        max_items=8
+        max_length=8
     )
 
     risk_considerations: list[str] = Field(
         default_factory=list,
         description="Risk considerations for paradigm selection",
-        max_items=8
+        max_length=8
     )
 
     success_factors: list[str] = Field(
         default_factory=list,
         description="Success factors for paradigm adoption",
-        max_items=8
+        max_length=8
     )
 
     alternatives_analysis: dict[str, str] = Field(

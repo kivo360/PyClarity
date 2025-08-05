@@ -109,7 +109,7 @@ class BiasDetection(BaseModel):
     evidence: list[str] = Field(
         default_factory=list,
         description="Evidence supporting bias detection",
-        max_items=10
+        max_length=10
     )
 
     manifestation: str = Field(
@@ -134,7 +134,7 @@ class BiasDetection(BaseModel):
     correction_suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions for correcting the bias",
-        max_items=5
+        max_length=5
     )
 
     @field_validator('severity')
@@ -179,7 +179,7 @@ class ReasoningMonitor(BaseModel):
     metrics_tracked: list[str] = Field(
         default_factory=list,
         description="Specific metrics being tracked",
-        max_items=10
+        max_length=10
     )
 
     thresholds: dict[str, float] = Field(
@@ -195,13 +195,13 @@ class ReasoningMonitor(BaseModel):
     alerts_triggered: list[str] = Field(
         default_factory=list,
         description="Alerts that have been triggered",
-        max_items=20
+        max_length=20
     )
 
     interventions_suggested: list[str] = Field(
         default_factory=list,
         description="Interventions suggested by the monitor",
-        max_items=10
+        max_length=10
     )
 
     @field_validator('metrics_tracked', 'alerts_triggered', 'interventions_suggested')
@@ -239,7 +239,7 @@ class ConfidenceAssessment(BaseModel):
     calibration_factors: list[str] = Field(
         default_factory=list,
         description="Factors considered in calibration",
-        max_items=8
+        max_length=8
     )
 
     overconfidence_detected: bool = Field(
@@ -330,25 +330,25 @@ class StrategyEvaluation(BaseModel):
     strengths: list[str] = Field(
         default_factory=list,
         description="Strengths of the strategy",
-        max_items=8
+        max_length=8
     )
 
     weaknesses: list[str] = Field(
         default_factory=list,
         description="Weaknesses of the strategy",
-        max_items=8
+        max_length=8
     )
 
     alternative_strategies: list[str] = Field(
         default_factory=list,
         description="Alternative strategies that could be considered",
-        max_items=5
+        max_length=5
     )
 
     improvement_suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions for improving the strategy",
-        max_items=8
+        max_length=8
     )
 
     context_suitability: str = Field(
@@ -386,7 +386,7 @@ class MetaLearningInsight(BaseModel):
     supporting_evidence: list[str] = Field(
         default_factory=list,
         description="Evidence supporting this insight",
-        max_items=10
+        max_length=10
     )
 
     generalizability: float = Field(
@@ -406,13 +406,13 @@ class MetaLearningInsight(BaseModel):
     implications: list[str] = Field(
         default_factory=list,
         description="Implications of this insight",
-        max_items=8
+        max_length=8
     )
 
     related_insights: list[str] = Field(
         default_factory=list,
         description="Related insights or patterns",
-        max_items=5
+        max_length=5
     )
 
     confidence_in_insight: float = Field(
@@ -459,7 +459,7 @@ class MetacognitiveMonitoringContext(BaseModel):
     monitoring_focus: list[str] = Field(
         default_factory=list,
         description="Specific aspects to focus monitoring on",
-        max_items=8
+        max_length=8
     )
 
     bias_detection_enabled: bool = Field(
@@ -534,13 +534,13 @@ class MetacognitiveMonitoringResult(BaseModel):
     bias_detections: list[BiasDetection] = Field(
         default_factory=list,
         description="Biases detected in the reasoning",
-        max_items=10
+        max_length=10
     )
 
     reasoning_monitors: list[ReasoningMonitor] = Field(
         default_factory=list,
         description="Monitors tracking reasoning process",
-        max_items=10
+        max_length=10
     )
 
     confidence_assessment: ConfidenceAssessment = Field(
@@ -551,13 +551,13 @@ class MetacognitiveMonitoringResult(BaseModel):
     strategy_evaluations: list[StrategyEvaluation] = Field(
         default_factory=list,
         description="Evaluations of reasoning strategies",
-        max_items=8
+        max_length=8
     )
 
     meta_learning_insights: list[MetaLearningInsight] = Field(
         default_factory=list,
         description="Insights from meta-learning",
-        max_items=10
+        max_length=10
     )
 
     overall_reasoning_quality: float = Field(
@@ -577,19 +577,19 @@ class MetacognitiveMonitoringResult(BaseModel):
     improvement_recommendations: list[str] = Field(
         default_factory=list,
         description="Recommendations for improving reasoning",
-        max_items=10
+        max_length=10
     )
 
     intervention_alerts: list[str] = Field(
         default_factory=list,
         description="Alerts for immediate interventions",
-        max_items=5
+        max_length=5
     )
 
     reasoning_patterns_identified: list[str] = Field(
         default_factory=list,
         description="Patterns identified in reasoning",
-        max_items=8
+        max_length=8
     )
 
     monitoring_duration_seconds: float = Field(

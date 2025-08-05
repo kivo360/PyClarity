@@ -18,8 +18,8 @@ class TestAllCognitiveToolsValidation:
         try:
             from pyclarity.tools.mental_models.models import (
                 MentalModelType,
-                MentalModelsContext,
-                MentalModelsResult
+                MentalModelContext,
+                MentalModelResult
             )
             from pyclarity.tools.mental_models.analyzer import MentalModelsAnalyzer
             # Test basic enum functionality

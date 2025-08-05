@@ -106,7 +106,7 @@ class ThoughtStep(BaseModel):
     )
 
     dependencies: list[str] = Field(
-        default_factory=list, description="Step IDs that this step depends on", max_items=5
+        default_factory=list, description="Step IDs that this step depends on", max_length=5
     )
 
     branch_id: str | None = Field(
@@ -118,15 +118,15 @@ class ThoughtStep(BaseModel):
     )
 
     supporting_evidence: list[str] = Field(
-        default_factory=list, description="Evidence or facts supporting this step", max_items=8
+        default_factory=list, description="Evidence or facts supporting this step", max_length=8
     )
 
     assumptions_made: list[str] = Field(
-        default_factory=list, description="Assumptions made in this reasoning step", max_items=5
+        default_factory=list, description="Assumptions made in this reasoning step", max_length=5
     )
 
     potential_errors: list[str] = Field(
-        default_factory=list, description="Potential errors or weaknesses in this step", max_items=3
+        default_factory=list, description="Potential errors or weaknesses in this step", max_length=3
     )
 
     revision_notes: str | None = Field(
@@ -215,7 +215,7 @@ class ThoughtBranch(BaseModel):
     parent_step_id: str | None = Field(None, description="Step ID where this branch originated")
 
     steps: list[ThoughtStep] = Field(
-        default_factory=list, description="Thought steps in this branch", max_items=20
+        default_factory=list, description="Thought steps in this branch", max_length=20
     )
 
     branch_confidence: float = Field(
@@ -229,7 +229,7 @@ class ThoughtBranch(BaseModel):
     completion_criteria: list[str] = Field(
         default_factory=list,
         description="Criteria for considering this branch complete",
-        max_items=5,
+        max_length=5,
     )
 
     created_at: datetime = Field(
@@ -310,19 +310,19 @@ class SequentialThinkingContext(BaseModel):
     allow_revisions: bool = Field(True, description="Whether to allow revision of previous steps")
 
     step_types_priority: list[ThoughtStepType] | None = Field(
-        None, description="Preferred order of thought step types", max_items=9
+        None, description="Preferred order of thought step types", max_length=9
     )
 
     domain_constraints: list[str] = Field(
-        default_factory=list, description="Domain-specific constraints to consider", max_items=8
+        default_factory=list, description="Domain-specific constraints to consider", max_length=8
     )
 
     evidence_sources: list[str] = Field(
-        default_factory=list, description="Available evidence sources to consider", max_items=10
+        default_factory=list, description="Available evidence sources to consider", max_length=10
     )
 
     validation_criteria: list[str] = Field(
-        default_factory=list, description="Criteria for validating reasoning steps", max_items=6
+        default_factory=list, description="Criteria for validating reasoning steps", max_length=6
     )
 
     @field_validator("problem")
@@ -353,19 +353,19 @@ class SequentialThinkingResult(BaseModel):
     """Result of sequential thinking analysis"""
 
     reasoning_chain: list[ThoughtStep] = Field(
-        ..., description="Complete sequence of reasoning steps", min_items=1, max_items=20
+        ..., description="Complete sequence of reasoning steps", min_length=1, max_length=20
     )
 
     branches_explored: list[ThoughtBranch] = Field(
         default_factory=list,
         description="Alternative reasoning branches that were explored",
-        max_items=5,
+        max_length=5,
     )
 
     revisions_made: list[ThoughtRevision] = Field(
         default_factory=list,
         description="Revisions made during the reasoning process",
-        max_items=10,
+        max_length=10,
     )
 
     final_conclusion: str = Field(
@@ -386,19 +386,19 @@ class SequentialThinkingResult(BaseModel):
     critical_assumptions: list[str] = Field(
         default_factory=list,
         description="Critical assumptions underlying the reasoning",
-        max_items=8,
+        max_length=8,
     )
 
     evidence_gaps: list[str] = Field(
         default_factory=list,
         description="Areas where additional evidence would strengthen reasoning",
-        max_items=6,
+        max_length=6,
     )
 
     alternative_conclusions: list[str] = Field(
         default_factory=list,
         description="Alternative conclusions that were considered",
-        max_items=5,
+        max_length=5,
     )
 
     reasoning_path_summary: str = Field(
@@ -419,7 +419,7 @@ class SequentialThinkingResult(BaseModel):
     recommendations: list[str] = Field(
         default_factory=list,
         description="Actionable recommendations based on the reasoning",
-        max_items=8,
+        max_length=8,
     )
 
     limitations: str | None = Field(

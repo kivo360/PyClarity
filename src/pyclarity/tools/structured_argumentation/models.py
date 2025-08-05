@@ -100,7 +100,7 @@ class Premise(BaseModel):
     supporting_evidence: list[str] = Field(
         default_factory=list,
         description="Evidence supporting this premise",
-        max_items=10
+        max_length=10
     )
 
     source: str | None = Field(
@@ -165,13 +165,13 @@ class Evidence(BaseModel):
     supporting_premises: list[str] = Field(
         default_factory=list,
         description="Premises this evidence supports",
-        max_items=20
+        max_length=20
     )
 
     contradicting_evidence: list[str] = Field(
         default_factory=list,
         description="Evidence that contradicts this evidence",
-        max_items=10
+        max_length=10
     )
 
     context: str = Field(
@@ -183,7 +183,7 @@ class Evidence(BaseModel):
     limitations: list[str] = Field(
         default_factory=list,
         description="Limitations of this evidence",
-        max_items=8
+        max_length=8
     )
 
 
@@ -198,20 +198,20 @@ class LogicChain(BaseModel):
     premises: list[Premise] = Field(
         ...,
         description="Premises in the logic chain",
-        min_items=1,
-        max_items=20
+        min_length=1,
+        max_length=20
     )
 
     inference_rules: list[str] = Field(
         default_factory=list,
         description="Inference rules applied",
-        max_items=10
+        max_length=10
     )
 
     intermediate_conclusions: list[str] = Field(
         default_factory=list,
         description="Intermediate conclusions in the chain",
-        max_items=15
+        max_length=15
     )
 
     final_conclusion: str = Field(
@@ -241,7 +241,7 @@ class LogicChain(BaseModel):
     logical_gaps: list[str] = Field(
         default_factory=list,
         description="Identified gaps in logical reasoning",
-        max_items=10
+        max_length=10
     )
 
     strength_rating: StrengthLevel = Field(
@@ -268,32 +268,32 @@ class ArgumentStructure(BaseModel):
     logic_chains: list[LogicChain] = Field(
         ...,
         description="Logic chains supporting the claim",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     supporting_evidence: list[Evidence] = Field(
         default_factory=list,
         description="Evidence supporting the argument",
-        max_items=20
+        max_length=20
     )
 
     counterarguments: list[str] = Field(
         default_factory=list,
         description="Known counterarguments",
-        max_items=15
+        max_length=15
     )
 
     rebuttals: list[str] = Field(
         default_factory=list,
         description="Rebuttals to counterarguments",
-        max_items=15
+        max_length=15
     )
 
     assumptions: list[str] = Field(
         default_factory=list,
         description="Underlying assumptions",
-        max_items=10
+        max_length=10
     )
 
     context: str = Field(
@@ -420,25 +420,25 @@ class ArgumentAnalysis(BaseModel):
     detected_fallacies: list[FallacyDetection] = Field(
         default_factory=list,
         description="Logical fallacies detected",
-        max_items=20
+        max_length=20
     )
 
     strengths: list[str] = Field(
         default_factory=list,
         description="Argument strengths identified",
-        max_items=15
+        max_length=15
     )
 
     weaknesses: list[str] = Field(
         default_factory=list,
         description="Argument weaknesses identified",
-        max_items=15
+        max_length=15
     )
 
     improvement_suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions for improving the argument",
-        max_items=20
+        max_length=20
     )
 
     overall_quality: StrengthLevel = Field(
@@ -465,7 +465,7 @@ class CounterargumentAnalysis(BaseModel):
     counterarguments: list[str] = Field(
         default_factory=list,
         description="Generated counterarguments",
-        max_items=20
+        max_length=20
     )
 
     counterargument_strength: dict[str, str] = Field(
@@ -488,13 +488,13 @@ class CounterargumentAnalysis(BaseModel):
     defensive_strategies: list[str] = Field(
         default_factory=list,
         description="Strategies to defend against counterarguments",
-        max_items=15
+        max_length=15
     )
 
     strengthening_recommendations: list[str] = Field(
         default_factory=list,
         description="Recommendations to strengthen the argument",
-        max_items=15
+        max_length=15
     )
 
 
@@ -516,8 +516,8 @@ class DebateStructure(BaseModel):
     positions: list[str] = Field(
         ...,
         description="Different positions in the debate",
-        min_items=2,
-        max_items=10
+        min_length=2,
+        max_length=10
     )
 
     arguments_by_position: dict[str, list[str]] = Field(
@@ -533,19 +533,19 @@ class DebateStructure(BaseModel):
     consensus_points: list[str] = Field(
         default_factory=list,
         description="Points of agreement across positions",
-        max_items=20
+        max_length=20
     )
 
     contentious_points: list[str] = Field(
         default_factory=list,
         description="Highly disputed points",
-        max_items=20
+        max_length=20
     )
 
     resolution_pathways: list[str] = Field(
         default_factory=list,
         description="Potential paths to resolution",
-        max_items=15
+        max_length=15
     )
 
     quality_assessment: dict[str, float] = Field(
@@ -657,25 +657,25 @@ class StructuredArgumentationResult(BaseModel):
     improvement_roadmap: list[str] = Field(
         default_factory=list,
         description="Step-by-step improvement roadmap",
-        max_items=20
+        max_length=20
     )
 
     logical_consistency_report: list[str] = Field(
         default_factory=list,
         description="Report on logical consistency issues",
-        max_items=15
+        max_length=15
     )
 
     evidence_assessment: list[str] = Field(
         default_factory=list,
         description="Assessment of evidence quality and relevance",
-        max_items=15
+        max_length=15
     )
 
     recommended_strengthening: list[str] = Field(
         default_factory=list,
         description="Recommendations for strengthening the argument",
-        max_items=15
+        max_length=15
     )
 
     fallacy_summary: dict[str, int] = Field(

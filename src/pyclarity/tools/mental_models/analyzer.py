@@ -307,16 +307,14 @@ class MentalModelsAnalyzer:
             "Document the explanation process for future reference"
         ]
 
-        # Generate structured explanation
-        structured_explanation = f"""When we break down '{context.problem}' step by step:
-
-1. What exactly is the problem? (Define clearly without jargon)
-2. What have we tried already? (Document previous approaches)
-3. What are we assuming? (Make implicit knowledge explicit)
-4. Where are we getting stuck? (Identify specific roadblocks)
-5. What would we do if we had unlimited resources? (Remove artificial constraints)
-
-This methodical explanation process often reveals that the real problem is different from the perceived problem."""
+        # Generate structured explanation (truncated for model constraints)
+        problem_summary = context.problem[:100] + "..." if len(context.problem) > 100 else context.problem
+        structured_explanation = (
+            f"Breaking down '{problem_summary}' through systematic explanation: "
+            f"1) Define clearly, 2) Document attempts, 3) Surface assumptions, "
+            f"4) Identify blockers, 5) Remove constraints. "
+            f"This reveals the real problem differs from perceived."
+        )
 
         return MentalModelResult(
             model_applied=MentalModelType.RUBBER_DUCK,

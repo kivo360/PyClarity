@@ -93,7 +93,7 @@ class DesignPattern(BaseModel):
     applicability: list[str] = Field(
         default_factory=list,
         description="When to apply this pattern",
-        max_items=10
+        max_length=10
     )
 
     structure: dict[str, Any] = Field(
@@ -104,13 +104,13 @@ class DesignPattern(BaseModel):
     participants: list[str] = Field(
         default_factory=list,
         description="Classes and objects participating in the pattern",
-        max_items=10
+        max_length=10
     )
 
     collaborations: list[str] = Field(
         default_factory=list,
         description="How participants collaborate",
-        max_items=8
+        max_length=8
     )
 
     consequences: dict[str, list[str]] = Field(
@@ -121,13 +121,13 @@ class DesignPattern(BaseModel):
     implementation_notes: list[str] = Field(
         default_factory=list,
         description="Implementation considerations",
-        max_items=8
+        max_length=8
     )
 
     related_patterns: list[str] = Field(
         default_factory=list,
         description="Related or similar patterns",
-        max_items=8
+        max_length=8
     )
 
     complexity: PatternComplexity = Field(
@@ -138,7 +138,7 @@ class DesignPattern(BaseModel):
     principles_supported: list[DesignPrinciple] = Field(
         default_factory=list,
         description="Design principles this pattern supports",
-        max_items=6
+        max_length=6
     )
 
     @field_validator('name')
@@ -195,13 +195,13 @@ class PatternApplication(BaseModel):
     benefits: list[str] = Field(
         default_factory=list,
         description="Benefits of applying this pattern",
-        max_items=8
+        max_length=8
     )
 
     drawbacks: list[str] = Field(
         default_factory=list,
         description="Potential drawbacks or risks",
-        max_items=8
+        max_length=8
     )
 
     implementation_effort: PatternComplexity = Field(
@@ -212,13 +212,13 @@ class PatternApplication(BaseModel):
     prerequisites: list[str] = Field(
         default_factory=list,
         description="Prerequisites for implementation",
-        max_items=6
+        max_length=6
     )
 
     alternatives: list[str] = Field(
         default_factory=list,
         description="Alternative patterns to consider",
-        max_items=5
+        max_length=5
     )
 
     recommendation: str = Field(
@@ -274,25 +274,25 @@ class ArchitecturalDecision(BaseModel):
     alternatives_considered: list[str] = Field(
         default_factory=list,
         description="Alternative solutions that were considered",
-        max_items=8
+        max_length=8
     )
 
     consequences: list[str] = Field(
         default_factory=list,
         description="Consequences of this decision",
-        max_items=8
+        max_length=8
     )
 
     patterns_involved: list[str] = Field(
         default_factory=list,
         description="Design patterns involved in this decision",
-        max_items=5
+        max_length=5
     )
 
     principles_applied: list[DesignPrinciple] = Field(
         default_factory=list,
         description="Design principles applied in this decision",
-        max_items=6
+        max_length=6
     )
 
     decision_date: str = Field(
@@ -303,7 +303,7 @@ class ArchitecturalDecision(BaseModel):
     stakeholders: list[str] = Field(
         default_factory=list,
         description="Stakeholders involved in the decision",
-        max_items=10
+        max_length=10
     )
 
 
@@ -318,8 +318,8 @@ class PatternCombination(BaseModel):
     patterns: list[DesignPattern] = Field(
         ...,
         description="Patterns in the combination",
-        min_items=2,
-        max_items=5
+        min_length=2,
+        max_length=5
     )
 
     interaction_type: str = Field(
@@ -331,13 +331,13 @@ class PatternCombination(BaseModel):
     combined_benefits: list[str] = Field(
         default_factory=list,
         description="Benefits of combining these patterns",
-        max_items=8
+        max_length=8
     )
 
     potential_conflicts: list[str] = Field(
         default_factory=list,
         description="Potential conflicts when combining patterns",
-        max_items=6
+        max_length=6
     )
 
     integration_complexity: PatternComplexity = Field(
@@ -348,13 +348,13 @@ class PatternCombination(BaseModel):
     usage_scenarios: list[str] = Field(
         default_factory=list,
         description="Scenarios where this combination is useful",
-        max_items=6
+        max_length=6
     )
 
     best_practices: list[str] = Field(
         default_factory=list,
         description="Best practices for combining these patterns",
-        max_items=8
+        max_length=8
     )
 
 
@@ -403,7 +403,7 @@ class DesignAnalysis(BaseModel):
     improvement_suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions for improving the design",
-        max_items=10
+        max_length=10
     )
 
     principle_adherence: dict[DesignPrinciple, float] = Field(
@@ -437,25 +437,25 @@ class DesignPatternsContext(BaseModel):
     requirements: list[str] = Field(
         default_factory=list,
         description="System requirements",
-        max_items=15
+        max_length=15
     )
 
     constraints: list[str] = Field(
         default_factory=list,
         description="Design constraints",
-        max_items=10
+        max_length=10
     )
 
     existing_patterns: list[str] = Field(
         default_factory=list,
         description="Patterns already used in the system",
-        max_items=10
+        max_length=10
     )
 
     target_principles: list[DesignPrinciple] = Field(
         default_factory=list,
         description="Design principles to emphasize",
-        max_items=8
+        max_length=8
     )
 
     performance_requirements: str | None = Field(
@@ -535,7 +535,7 @@ class DesignPatternsResult(BaseModel):
     improvement_suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions for improving the design",
-        max_items=10
+        max_length=10
     )
 
     pattern_catalog_size: int = Field(

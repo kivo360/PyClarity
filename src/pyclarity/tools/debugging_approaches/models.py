@@ -96,26 +96,26 @@ class DebugContext(BaseModel):
     error_symptoms: list[str] = Field(
         ...,
         description="Observable symptoms of the error",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     reproduction_steps: list[str] = Field(
         default_factory=list,
         description="Steps to reproduce the error",
-        max_items=15
+        max_length=15
     )
 
     constraints: list[str] = Field(
         default_factory=list,
         description="Debugging constraints (time, resources, access)",
-        max_items=8
+        max_length=8
     )
 
     available_tools: list[str] = Field(
         default_factory=list,
         description="Available debugging tools",
-        max_items=15
+        max_length=15
     )
 
     time_constraints: str | None = Field(
@@ -174,20 +174,20 @@ class ErrorClassification(BaseModel):
     symptoms: list[str] = Field(
         ...,
         description="Observable symptoms",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     potential_causes: list[str] = Field(
         default_factory=list,
         description="Potential causes of the error",
-        max_items=8
+        max_length=8
     )
 
     affected_components: list[str] = Field(
         default_factory=list,
         description="Components affected by the error",
-        max_items=10
+        max_length=10
     )
 
     frequency: str = Field(
@@ -235,19 +235,19 @@ class DebuggingHypothesis(BaseModel):
     supporting_evidence: list[str] = Field(
         default_factory=list,
         description="Evidence supporting this hypothesis",
-        max_items=8
+        max_length=8
     )
 
     contradicting_evidence: list[str] = Field(
         default_factory=list,
         description="Evidence contradicting this hypothesis",
-        max_items=8
+        max_length=8
     )
 
     test_plan: list[str] = Field(
         default_factory=list,
         description="Steps to test this hypothesis",
-        max_items=10
+        max_length=10
     )
 
     estimated_effort: str = Field(
@@ -265,7 +265,7 @@ class DebuggingHypothesis(BaseModel):
     alternative_hypotheses: list[str] = Field(
         default_factory=list,
         description="Alternative hypotheses to consider",
-        max_items=5
+        max_length=5
     )
 
 
@@ -310,13 +310,13 @@ class DebuggingStep(BaseModel):
     tools_used: list[str] = Field(
         default_factory=list,
         description="Tools used in this step",
-        max_items=8
+        max_length=8
     )
 
     evidence_gathered: list[str] = Field(
         default_factory=list,
         description="Evidence gathered from this step",
-        max_items=10
+        max_length=10
     )
 
     time_spent: str | None = Field(
@@ -333,7 +333,7 @@ class DebuggingStep(BaseModel):
     next_steps: list[str] = Field(
         default_factory=list,
         description="Recommended next steps",
-        max_items=5
+        max_length=5
     )
 
 
@@ -355,13 +355,13 @@ class RootCauseAnalysis(BaseModel):
     root_causes: list[str] = Field(
         default_factory=list,
         description="Identified root causes",
-        max_items=8
+        max_length=8
     )
 
     contributing_factors: list[str] = Field(
         default_factory=list,
         description="Contributing factors to the problem",
-        max_items=10
+        max_length=10
     )
 
     analysis_method: str = Field(
@@ -373,19 +373,19 @@ class RootCauseAnalysis(BaseModel):
     evidence_chain: list[str] = Field(
         default_factory=list,
         description="Chain of evidence leading to root cause",
-        max_items=10
+        max_length=10
     )
 
     prevention_measures: list[str] = Field(
         default_factory=list,
         description="Measures to prevent recurrence",
-        max_items=10
+        max_length=10
     )
 
     systemic_issues: list[str] = Field(
         default_factory=list,
         description="Systemic issues identified",
-        max_items=8
+        max_length=8
     )
 
     confidence_score: float = Field(
@@ -417,13 +417,13 @@ class DebuggingSession(BaseModel):
     hypotheses: list[DebuggingHypothesis] = Field(
         default_factory=list,
         description="Generated hypotheses",
-        max_items=10
+        max_length=10
     )
 
     debugging_steps: list[DebuggingStep] = Field(
         default_factory=list,
         description="Steps taken during debugging",
-        max_items=20
+        max_length=20
     )
 
     root_cause_analysis: RootCauseAnalysis | None = Field(
@@ -440,13 +440,13 @@ class DebuggingSession(BaseModel):
     lessons_learned: list[str] = Field(
         default_factory=list,
         description="Lessons learned from the session",
-        max_items=10
+        max_length=10
     )
 
     prevention_recommendations: list[str] = Field(
         default_factory=list,
         description="Recommendations to prevent similar issues",
-        max_items=10
+        max_length=10
     )
 
     session_duration: str | None = Field(
@@ -506,25 +506,25 @@ class DebuggingRecommendation(BaseModel):
     required_tools: list[str] = Field(
         default_factory=list,
         description="Tools required for this strategy",
-        max_items=8
+        max_length=8
     )
 
     prerequisites: list[str] = Field(
         default_factory=list,
         description="Prerequisites for using this strategy",
-        max_items=8
+        max_length=8
     )
 
     alternative_strategies: list[DebuggingStrategy] = Field(
         default_factory=list,
         description="Alternative strategies to consider",
-        max_items=5
+        max_length=5
     )
 
     risk_factors: list[str] = Field(
         default_factory=list,
         description="Risk factors and limitations",
-        max_items=8
+        max_length=8
     )
 
 
@@ -553,8 +553,8 @@ class DebuggingApproachesContext(BaseModel):
     error_symptoms: list[str] = Field(
         ...,
         description="Observable symptoms of the error",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     environment_details: dict[str, str] = Field(
@@ -565,7 +565,7 @@ class DebuggingApproachesContext(BaseModel):
     available_tools: list[str] = Field(
         default_factory=list,
         description="Available debugging tools and resources",
-        max_items=15
+        max_length=15
     )
 
     time_constraints: str | None = Field(
@@ -582,19 +582,19 @@ class DebuggingApproachesContext(BaseModel):
     reproduction_steps: list[str] = Field(
         default_factory=list,
         description="Known steps to reproduce the error",
-        max_items=15
+        max_length=15
     )
 
     previous_attempts: list[str] = Field(
         default_factory=list,
         description="Previous debugging attempts and their results",
-        max_items=10
+        max_length=10
     )
 
     team_expertise: list[str] = Field(
         default_factory=list,
         description="Team's expertise and skills",
-        max_items=10
+        max_length=10
     )
 
     include_root_cause_analysis: bool = Field(
@@ -660,37 +660,37 @@ class DebuggingApproachesResult(BaseModel):
     debugging_roadmap: list[str] = Field(
         default_factory=list,
         description="Step-by-step debugging roadmap",
-        max_items=15
+        max_length=15
     )
 
     prevention_measures: list[str] = Field(
         default_factory=list,
         description="Measures to prevent similar issues",
-        max_items=10
+        max_length=10
     )
 
     risk_assessment: list[str] = Field(
         default_factory=list,
         description="Risk factors and mitigation strategies",
-        max_items=8
+        max_length=8
     )
 
     tool_recommendations: list[str] = Field(
         default_factory=list,
         description="Recommended tools for debugging",
-        max_items=10
+        max_length=10
     )
 
     best_practices: list[str] = Field(
         default_factory=list,
         description="Best practices for this type of debugging",
-        max_items=10
+        max_length=10
     )
 
     learning_opportunities: list[str] = Field(
         default_factory=list,
         description="Learning opportunities from this debugging scenario",
-        max_items=8
+        max_length=8
     )
 
     processing_time_ms: int = Field(
