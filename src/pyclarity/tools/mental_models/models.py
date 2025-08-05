@@ -144,13 +144,13 @@ class MentalModelContext(BaseModel):
     focus_areas: list[str] | None = Field(
         None,
         description="Specific areas to focus the analysis on",
-        max_items=5
+        max_length=5
     )
 
     constraints: list[str] | None = Field(
         None,
         description="Known constraints or limitations",
-        max_items=8
+        max_length=8
     )
 
     domain_expertise: str | None = Field(
@@ -201,45 +201,45 @@ class MentalModelResult(BaseModel):
     key_insights: list[MentalModelInsight] = Field(
         ...,
         description="List of key insights from the analysis",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     recommendations: list[str] = Field(
         ...,
         description="Actionable recommendations based on the analysis",
-        min_items=1,
-        max_items=8
+        min_length=1,
+        max_length=8
     )
 
     assumptions_identified: list[MentalModelAssumption] = Field(
         default_factory=list,
         description="Assumptions identified during analysis",
-        max_items=6
+        max_length=6
     )
 
     fundamental_elements: list[str] | None = Field(
         None,
         description="Fundamental elements identified (for first principles)",
-        max_items=8
+        max_length=8
     )
 
     trade_offs: list[dict[str, str]] | None = Field(
         None,
         description="Trade-offs identified (for opportunity cost)",
-        max_items=5
+        max_length=5
     )
 
     error_paths: list[str] | None = Field(
         None,
         description="Error propagation paths identified",
-        max_items=6
+        max_length=6
     )
 
     critical_factors: list[str] | None = Field(
         None,
         description="Critical 20% factors (for Pareto analysis)",
-        max_items=5
+        max_length=5
     )
 
     simplified_explanation: str | None = Field(
@@ -257,7 +257,7 @@ class MentalModelResult(BaseModel):
     next_steps: list[str] | None = Field(
         None,
         description="Suggested next steps based on analysis",
-        max_items=5
+        max_length=5
     )
 
     processing_time_ms: int = Field(

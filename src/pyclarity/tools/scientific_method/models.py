@@ -107,19 +107,19 @@ class Hypothesis(BaseModel):
     variables: list[str] = Field(
         default_factory=list,
         description="Variables involved in the hypothesis",
-        max_items=10
+        max_length=10
     )
 
     assumptions: list[str] = Field(
         default_factory=list,
         description="Underlying assumptions",
-        max_items=8
+        max_length=8
     )
 
     predictions: list[str] = Field(
         default_factory=list,
         description="Specific predictions made by the hypothesis",
-        max_items=8
+        max_length=8
     )
 
     testability: float = Field(
@@ -145,7 +145,7 @@ class Hypothesis(BaseModel):
     related_hypotheses: list[str] = Field(
         default_factory=list,
         description="Related or competing hypotheses",
-        max_items=5
+        max_length=5
     )
 
     @field_validator('statement')
@@ -233,7 +233,7 @@ class Evidence(BaseModel):
     limitations: list[str] = Field(
         default_factory=list,
         description="Limitations of this evidence",
-        max_items=5
+        max_length=5
     )
 
 
@@ -273,13 +273,13 @@ class Experiment(BaseModel):
     variables_controlled: list[str] = Field(
         default_factory=list,
         description="Variables that are controlled",
-        max_items=10
+        max_length=10
     )
 
     variables_measured: list[str] = Field(
         default_factory=list,
         description="Variables that are measured",
-        max_items=10
+        max_length=10
     )
 
     methodology: str = Field(
@@ -291,25 +291,25 @@ class Experiment(BaseModel):
     expected_outcomes: list[str] = Field(
         default_factory=list,
         description="Expected outcomes",
-        max_items=8
+        max_length=8
     )
 
     success_criteria: list[str] = Field(
         default_factory=list,
         description="Criteria for determining success",
-        max_items=8
+        max_length=8
     )
 
     potential_confounds: list[str] = Field(
         default_factory=list,
         description="Potential confounding factors",
-        max_items=8
+        max_length=8
     )
 
     ethical_considerations: list[str] = Field(
         default_factory=list,
         description="Ethical considerations",
-        max_items=6
+        max_length=6
     )
 
     feasibility_score: float = Field(
@@ -331,7 +331,7 @@ class HypothesisTest(BaseModel):
     evidence_considered: list[str] = Field(
         default_factory=list,
         description="IDs of evidence considered",
-        max_items=20
+        max_length=20
     )
 
     test_result: TestResult = Field(
@@ -380,19 +380,19 @@ class HypothesisTest(BaseModel):
     alternative_explanations: list[str] = Field(
         default_factory=list,
         description="Alternative explanations considered",
-        max_items=5
+        max_length=5
     )
 
     limitations: list[str] = Field(
         default_factory=list,
         description="Limitations of the test",
-        max_items=6
+        max_length=6
     )
 
     recommendations: list[str] = Field(
         default_factory=list,
         description="Recommendations based on results",
-        max_items=6
+        max_length=6
     )
 
 
@@ -416,14 +416,14 @@ class TheoryConstruction(BaseModel):
     supporting_hypotheses: list[str] = Field(
         default_factory=list,
         description="Hypotheses that support the theory",
-        max_items=10
+        max_length=10
     )
 
     core_principles: list[str] = Field(
         default_factory=list,
         description="Core principles of the theory",
-        min_items=1,
-        max_items=8
+        min_length=1,
+        max_length=8
     )
 
     explanatory_power: float = Field(
@@ -456,13 +456,13 @@ class TheoryConstruction(BaseModel):
     testable_predictions: list[str] = Field(
         default_factory=list,
         description="Testable predictions from the theory",
-        max_items=10
+        max_length=10
     )
 
     competing_theories: list[str] = Field(
         default_factory=list,
         description="Competing theories",
-        max_items=5
+        max_length=5
     )
 
     theory_confidence: float = Field(
@@ -532,13 +532,13 @@ class ScientificMethodContext(BaseModel):
     evidence_sources: list[str] = Field(
         default_factory=list,
         description="Available evidence sources",
-        max_items=10
+        max_length=10
     )
 
     constraints: list[str] = Field(
         default_factory=list,
         description="Constraints on investigation",
-        max_items=8
+        max_length=8
     )
 
     prior_knowledge: str | None = Field(
@@ -632,19 +632,19 @@ class ScientificMethodResult(BaseModel):
     conclusions_supported: list[str] = Field(
         default_factory=list,
         description="Conclusions that are well-supported",
-        max_items=10
+        max_length=10
     )
 
     areas_needing_research: list[str] = Field(
         default_factory=list,
         description="Areas that need further research",
-        max_items=8
+        max_length=8
     )
 
     methodological_recommendations: list[str] = Field(
         default_factory=list,
         description="Recommendations for methodology",
-        max_items=8
+        max_length=8
     )
 
     investigation_duration_minutes: float = Field(

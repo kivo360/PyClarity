@@ -112,19 +112,19 @@ class Persona(BaseModel):
     priorities: list[str] = Field(
         default_factory=list,
         description="Key priorities and concerns",
-        max_items=10
+        max_length=10
     )
 
     constraints: list[str] = Field(
         default_factory=list,
         description="Constraints or limitations",
-        max_items=10
+        max_length=10
     )
 
     expertise_areas: list[str] = Field(
         default_factory=list,
         description="Areas of expertise",
-        max_items=10
+        max_length=10
     )
 
     influence_weight: float = Field(
@@ -172,25 +172,25 @@ class PersonaPerspective(BaseModel):
     concerns: list[str] = Field(
         default_factory=list,
         description="Concerns raised by this persona",
-        max_items=10
+        max_length=10
     )
 
     suggestions: list[str] = Field(
         default_factory=list,
         description="Suggestions from this persona",
-        max_items=10
+        max_length=10
     )
 
     supporting_arguments: list[str] = Field(
         default_factory=list,
         description="Arguments supporting their position",
-        max_items=10
+        max_length=10
     )
 
     objections: list[str] = Field(
         default_factory=list,
         description="Objections to other perspectives",
-        max_items=10
+        max_length=10
     )
 
     confidence_level: float = Field(
@@ -203,7 +203,7 @@ class PersonaPerspective(BaseModel):
     reasoning_path: list[str] = Field(
         default_factory=list,
         description="How they arrived at this perspective",
-        max_items=10
+        max_length=10
     )
 
     timestamp: datetime = Field(
@@ -223,8 +223,8 @@ class CollaborativeDialogue(BaseModel):
     participants: list[str] = Field(
         ...,
         description="Names of participating personas",
-        min_items=2,
-        max_items=20
+        min_length=2,
+        max_length=20
     )
 
     topic: str = Field(
@@ -237,25 +237,25 @@ class CollaborativeDialogue(BaseModel):
     exchanges: list[dict[str, Any]] = Field(
         default_factory=list,
         description="Dialogue exchanges",
-        max_items=50
+        max_length=50
     )
 
     consensus_points: list[str] = Field(
         default_factory=list,
         description="Points of consensus reached",
-        max_items=20
+        max_length=20
     )
 
     disagreements: list[str] = Field(
         default_factory=list,
         description="Remaining disagreements",
-        max_items=20
+        max_length=20
     )
 
     resolution_attempts: list[str] = Field(
         default_factory=list,
         description="Attempts to resolve conflicts",
-        max_items=10
+        max_length=10
     )
 
     outcome: str | None = Field(
@@ -300,19 +300,19 @@ class ConsensusResult(BaseModel):
     dissenting_opinions: list[str] = Field(
         default_factory=list,
         description="Dissenting opinions",
-        max_items=10
+        max_length=10
     )
 
     compromise_elements: list[str] = Field(
         default_factory=list,
         description="Compromise elements included",
-        max_items=10
+        max_length=10
     )
 
     unresolved_issues: list[str] = Field(
         default_factory=list,
         description="Issues that remain unresolved",
-        max_items=10
+        max_length=10
     )
 
     confidence_in_consensus: float = Field(
@@ -335,8 +335,8 @@ class CollaborativeReasoningContext(BaseModel):
 
     personas: list[Persona] = Field(
         ...,
-        min_items=2,
-        max_items=10,
+        min_length=2,
+        max_length=10,
         description="Personas to simulate in the reasoning process"
     )
 
@@ -422,13 +422,13 @@ class CollaborativeReasoningResult(BaseModel):
     persona_perspectives: list[PersonaPerspective] = Field(
         ...,
         description="Individual perspectives from each persona",
-        min_items=2
+        min_length=2
     )
 
     dialogue_records: list[CollaborativeDialogue] = Field(
         default_factory=list,
         description="Records of collaborative dialogues",
-        max_items=10
+        max_length=10
     )
 
     consensus_result: ConsensusResult = Field(
@@ -439,7 +439,7 @@ class CollaborativeReasoningResult(BaseModel):
     key_insights: list[str] = Field(
         default_factory=list,
         description="Key insights from collaborative process",
-        max_items=10
+        max_length=10
     )
 
     perspective_diversity_score: float = Field(
@@ -459,13 +459,13 @@ class CollaborativeReasoningResult(BaseModel):
     unresolved_tensions: list[str] = Field(
         default_factory=list,
         description="Tensions that remain unresolved",
-        max_items=10
+        max_length=10
     )
 
     recommended_next_steps: list[str] = Field(
         default_factory=list,
         description="Recommended next steps",
-        max_items=10
+        max_length=10
     )
 
     stakeholder_buy_in_assessment: dict[str, float] = Field(
@@ -476,7 +476,7 @@ class CollaborativeReasoningResult(BaseModel):
     implementation_considerations: list[str] = Field(
         default_factory=list,
         description="Considerations for implementation",
-        max_items=10
+        max_length=10
     )
 
     dialogue_duration_minutes: float = Field(

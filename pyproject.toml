@@ -97,6 +97,10 @@ dev = [
   "types-aiofiles>=24.1.0",
   "types-setuptools>=75.6.0",
   "distilabel[hf-inference-endpoints,litellm]>=1.5.3",
+  "pytest-sugar>=1.0.0",
+  "pytest-check>=2.5.3",
+  "anyio>=4.9.0",
+  "pytest-bdd>=8.1.0",
 ]
 
 [tool.commitizen]  # https://commitizen-tools.github.io/commitizen/config/

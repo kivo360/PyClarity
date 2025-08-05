@@ -163,13 +163,13 @@ class DecisionOption(BaseModel):
     risks: list[str] | None = Field(
         None,
         description="Identified risks for this option",
-        max_items=8
+        max_length=8
     )
 
     assumptions: list[str] | None = Field(
         None,
         description="Key assumptions for this option",
-        max_items=6
+        max_length=6
     )
 
     @field_validator('name')
@@ -215,15 +215,15 @@ class DecisionMatrix(BaseModel):
     criteria: list[str] = Field(
         ...,
         description="List of criterion names in order",
-        min_items=2,
-        max_items=20
+        min_length=2,
+        max_length=20
     )
 
     options: list[str] = Field(
         ...,
         description="List of option names in order",
-        min_items=2,
-        max_items=15
+        min_length=2,
+        max_length=15
     )
 
     scores_matrix: list[list[float]] = Field(
@@ -335,8 +335,8 @@ class RiskAssessment(BaseModel):
     risk_factors: list[dict[str, Any]] = Field(
         ...,
         description="List of risk factors with details",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     overall_risk_level: RiskLevel = Field(
@@ -354,13 +354,13 @@ class RiskAssessment(BaseModel):
     mitigation_strategies: list[str] | None = Field(
         None,
         description="Suggested risk mitigation strategies",
-        max_items=8
+        max_length=8
     )
 
     contingency_plans: list[str] | None = Field(
         None,
         description="Contingency plans for high-risk scenarios",
-        max_items=5
+        max_length=5
     )
 
     @field_validator('risk_factors')
@@ -407,8 +407,8 @@ class TradeOffAnalysis(BaseModel):
     trade_offs: list[dict[str, str]] = Field(
         ...,
         description="List of trade-off comparisons",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     winner_by_criteria: dict[str, str] = Field(
@@ -458,8 +458,8 @@ class SensitivityAnalysis(BaseModel):
     weight_variations: list[dict[str, Any]] = Field(
         ...,
         description="Results under different weight scenarios",
-        min_items=1,
-        max_items=20
+        min_length=1,
+        max_length=20
     )
 
     threshold_analysis: dict[str, float] | None = Field(
@@ -498,15 +498,15 @@ class DecisionFrameworkContext(BaseModel):
     criteria: list[DecisionCriteria] = Field(
         ...,
         description="Decision criteria with weights",
-        min_items=2,
-        max_items=20
+        min_length=2,
+        max_length=20
     )
 
     options: list[DecisionOption] = Field(
         ...,
         description="Decision options to evaluate",
-        min_items=2,
-        max_items=15
+        min_length=2,
+        max_length=15
     )
 
     complexity_level: ComplexityLevel = Field(
@@ -538,13 +538,13 @@ class DecisionFrameworkContext(BaseModel):
     stakeholders: list[str] | None = Field(
         None,
         description="Key stakeholders in the decision",
-        max_items=10
+        max_length=10
     )
 
     constraints: list[str] | None = Field(
         None,
         description="Hard constraints or limitations",
-        max_items=8
+        max_length=8
     )
 
     @field_validator('problem')
@@ -620,14 +620,14 @@ class DecisionFrameworkResult(BaseModel):
     option_rankings: list[dict[str, Any]] = Field(
         ...,
         description="Ranked list of options with scores",
-        min_items=2
+        min_length=2
     )
 
     key_insights: list[str] = Field(
         ...,
         description="Key insights from the analysis",
-        min_items=1,
-        max_items=8
+        min_length=1,
+        max_length=8
     )
 
     risk_assessments: list[RiskAssessment] | None = Field(
@@ -655,19 +655,19 @@ class DecisionFrameworkResult(BaseModel):
     implementation_considerations: list[str] | None = Field(
         None,
         description="Key considerations for implementing the decision",
-        max_items=8
+        max_length=8
     )
 
     monitoring_metrics: list[str] | None = Field(
         None,
         description="Metrics to monitor after implementation",
-        max_items=6
+        max_length=6
     )
 
     alternative_scenarios: list[str] | None = Field(
         None,
         description="Alternative scenarios to consider",
-        max_items=5
+        max_length=5
     )
 
     confidence_factors: dict[str, float] | None = Field(

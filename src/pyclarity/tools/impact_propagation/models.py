@@ -217,8 +217,8 @@ class PropagationPath(BaseModel):
     path_nodes: list[str] = Field(
         ...,
         description="Ordered list of node IDs in the path",
-        min_items=2,
-        max_items=20
+        min_length=2,
+        max_length=20
     )
 
     total_impact: EffectMagnitude = Field(
@@ -243,7 +243,7 @@ class PropagationPath(BaseModel):
     critical_points: list[str] = Field(
         default_factory=list,
         description="Node IDs that are critical in this path",
-        max_items=10
+        max_length=10
     )
 
     @field_validator('path_nodes')
@@ -266,8 +266,8 @@ class FeedbackLoop(BaseModel):
     loop_nodes: list[str] = Field(
         ...,
         description="Ordered list of nodes forming the loop",
-        min_items=2,
-        max_items=15
+        min_length=2,
+        max_length=15
     )
 
     feedback_type: FeedbackType = Field(
@@ -330,8 +330,8 @@ class RiskArea(BaseModel):
     affected_nodes: list[str] = Field(
         ...,
         description="Node IDs at risk",
-        min_items=1,
-        max_items=50
+        min_length=1,
+        max_length=50
     )
 
     risk_level: str = Field(
@@ -342,20 +342,20 @@ class RiskArea(BaseModel):
     trigger_conditions: list[str] = Field(
         ...,
         description="Conditions that could trigger this risk",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
 
     mitigation_strategies: list[str] = Field(
         default_factory=list,
         description="Strategies to mitigate the risk",
-        max_items=10
+        max_length=10
     )
 
     early_warning_indicators: list[str] = Field(
         default_factory=list,
         description="Indicators that risk is materializing",
-        max_items=10
+        max_length=10
     )
 
     @field_validator('risk_level')
@@ -405,7 +405,7 @@ class InterventionPoint(BaseModel):
     side_effects: list[str] = Field(
         default_factory=list,
         description="Potential side effects of intervention",
-        max_items=10
+        max_length=10
     )
 
     timing_critical: bool = Field(
@@ -444,13 +444,13 @@ class ImpactPropagationContext(BaseModel):
     system_nodes: list[Node] | None = Field(
         None,
         description="Pre-defined system nodes if known",
-        max_items=100
+        max_length=100
     )
 
     system_edges: list[Edge] | None = Field(
         None,
         description="Pre-defined connections if known",
-        max_items=500
+        max_length=500
     )
 
     initial_impact: ImpactEvent | None = Field(
@@ -474,7 +474,7 @@ class ImpactPropagationContext(BaseModel):
     focus_areas: list[str] | None = Field(
         None,
         description="Specific areas to focus analysis on",
-        max_items=10
+        max_length=10
     )
 
     risk_tolerance: str = Field(
@@ -521,7 +521,7 @@ class ImpactPropagationResult(BaseModel):
     primary_impacts: list[ImpactEvent] = Field(
         ...,
         description="Direct, first-order impacts",
-        min_items=1
+        min_length=1
     )
 
     propagation_paths: list[PropagationPath] = Field(
@@ -542,7 +542,7 @@ class ImpactPropagationResult(BaseModel):
     risk_areas: list[RiskArea] = Field(
         ...,
         description="Identified risk areas",
-        min_items=1
+        min_length=1
     )
 
     intervention_points: list[InterventionPoint] = Field(
@@ -553,7 +553,7 @@ class ImpactPropagationResult(BaseModel):
     critical_nodes: list[str] = Field(
         ...,
         description="Node IDs that are critical for system stability",
-        min_items=1
+        min_length=1
     )
 
     timeline_projection: dict[str, list[ImpactEvent]] = Field(
@@ -564,14 +564,14 @@ class ImpactPropagationResult(BaseModel):
     mitigation_strategies: list[str] = Field(
         ...,
         description="Recommended mitigation strategies",
-        min_items=1,
-        max_items=15
+        min_length=1,
+        max_length=15
     )
 
     amplification_risks: list[str] = Field(
         default_factory=list,
         description="Risks of impact amplification",
-        max_items=10
+        max_length=10
     )
 
     system_resilience_score: float = Field(
@@ -589,8 +589,8 @@ class ImpactPropagationResult(BaseModel):
     key_insights: list[str] = Field(
         ...,
         description="Key insights from the analysis",
-        min_items=3,
-        max_items=10
+        min_length=3,
+        max_length=10
     )
 
     confidence_score: float = Field(

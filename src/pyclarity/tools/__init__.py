@@ -5,7 +5,7 @@ Cognitive tools for strategic thinking, problem-solving, and decision-making.
 """
 
 # Missing imports that have implementations
-from .collaborative_reasoning import (
+from pyclarity.tools.collaborative_reasoning import (
     CollaborativeReasoningAnalyzer,
     CollaborativeReasoningContext,
     CollaborativeReasoningResult,
@@ -14,7 +14,7 @@ from .collaborative_reasoning import (
     PersonaType,
     ReasoningStyle,
 )
-from .debugging_approaches import (
+from pyclarity.tools.debugging_approaches import (
     DebuggingApproachesAnalyzer,
     DebuggingApproachesContext,
     DebuggingApproachesResult,
@@ -22,7 +22,7 @@ from .debugging_approaches import (
     ErrorCategory,
     ErrorClassification,
 )
-from .decision_framework import (
+from pyclarity.tools.decision_framework import (
     CriteriaType,
     DecisionCriteria,
     DecisionFrameworkAnalyzer,
@@ -35,7 +35,7 @@ from .decision_framework import (
 )
 
 # Cognitive Tools - Analysis & Problem Solving
-from .design_patterns import (
+from pyclarity.tools.design_patterns import (
     DesignPattern,
     DesignPatternsAnalyzer,
     DesignPatternsContext,
@@ -56,7 +56,7 @@ from .design_patterns import (
 #     EffectMagnitude,
 # )
 # New FastMCP tools
-from .iterative_validation import (
+from pyclarity.tools.iterative_validation import (
     ConfidenceLevel,
     Hypothesis,
     IterativeValidationAnalyzer,
@@ -73,7 +73,7 @@ from .iterative_validation import (
 )
 
 # Cognitive Tools - Core Reasoning
-from .mental_models import (
+from pyclarity.tools.mental_models import (
     MentalModelAssumption,
     MentalModelContext,
     MentalModelInsight,
@@ -81,7 +81,7 @@ from .mental_models import (
     MentalModelsAnalyzer,
     MentalModelType,
 )
-from .metacognitive_monitoring import (
+from pyclarity.tools.metacognitive_monitoring import (
     BiasType,
     MetacognitiveMonitoringAnalyzer,
     MetacognitiveMonitoringContext,
@@ -90,7 +90,7 @@ from .metacognitive_monitoring import (
     MonitoringDepth,
     MonitoringFrequency,
 )
-from .multi_perspective import (
+from pyclarity.tools.multi_perspective import (
     ConflictSeverity,
     IntegrationApproach,
     IntegrationStrategy,
@@ -102,7 +102,7 @@ from .multi_perspective import (
     SynergyConflict,
     ViewpointAnalysis,
 )
-from .programming_paradigms import (
+from pyclarity.tools.programming_paradigms import (
     ParadigmAnalysis,
     ParadigmProfile,
     ProgrammingParadigm,
@@ -110,7 +110,7 @@ from .programming_paradigms import (
     ProgrammingParadigmsContext,
     ProgrammingParadigmsResult,
 )
-from .scientific_method import (
+from pyclarity.tools.scientific_method import (
     Evidence,
     EvidenceType,
     Experiment,
@@ -121,7 +121,7 @@ from .scientific_method import (
     ScientificMethodResult,
     TestResult,
 )
-from .sequential_readiness import (
+from pyclarity.tools.sequential_readiness import (
     Dependency,
     GapSeverity,
     Intervention,
@@ -135,6 +135,7 @@ from .sequential_readiness import (
     StateTransition,
     TransitionType,
 )
+
 from .sequential_thinking import (
     BranchStrategy,
     ComplexityLevel,
@@ -189,7 +190,6 @@ __all__ = [
     "ThoughtStep",
     "ThoughtRevision",
     "ThoughtBranch",
-
     # Mental Models
     "MentalModelsAnalyzer",
     "MentalModelContext",
@@ -197,7 +197,6 @@ __all__ = [
     "MentalModelType",
     "MentalModelInsight",
     "MentalModelAssumption",
-
     # Decision Framework
     "DecisionFrameworkAnalyzer",
     "DecisionFrameworkContext",
@@ -208,7 +207,6 @@ __all__ = [
     "DecisionCriteria",
     "DecisionOption",
     "DecisionMatrix",
-
     # Scientific Method
     "ScientificMethodAnalyzer",
     "ScientificMethodContext",
@@ -219,7 +217,6 @@ __all__ = [
     "Hypothesis",
     "Evidence",
     "Experiment",
-
     # Design Patterns
     "DesignPatternsAnalyzer",
     "DesignPatternsContext",
@@ -227,7 +224,6 @@ __all__ = [
     "PatternCategory",
     "DesignPattern",
     "PatternApplication",
-
     # Programming Paradigms
     "ProgrammingParadigmsAnalyzer",
     "ProgrammingParadigmsContext",
@@ -235,7 +231,6 @@ __all__ = [
     "ProgrammingParadigm",
     "ParadigmProfile",
     "ParadigmAnalysis",
-
     # Debugging Approaches
     "DebuggingApproachesAnalyzer",
     "DebuggingApproachesContext",
@@ -243,7 +238,6 @@ __all__ = [
     "DebuggingStrategy",
     "ErrorCategory",
     "ErrorClassification",
-
     # Visual Reasoning
     "VisualReasoningAnalyzer",
     "VisualReasoningContext",
@@ -252,7 +246,6 @@ __all__ = [
     "SpatialRelationship",
     "PatternType",
     "VisualElement",
-
     # Structured Argumentation
     "StructuredArgumentationAnalyzer",
     "StructuredArgumentationContext",
@@ -261,7 +254,6 @@ __all__ = [
     "LogicalFallacy",
     "EvidenceType",
     "StrengthLevel",
-
     # Collaborative Reasoning
     "CollaborativeReasoningAnalyzer",
     "CollaborativeReasoningContext",
@@ -270,7 +262,6 @@ __all__ = [
     "ConsensusStrategy",
     "ReasoningStyle",
     "DialogueStyle",
-
     # Metacognitive Monitoring
     "MetacognitiveMonitoringAnalyzer",
     "MetacognitiveMonitoringContext",
@@ -279,7 +270,6 @@ __all__ = [
     "MetaStrategies",
     "MonitoringDepth",
     "MonitoringFrequency",
-
     # Impact Propagation - temporarily disabled
     # "ImpactPropagationAnalyzer",
     # "ImpactPropagationContext",
@@ -289,7 +279,6 @@ __all__ = [
     # "Node",
     # "PropagationSpeed",
     # "EffectMagnitude",
-
     # Iterative Validation
     "IterativeValidationAnalyzer",
     "IterativeValidationContext",
@@ -304,7 +293,6 @@ __all__ = [
     "Learning",
     "Refinement",
     "ValidationCycle",
-
     # Multi-Perspective
     "MultiPerspectiveAnalyzer",
     "MultiPerspectiveContext",
@@ -316,7 +304,6 @@ __all__ = [
     "ViewpointAnalysis",
     "SynergyConflict",
     "IntegrationStrategy",
-
     # Sequential Readiness
     "SequentialReadinessAnalyzer",
     "SequentialReadinessContext",
@@ -330,7 +317,6 @@ __all__ = [
     "ReadinessGap",
     "Intervention",
     "Dependency",
-
     # Triple Constraint
     "TripleConstraintAnalyzer",
     "TripleConstraintContext",
