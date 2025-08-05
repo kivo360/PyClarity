@@ -6,25 +6,24 @@ experimental design principles, evidence evaluation and analysis,
 theory building and validation, and systematic inquiry processes.
 """
 
+from .analyzer import ScientificMethodAnalyzer
 from .models import (
     # Enums
     ComplexityLevel,
-    HypothesisType,
-    EvidenceType,
+    Evidence,
     EvidenceQuality,
-    TestResult,
+    EvidenceType,
+    Experiment,
     # Supporting models
     Hypothesis,
-    Evidence,
-    Experiment,
     HypothesisTest,
-    TheoryConstruction,
+    HypothesisType,
     # Main models
     ScientificMethodContext,
     ScientificMethodResult,
+    TestResult,
+    TheoryConstruction,
 )
-
-from .analyzer import ScientificMethodAnalyzer
 
 __all__ = [
     # Enums

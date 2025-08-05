@@ -6,14 +6,14 @@ including success metrics, learning loops, and course correction mechanisms.
 """
 
 import asyncio
-from typing import Dict, List, Any, Optional, Tuple
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
 
 from .models import (
     DecisionContext,
-    ValidationFramework,
     DecisionState,
+    ValidationFramework,
 )
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class ValidationOrchestrator:
     """Orchestrates decision validation and continuous improvement."""
-    
+
     async def orchestrate_validation(self, context: DecisionContext) -> ValidationFramework:
         """Orchestrate comprehensive validation framework."""
         try:
@@ -31,15 +31,15 @@ class ValidationOrchestrator:
             course_correction = await self._plan_course_correction(context)
             validation_timeline = await self._create_validation_timeline(context)
             early_warning_system = await self._design_early_warning_system(context)
-            
+
             readiness_score = self._calculate_validation_readiness(
                 validation_framework, success_metrics, early_warning_system
             )
-            
+
             recommendations = self._generate_validation_recommendations(
                 validation_framework, learning_loops, early_warning_system
             )
-            
+
             return ValidationFramework(
                 readiness_score=readiness_score,
                 validation_framework=validation_framework,
@@ -50,12 +50,12 @@ class ValidationOrchestrator:
                 early_warning_system=early_warning_system,
                 recommendations=recommendations
             )
-            
+
         except Exception as e:
             logger.error(f"Error in validation orchestration: {e}")
             raise
-    
-    async def _design_validation_framework(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _design_validation_framework(self, context: DecisionContext) -> dict[str, Any]:
         """Design comprehensive validation framework."""
         # Define validation approach based on decision type
         validation_approaches = {
@@ -65,15 +65,15 @@ class ValidationOrchestrator:
             "technical": "technical_validation",
             "financial": "financial_validation"
         }
-        
+
         approach = validation_approaches.get(
-            context.decision_type.value, 
+            context.decision_type.value,
             "multi_phase_validation"
         )
-        
+
         # Define validation phases
         validation_phases = []
-        
+
         # Pre-implementation validation
         validation_phases.append({
             "phase": "pre_implementation",
@@ -87,7 +87,7 @@ class ValidationOrchestrator:
             "duration": "1 week",
             "go_no_go_criteria": ["all_assumptions_validated", "resources_confirmed", "stakeholders_aligned"]
         })
-        
+
         # Early implementation validation
         validation_phases.append({
             "phase": "early_implementation",
@@ -101,7 +101,7 @@ class ValidationOrchestrator:
             "duration": "4 weeks",
             "adjustment_triggers": ["deviation_from_plan", "unexpected_results", "stakeholder_concerns"]
         })
-        
+
         # Mid-point validation
         validation_phases.append({
             "phase": "mid_point_review",
@@ -115,7 +115,7 @@ class ValidationOrchestrator:
             "duration": "1 week",
             "pivot_decision_point": True
         })
-        
+
         # Final validation
         validation_phases.append({
             "phase": "final_validation",
@@ -129,7 +129,7 @@ class ValidationOrchestrator:
             "duration": "2 weeks",
             "deliverables": ["validation_report", "recommendations", "knowledge_base_update"]
         })
-        
+
         # Define validation methods
         validation_methods = {
             "quantitative": ["kpi_tracking", "statistical_analysis", "trend_monitoring", "variance_analysis"],
@@ -137,7 +137,7 @@ class ValidationOrchestrator:
             "comparative": ["benchmark_comparison", "control_group_analysis", "before_after_analysis"],
             "predictive": ["leading_indicator_tracking", "scenario_testing", "simulation_validation"]
         }
-        
+
         return {
             "approach": approach,
             "validation_phases": validation_phases,
@@ -146,12 +146,12 @@ class ValidationOrchestrator:
             "validation_rigor": "high" if context.complexity_level.value in ["high", "very_high"] else "standard",
             "third_party_validation": context.decision_type.value in ["strategic", "financial"]
         }
-    
-    async def _define_success_metrics(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _define_success_metrics(self, context: DecisionContext) -> dict[str, Any]:
         """Define comprehensive success metrics."""
         # Primary success metrics based on decision type
         primary_metrics = []
-        
+
         if context.decision_type.value == "strategic":
             primary_metrics.extend([
                 {
@@ -186,7 +186,7 @@ class ValidationOrchestrator:
                     "weight": 0.25
                 }
             ])
-        
+
         # Universal metrics
         primary_metrics.extend([
             {
@@ -204,7 +204,7 @@ class ValidationOrchestrator:
                 "weight": 0.25
             }
         ])
-        
+
         # Secondary metrics
         secondary_metrics = [
             {
@@ -226,7 +226,7 @@ class ValidationOrchestrator:
                 "frequency": "monthly"
             }
         ]
-        
+
         # Leading indicators
         leading_indicators = [
             {
@@ -248,7 +248,7 @@ class ValidationOrchestrator:
                 "monitoring": "continuous"
             }
         ]
-        
+
         # Create balanced scorecard
         balanced_scorecard = {
             "financial": [m for m in primary_metrics if "roi" in m["metric"] or "cost" in m["metric"]],
@@ -256,7 +256,7 @@ class ValidationOrchestrator:
             "process": [m for m in primary_metrics if "efficiency" in m["metric"] or "operational" in m["metric"]],
             "learning": [m for m in secondary_metrics if "engagement" in m["metric"]]
         }
-        
+
         return {
             "primary_metrics": primary_metrics,
             "secondary_metrics": secondary_metrics,
@@ -270,12 +270,12 @@ class ValidationOrchestrator:
                 "adjustment_process": "quarterly_calibration"
             }
         }
-    
-    async def _establish_learning_loops(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _establish_learning_loops(self, context: DecisionContext) -> dict[str, Any]:
         """Establish continuous learning loops."""
         # Define learning mechanisms
         learning_mechanisms = []
-        
+
         # Rapid feedback loops
         learning_mechanisms.append({
             "mechanism": "daily_standup_insights",
@@ -285,7 +285,7 @@ class ValidationOrchestrator:
             "output": "action_items",
             "cycle_time": "24_hours"
         })
-        
+
         # Weekly retrospectives
         learning_mechanisms.append({
             "mechanism": "weekly_retrospective",
@@ -295,7 +295,7 @@ class ValidationOrchestrator:
             "output": "improvement_actions",
             "cycle_time": "1_week"
         })
-        
+
         # Monthly deep dives
         learning_mechanisms.append({
             "mechanism": "monthly_analysis_session",
@@ -305,7 +305,7 @@ class ValidationOrchestrator:
             "output": "strategic_adjustments",
             "cycle_time": "30_days"
         })
-        
+
         # Quarterly reviews
         learning_mechanisms.append({
             "mechanism": "quarterly_strategic_review",
@@ -315,7 +315,7 @@ class ValidationOrchestrator:
             "output": "strategic_decisions",
             "cycle_time": "90_days"
         })
-        
+
         # Knowledge capture processes
         knowledge_capture = {
             "documentation": {
@@ -337,7 +337,7 @@ class ValidationOrchestrator:
                 "success_factors": "continuously_refined"
             }
         }
-        
+
         # Feedback integration
         feedback_integration = {
             "collection_methods": ["surveys", "interviews", "analytics", "observation"],
@@ -346,7 +346,7 @@ class ValidationOrchestrator:
             "action_threshold": "3_similar_feedback_points",
             "feedback_to_action": "2_week_maximum"
         }
-        
+
         return {
             "learning_mechanisms": learning_mechanisms,
             "knowledge_capture": knowledge_capture,
@@ -363,8 +363,8 @@ class ValidationOrchestrator:
                 "knowledge_sharing": "rewarded"
             }
         }
-    
-    async def _plan_course_correction(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _plan_course_correction(self, context: DecisionContext) -> dict[str, Any]:
         """Plan course correction mechanisms."""
         # Define correction triggers
         correction_triggers = [
@@ -399,7 +399,7 @@ class ValidationOrchestrator:
                 "escalation": "resource_committee"
             }
         ]
-        
+
         # Correction strategies
         correction_strategies = {
             "minor_adjustments": {
@@ -418,7 +418,7 @@ class ValidationOrchestrator:
                 "pause_and_reassess": ["temporary_halt", "comprehensive_review", "restart_decision"]
             }
         }
-        
+
         # Decision rights for corrections
         decision_rights = {
             "minor_adjustments": "project_manager",
@@ -426,7 +426,7 @@ class ValidationOrchestrator:
             "exit_strategies": "executive_sponsor",
             "emergency_actions": "crisis_team"
         }
-        
+
         # Correction process
         correction_process = {
             "detection": "automated_monitoring",
@@ -436,7 +436,7 @@ class ValidationOrchestrator:
             "validation": "effectiveness_measurement",
             "documentation": "decision_log_update"
         }
-        
+
         return {
             "correction_triggers": correction_triggers,
             "correction_strategies": correction_strategies,
@@ -454,8 +454,8 @@ class ValidationOrchestrator:
                 "level_4": "executive_sponsor"
             }
         }
-    
-    async def _create_validation_timeline(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _create_validation_timeline(self, context: DecisionContext) -> dict[str, Any]:
         """Create detailed validation timeline."""
         # Define validation milestones
         milestones = [
@@ -490,7 +490,7 @@ class ValidationOrchestrator:
                 "critical_path": True
             }
         ]
-        
+
         # Ongoing activities
         ongoing_activities = {
             "daily": ["metric_collection", "issue_tracking", "team_sync"],
@@ -498,7 +498,7 @@ class ValidationOrchestrator:
             "monthly": ["comprehensive_analysis", "report_generation", "strategy_review"],
             "quarterly": ["strategic_validation", "course_correction", "forecast_update"]
         }
-        
+
         # Resource requirements
         resource_requirements = {
             "validation_team": {
@@ -509,7 +509,7 @@ class ValidationOrchestrator:
             "tools": ["analytics_platform", "survey_tools", "reporting_dashboard", "collaboration_platform"],
             "budget": "5-10%_of_project_budget"
         }
-        
+
         return {
             "milestones": milestones,
             "ongoing_activities": ongoing_activities,
@@ -519,8 +519,8 @@ class ValidationOrchestrator:
             "timeline_flexibility": "moderate",
             "acceleration_options": ["automated_monitoring", "parallel_validation", "focused_metrics"]
         }
-    
-    async def _design_early_warning_system(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _design_early_warning_system(self, context: DecisionContext) -> dict[str, Any]:
         """Design early warning system for decision health."""
         # Define warning indicators
         indicators = [
@@ -565,7 +565,7 @@ class ValidationOrchestrator:
                 "response": "scope_lockdown"
             }
         ]
-        
+
         # Alert mechanisms
         alert_mechanisms = {
             "automated_alerts": {
@@ -579,7 +579,7 @@ class ValidationOrchestrator:
                 "monthly_briefing": "executive_update"
             }
         }
-        
+
         # Response protocols
         response_protocols = {
             "yellow_alert": {
@@ -601,7 +601,7 @@ class ValidationOrchestrator:
                 "communication": "advisory_notice"
             }
         }
-        
+
         # Predictive analytics
         predictive_elements = {
             "machine_learning": "pattern_recognition",
@@ -609,7 +609,7 @@ class ValidationOrchestrator:
             "scenario_analysis": "outcome_simulation",
             "expert_system": "rule_based_prediction"
         }
-        
+
         return {
             "indicators": indicators,
             "alert_mechanisms": alert_mechanisms,
@@ -627,38 +627,38 @@ class ValidationOrchestrator:
                 "response_optimization": "after_each_incident"
             }
         }
-    
-    def _calculate_validation_readiness(self, validation_framework: Dict[str, Any],
-                                      success_metrics: Dict[str, Any],
-                                      early_warning_system: Dict[str, Any]) -> float:
+
+    def _calculate_validation_readiness(self, validation_framework: dict[str, Any],
+                                      success_metrics: dict[str, Any],
+                                      early_warning_system: dict[str, Any]) -> float:
         """Calculate validation readiness score."""
         # Framework completeness
         framework_phases = len(validation_framework["validation_phases"])
         framework_score = min(100, framework_phases * 20)
-        
+
         # Metrics definition
         metrics_count = len(success_metrics["primary_metrics"]) + len(success_metrics["secondary_metrics"])
         metrics_score = min(100, metrics_count * 10)
-        
+
         # Early warning robustness
         warning_indicators = len(early_warning_system["indicators"])
         warning_score = min(100, warning_indicators * 15)
-        
+
         # Weight the factors
         readiness = (
             framework_score * 0.35 +
             metrics_score * 0.35 +
             warning_score * 0.30
         )
-        
+
         return min(100.0, readiness)
-    
-    def _generate_validation_recommendations(self, validation_framework: Dict[str, Any],
-                                           learning_loops: Dict[str, Any],
-                                           early_warning_system: Dict[str, Any]) -> List[Dict[str, Any]]:
+
+    def _generate_validation_recommendations(self, validation_framework: dict[str, Any],
+                                           learning_loops: dict[str, Any],
+                                           early_warning_system: dict[str, Any]) -> list[dict[str, Any]]:
         """Generate validation recommendations."""
         recommendations = []
-        
+
         # Framework recommendations
         if validation_framework["validation_rigor"] == "high":
             recommendations.append({
@@ -667,7 +667,7 @@ class ValidationOrchestrator:
                 "urgency": "high",
                 "category": "validation_rigor"
             })
-        
+
         # Learning recommendations
         if len(learning_loops["learning_mechanisms"]) > 0:
             recommendations.append({
@@ -676,7 +676,7 @@ class ValidationOrchestrator:
                 "urgency": "medium",
                 "category": "continuous_improvement"
             })
-        
+
         # Early warning recommendations
         if len(early_warning_system["indicators"]) > 3:
             recommendations.append({
@@ -685,7 +685,7 @@ class ValidationOrchestrator:
                 "urgency": "high",
                 "category": "risk_management"
             })
-        
+
         # Always recommend metrics dashboard
         recommendations.append({
             "action": "Create real-time metrics dashboard for transparency",
@@ -693,5 +693,5 @@ class ValidationOrchestrator:
             "urgency": "medium",
             "category": "monitoring"
         })
-        
+
         return sorted(recommendations, key=lambda x: x["strategic_impact"], reverse=True)

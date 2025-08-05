@@ -5,28 +5,27 @@ Provides spatial and diagrammatic thinking capabilities including visual problem
 pattern recognition, diagram analysis, and spatial relationship understanding.
 """
 
+from .analyzer import VisualReasoningAnalyzer
 from .models import (
-    # Enums
-    VisualRepresentationType,
-    SpatialRelationship,
+    DiagramAnalysis,
+    PatternRecognition,
     PatternType,
+    SpatialMapping,
+    SpatialRelationship,
     # Supporting models
     VisualElement,
-    SpatialMapping,
-    PatternRecognition,
-    DiagramAnalysis,
     VisualProblemSolving,
     # Main models
     VisualReasoningContext,
     VisualReasoningResult,
+    # Enums
+    VisualRepresentationType,
 )
-
-from .analyzer import VisualReasoningAnalyzer
 
 __all__ = [
     # Enums
     "VisualRepresentationType",
-    "SpatialRelationship", 
+    "SpatialRelationship",
     "PatternType",
     # Supporting models
     "VisualElement",

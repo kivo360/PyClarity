@@ -7,76 +7,76 @@ experimental design principles, evidence evaluation and analysis,
 theory building and validation, and systematic inquiry processes.
 """
 
-from typing import List, Dict, Any, Optional, Tuple
 import asyncio
 import time
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 from .models import (
+    Evidence,
+    EvidenceQuality,
+    EvidenceType,
+    Experiment,
+    Hypothesis,
+    HypothesisTest,
+    HypothesisType,
     ScientificMethodContext,
     ScientificMethodResult,
-    Hypothesis,
-    Evidence,
-    Experiment,
-    HypothesisTest,
-    TheoryConstruction,
-    HypothesisType,
-    EvidenceType,
-    EvidenceQuality,
     TestResult,
+    TheoryConstruction,
 )
 
 
 class ScientificMethodAnalyzer:
     """Scientific method cognitive tool analyzer"""
-    
+
     def __init__(self):
         """Initialize the scientific method analyzer"""
         self.tool_name = "Scientific Method"
         self.version = "1.0.0"
-        
+
         # Internal state for processing
         self._processing_start_time = 0.0
-    
+
     async def analyze(self, context: ScientificMethodContext) -> ScientificMethodResult:
         """
         Analyze a problem using the scientific method.
-        
+
         Args:
             context: Scientific method context with research question and parameters
-            
+
         Returns:
             ScientificMethodResult with hypotheses, evidence, tests, and conclusions
         """
         self._processing_start_time = time.time()
-        
+
         # Phase 1: Generate hypotheses
         hypotheses = []
         if context.hypothesis_generation_enabled:
             hypotheses = await self._generate_hypotheses(context)
-        
+
         # Phase 2: Collect and evaluate evidence
         evidence_collected = []
         if context.evidence_evaluation_enabled:
             evidence_collected = await self._collect_evidence(context, hypotheses)
-        
+
         # Phase 3: Design experiments
         experiments = []
         if context.experiment_design_enabled:
             experiments = await self._design_experiments(context, hypotheses)
-        
+
         # Phase 4: Test hypotheses
         hypothesis_tests = await self._test_hypotheses(
             hypotheses, evidence_collected, context
         )
-        
+
         # Phase 5: Construct theory if enabled
         theory = None
         if context.theory_construction_enabled:
             theory = await self._construct_theory(
                 hypotheses, hypothesis_tests, evidence_collected, context
             )
-        
+
         # Phase 6: Evaluate scientific rigor and generate conclusions
         (
             rigor_score,
@@ -93,10 +93,10 @@ class ScientificMethodAnalyzer:
             hypothesis_tests,
             theory
         )
-        
+
         # Calculate processing time
         processing_time = time.time() - self._processing_start_time
-        
+
         return ScientificMethodResult(
             hypotheses_generated=hypotheses,
             evidence_collected=evidence_collected,
@@ -117,16 +117,16 @@ class ScientificMethodAnalyzer:
             ),
             processing_time_ms=round(processing_time * 1000)
         )
-    
+
     async def _generate_hypotheses(
         self, context: ScientificMethodContext
-    ) -> List[Hypothesis]:
+    ) -> list[Hypothesis]:
         """Generate testable hypotheses for the research question"""
         # Simulate processing delay
         await asyncio.sleep(0.1)
-        
+
         hypotheses = []
-        
+
         # Generate different types of hypotheses
         hypothesis_types = [
             HypothesisType.EXPLANATORY,
@@ -134,7 +134,7 @@ class ScientificMethodAnalyzer:
             HypothesisType.CAUSAL,
             HypothesisType.CORRELATIONAL
         ]
-        
+
         for i, hyp_type in enumerate(hypothesis_types[:context.max_hypotheses]):
             hypothesis = await self._create_hypothesis(
                 context.research_question,
@@ -142,16 +142,16 @@ class ScientificMethodAnalyzer:
                 context.domain_knowledge
             )
             hypotheses.append(hypothesis)
-        
+
         # Add null hypothesis for statistical testing
         if len(hypotheses) > 0:
             null_hypothesis = await self._create_null_hypothesis(
                 hypotheses[0], context
             )
             hypotheses.append(null_hypothesis)
-        
+
         return hypotheses
-    
+
     async def _create_hypothesis(
         self,
         research_question: str,
@@ -159,32 +159,32 @@ class ScientificMethodAnalyzer:
         domain_knowledge: str
     ) -> Hypothesis:
         """Create a specific hypothesis"""
-        
+
         # Generate hypothesis based on type
         if hypothesis_type == HypothesisType.EXPLANATORY:
             statement = f"The observed phenomenon in '{research_question}' is explained by underlying causal mechanisms"
             variables = ["phenomenon", "causal_mechanism", "context_factors"]
             predictions = ["Mechanism should be observable", "Effect should vary with mechanism strength"]
-        
+
         elif hypothesis_type == HypothesisType.PREDICTIVE:
             statement = f"Based on current understanding, '{research_question}' will result in specific measurable outcomes"
             variables = ["current_state", "intervention", "predicted_outcome"]
             predictions = ["Outcome will match prediction", "Relationship will be consistent"]
-        
+
         elif hypothesis_type == HypothesisType.CAUSAL:
             statement = f"There is a direct causal relationship between key factors in '{research_question}'"
             variables = ["cause_variable", "effect_variable", "confounding_variables"]
             predictions = ["Manipulation of cause changes effect", "Temporal precedence observable"]
-        
+
         else:  # CORRELATIONAL
             statement = f"Variables in '{research_question}' show systematic relationships"
             variables = ["variable_a", "variable_b", "relationship_strength"]
             predictions = ["Correlation will be significant", "Relationship will be consistent"]
-        
+
         # Calculate testability and falsifiability
         testability = 0.8 if "measurable" in statement.lower() else 0.6
         falsifiability = 0.9 if "specific" in statement.lower() else 0.7
-        
+
         return Hypothesis(
             statement=statement,
             hypothesis_type=hypothesis_type,
@@ -196,14 +196,14 @@ class ScientificMethodAnalyzer:
             theoretical_foundation=domain_knowledge,
             related_hypotheses=[]
         )
-    
+
     async def _create_null_hypothesis(
         self,
         alternative_hypothesis: Hypothesis,
         context: ScientificMethodContext
     ) -> Hypothesis:
         """Create null hypothesis for statistical testing"""
-        
+
         return Hypothesis(
             statement=f"There is no significant relationship or effect in '{context.research_question}'",
             hypothesis_type=HypothesisType.NULL_HYPOTHESIS,
@@ -215,18 +215,18 @@ class ScientificMethodAnalyzer:
             theoretical_foundation="Statistical null hypothesis principle",
             related_hypotheses=[alternative_hypothesis.hypothesis_id]
         )
-    
+
     async def _collect_evidence(
         self,
         context: ScientificMethodContext,
-        hypotheses: List[Hypothesis]
-    ) -> List[Evidence]:
+        hypotheses: list[Hypothesis]
+    ) -> list[Evidence]:
         """Collect and evaluate evidence for hypotheses"""
         # Simulate processing delay
         await asyncio.sleep(0.1)
-        
+
         evidence_pieces = []
-        
+
         # Generate different types of evidence
         evidence_types = [
             EvidenceType.OBSERVATIONAL,
@@ -234,14 +234,14 @@ class ScientificMethodAnalyzer:
             EvidenceType.STATISTICAL,
             EvidenceType.LITERATURE_REVIEW
         ]
-        
+
         for evidence_type in evidence_types:
             for i, hypothesis in enumerate(hypotheses[:3]):  # Limit evidence per hypothesis
                 evidence = await self._create_evidence(
                     hypothesis, evidence_type, context
                 )
                 evidence_pieces.append(evidence)
-        
+
         # Add evidence from specified sources
         for source in context.evidence_sources:
             source_evidence = Evidence(
@@ -256,9 +256,9 @@ class ScientificMethodAnalyzer:
                 limitations=["Source-specific limitations", "Potential bias"]
             )
             evidence_pieces.append(source_evidence)
-        
+
         return evidence_pieces
-    
+
     async def _create_evidence(
         self,
         hypothesis: Hypothesis,
@@ -266,7 +266,7 @@ class ScientificMethodAnalyzer:
         context: ScientificMethodContext
     ) -> Evidence:
         """Create evidence for a specific hypothesis"""
-        
+
         # Simulate evidence quality and strength based on type
         if evidence_type == EvidenceType.EXPERIMENTAL:
             quality = EvidenceQuality.HIGH
@@ -274,28 +274,28 @@ class ScientificMethodAnalyzer:
             supporting_strength = 0.7
             confidence = 0.8
             limitations = ["Controlled conditions", "Limited generalizability"]
-        
+
         elif evidence_type == EvidenceType.OBSERVATIONAL:
             quality = EvidenceQuality.MEDIUM
             reliability = 0.7
             supporting_strength = 0.5
             confidence = 0.6
             limitations = ["Correlation not causation", "Confounding variables"]
-        
+
         elif evidence_type == EvidenceType.STATISTICAL:
             quality = EvidenceQuality.HIGH
             reliability = 0.85
             supporting_strength = 0.6
             confidence = 0.75
             limitations = ["Sample size", "Statistical assumptions"]
-        
+
         else:  # LITERATURE_REVIEW
             quality = EvidenceQuality.MEDIUM
             reliability = 0.75
             supporting_strength = 0.4
             confidence = 0.65
             limitations = ["Secondary source", "Publication bias"]
-        
+
         return Evidence(
             description=f"{evidence_type.value.title()} evidence for: {hypothesis.statement[:50]}...",
             evidence_type=evidence_type,
@@ -308,38 +308,38 @@ class ScientificMethodAnalyzer:
             methodology_notes=f"Standard {evidence_type.value} methodology",
             limitations=limitations
         )
-    
+
     async def _design_experiments(
         self,
         context: ScientificMethodContext,
-        hypotheses: List[Hypothesis]
-    ) -> List[Experiment]:
+        hypotheses: list[Hypothesis]
+    ) -> list[Experiment]:
         """Design experiments to test hypotheses"""
         # Simulate processing delay
         await asyncio.sleep(0.1)
-        
+
         experiments = []
-        
+
         for hypothesis in hypotheses[:3]:  # Limit experiments
             if hypothesis.hypothesis_type != HypothesisType.NULL_HYPOTHESIS:
                 experiment = await self._create_experiment(hypothesis, context)
                 experiments.append(experiment)
-        
+
         return experiments
-    
+
     async def _create_experiment(
         self,
         hypothesis: Hypothesis,
         context: ScientificMethodContext
     ) -> Experiment:
         """Create experiment for testing a hypothesis"""
-        
+
         # Determine experiment feasibility based on constraints
         feasibility = 0.8
         for constraint in context.constraints:
             if "time" in constraint.lower() or "budget" in constraint.lower():
                 feasibility *= 0.8
-        
+
         return Experiment(
             name=f"Test for {hypothesis.hypothesis_type.value} hypothesis",
             objective=f"Test the hypothesis: {hypothesis.statement}",
@@ -354,41 +354,41 @@ class ScientificMethodAnalyzer:
             ethical_considerations=["Informed consent", "Risk assessment", "Data privacy"],
             feasibility_score=feasibility
         )
-    
+
     async def _test_hypotheses(
         self,
-        hypotheses: List[Hypothesis],
-        evidence: List[Evidence],
+        hypotheses: list[Hypothesis],
+        evidence: list[Evidence],
         context: ScientificMethodContext
-    ) -> List[HypothesisTest]:
+    ) -> list[HypothesisTest]:
         """Test hypotheses against collected evidence"""
         # Simulate processing delay
         await asyncio.sleep(0.1)
-        
+
         hypothesis_tests = []
-        
+
         for hypothesis in hypotheses:
             # Find relevant evidence for this hypothesis
             relevant_evidence = [
                 e for e in evidence
                 if any(var in e.description.lower() for var in hypothesis.variables)
             ]
-            
+
             test_result = await self._conduct_hypothesis_test(
                 hypothesis, relevant_evidence, context
             )
             hypothesis_tests.append(test_result)
-        
+
         return hypothesis_tests
-    
+
     async def _conduct_hypothesis_test(
         self,
         hypothesis: Hypothesis,
-        evidence: List[Evidence],
+        evidence: list[Evidence],
         context: ScientificMethodContext
     ) -> HypothesisTest:
         """Conduct test for a single hypothesis"""
-        
+
         if not evidence:
             return HypothesisTest(
                 hypothesis_id=hypothesis.hypothesis_id,
@@ -401,11 +401,11 @@ class ScientificMethodAnalyzer:
                 limitations=["Insufficient evidence"],
                 recommendations=["Collect more evidence"]
             )
-        
+
         # Analyze evidence
         supporting_evidence = [e for e in evidence if e.supporting_strength > 0.3]
         opposing_evidence = [e for e in evidence if e.supporting_strength < -0.3]
-        
+
         # Calculate evidence quality
         quality_scores = []
         for e in evidence:
@@ -415,13 +415,13 @@ class ScientificMethodAnalyzer:
                 quality_scores.append(0.7)
             else:
                 quality_scores.append(0.4)
-        
+
         evidence_quality = sum(quality_scores) / len(quality_scores) if quality_scores else 0.5
-        
+
         # Determine test result
         support_strength = sum(e.supporting_strength for e in supporting_evidence)
         oppose_strength = abs(sum(e.supporting_strength for e in opposing_evidence))
-        
+
         if support_strength > oppose_strength and support_strength > 1.0:
             test_result = TestResult.SUPPORTED
             confidence = min(0.9, 0.5 + support_strength * 0.2)
@@ -434,12 +434,12 @@ class ScientificMethodAnalyzer:
         else:
             test_result = TestResult.INCONCLUSIVE
             confidence = 0.3
-        
+
         # Generate statistical significance (simulated)
         statistical_significance = None
         if len(evidence) >= 3 and evidence_quality > 0.6:
             statistical_significance = max(0.001, context.significance_threshold * (1 - confidence))
-        
+
         return HypothesisTest(
             hypothesis_id=hypothesis.hypothesis_id,
             evidence_considered=[e.evidence_id for e in evidence],
@@ -454,46 +454,46 @@ class ScientificMethodAnalyzer:
             limitations=self._identify_test_limitations(evidence),
             recommendations=self._generate_test_recommendations(test_result, confidence)
         )
-    
+
     async def _construct_theory(
         self,
-        hypotheses: List[Hypothesis],
-        hypothesis_tests: List[HypothesisTest],
-        evidence: List[Evidence],
+        hypotheses: list[Hypothesis],
+        hypothesis_tests: list[HypothesisTest],
+        evidence: list[Evidence],
         context: ScientificMethodContext
-    ) -> Optional[TheoryConstruction]:
+    ) -> TheoryConstruction | None:
         """Construct theory from supported hypotheses"""
         # Simulate processing delay
         await asyncio.sleep(0.1)
-        
+
         # Find well-supported hypotheses
         supported_tests = [
             test for test in hypothesis_tests
             if test.test_result in [TestResult.SUPPORTED, TestResult.PARTIALLY_SUPPORTED]
             and test.confidence_level > 0.7
         ]
-        
+
         if len(supported_tests) < 2:
             return None
-        
+
         # Get corresponding hypotheses
         supported_hypotheses = [
             h for h in hypotheses
             if any(test.hypothesis_id == h.hypothesis_id for test in supported_tests)
         ]
-        
+
         # Calculate theory metrics
         explanatory_power = sum(test.confidence_level for test in supported_tests) / len(supported_tests)
         predictive_power = min(0.9, explanatory_power * 0.9)  # Slightly lower than explanatory
         parsimony_score = max(0.3, 1.0 - (len(supported_hypotheses) * 0.1))  # Simpler is better
-        
+
         # Generate core principles
         core_principles = [
             "Systematic relationships exist between key variables",
             "Observable patterns can be predicted and explained",
             "Evidence supports theoretical predictions"
         ]
-        
+
         return TheoryConstruction(
             theory_name=f"Integrated Theory for {context.research_question[:30]}...",
             theory_statement=f"A comprehensive explanation integrating {len(supported_hypotheses)} validated hypotheses",
@@ -509,18 +509,18 @@ class ScientificMethodAnalyzer:
             competing_theories=["Alternative theoretical frameworks"],
             theory_confidence=min(explanatory_power, predictive_power)
         )
-    
+
     async def _evaluate_scientific_process(
         self,
         context: ScientificMethodContext,
-        hypotheses: List[Hypothesis],
-        evidence: List[Evidence],
-        experiments: List[Experiment],
-        hypothesis_tests: List[HypothesisTest],
-        theory: Optional[TheoryConstruction]
-    ) -> Tuple[float, float, float, List[str], List[str], List[str]]:
+        hypotheses: list[Hypothesis],
+        evidence: list[Evidence],
+        experiments: list[Experiment],
+        hypothesis_tests: list[HypothesisTest],
+        theory: TheoryConstruction | None
+    ) -> tuple[float, float, float, list[str], list[str], list[str]]:
         """Evaluate the overall scientific process"""
-        
+
         # Calculate scientific rigor
         rigor_factors = [
             len(hypotheses) / max(1, context.max_hypotheses),  # Hypothesis generation
@@ -530,7 +530,7 @@ class ScientificMethodAnalyzer:
             1.0 if theory else 0.5  # Theory construction
         ]
         rigor_score = sum(rigor_factors) / len(rigor_factors)
-        
+
         # Calculate methodology quality
         methodology_factors = [
             sum(h.testability for h in hypotheses) / max(1, len(hypotheses)),  # Hypothesis testability
@@ -538,7 +538,7 @@ class ScientificMethodAnalyzer:
             sum(e.feasibility_score for e in experiments) / max(1, len(experiments)),  # Experiment feasibility
         ]
         methodology_quality = sum(methodology_factors) / len(methodology_factors)
-        
+
         # Calculate evidence strength
         evidence_strength = 0.0
         if evidence:
@@ -548,7 +548,7 @@ class ScientificMethodAnalyzer:
                 for e in evidence
             )
             evidence_strength = min(1.0, weighted_strength / len(evidence))
-        
+
         # Generate conclusions
         conclusions = []
         well_supported_tests = [t for t in hypothesis_tests if t.test_result == TestResult.SUPPORTED and t.confidence_level > 0.7]
@@ -556,16 +556,16 @@ class ScientificMethodAnalyzer:
             hypothesis = next((h for h in hypotheses if h.hypothesis_id == test.hypothesis_id), None)
             if hypothesis:
                 conclusions.append(f"{hypothesis.hypothesis_type.value.title()}: {hypothesis.statement}")
-        
+
         # Identify research areas
         research_areas = []
         inconclusive_tests = [t for t in hypothesis_tests if t.test_result == TestResult.INCONCLUSIVE]
         for test in inconclusive_tests:
             research_areas.append(f"Further investigation needed for hypothesis {test.hypothesis_id}")
-        
+
         if len(evidence) < len(hypotheses) * 2:
             research_areas.append("More comprehensive evidence collection needed")
-        
+
         # Generate recommendations
         recommendations = [
             "Continue systematic hypothesis testing approach",
@@ -573,29 +573,29 @@ class ScientificMethodAnalyzer:
             "Design and conduct feasible experiments",
             "Apply statistical rigor to hypothesis testing"
         ]
-        
+
         if rigor_score < 0.7:
             recommendations.append("Improve overall scientific rigor")
         if methodology_quality < 0.7:
             recommendations.append("Enhance methodological approaches")
         if evidence_strength < 0.6:
             recommendations.append("Collect higher quality evidence")
-        
+
         return rigor_score, methodology_quality, evidence_strength, conclusions, research_areas, recommendations
-    
+
     # Helper methods
     def _calculate_scientific_confidence(
-        self, hypothesis_tests: List[HypothesisTest], evidence_strength: float
+        self, hypothesis_tests: list[HypothesisTest], evidence_strength: float
     ) -> float:
         """Calculate scientific confidence combining tests and evidence"""
         if not hypothesis_tests:
             return evidence_strength * 0.5
-        
+
         test_confidences = [t.confidence_level for t in hypothesis_tests]
         test_confidence = sum(test_confidences) / len(test_confidences)
         return (test_confidence + evidence_strength) / 2.0
-    
-    def _generate_alternative_explanations(self, hypothesis: Hypothesis) -> List[str]:
+
+    def _generate_alternative_explanations(self, hypothesis: Hypothesis) -> list[str]:
         """Generate alternative explanations for a hypothesis"""
         return [
             "Random variation or chance",
@@ -603,28 +603,28 @@ class ScientificMethodAnalyzer:
             "Alternative causal mechanisms",
             "Measurement artifacts or bias"
         ]
-    
-    def _identify_test_limitations(self, evidence: List[Evidence]) -> List[str]:
+
+    def _identify_test_limitations(self, evidence: list[Evidence]) -> list[str]:
         """Identify limitations in hypothesis testing"""
         limitations = set()
         for e in evidence:
             limitations.update(e.limitations)
-        
+
         common_limitations = [
             "Limited sample size",
             "Potential selection bias",
             "Temporal constraints",
             "Generalizability concerns"
         ]
-        
+
         return list(limitations)[:6]  # Limit to 6
-    
+
     def _generate_test_recommendations(
         self, test_result: TestResult, confidence: float
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate recommendations based on test results"""
         recommendations = []
-        
+
         if test_result == TestResult.SUPPORTED:
             recommendations.append("Replicate findings with independent studies")
             recommendations.append("Test boundary conditions and generalizability")
@@ -637,8 +637,8 @@ class ScientificMethodAnalyzer:
         else:  # INCONCLUSIVE
             recommendations.append("Increase sample size or evidence quality")
             recommendations.append("Improve experimental design")
-        
+
         if confidence < 0.7:
             recommendations.append("Increase confidence through additional validation")
-        
+
         return recommendations[:6]  # Limit to 6

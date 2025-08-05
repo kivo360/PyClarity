@@ -4,73 +4,17 @@ PyClarity Tools Package
 Cognitive tools for strategic thinking, problem-solving, and decision-making.
 """
 
-from .sequential_thinking import (
-    SequentialThinkingAnalyzer,
-    SequentialThinkingContext,
-    SequentialThinkingResult,
-    ComplexityLevel,
-    ThoughtStepType,
-    BranchStrategy,
-    ThoughtStepStatus,
-    ThoughtStep,
-    ThoughtRevision,
-    ThoughtBranch,
+# Missing imports that have implementations
+from pyclarity.tools.collaborative_reasoning import (
+    CollaborativeReasoningAnalyzer,
+    CollaborativeReasoningContext,
+    CollaborativeReasoningResult,
+    ConsensusStrategy,
+    DialogueStyle,
+    PersonaType,
+    ReasoningStyle,
 )
-
-# Cognitive Tools - Core Reasoning
-from .mental_models import (
-    MentalModelsAnalyzer,
-    MentalModelContext,
-    MentalModelResult,
-    MentalModelType,
-    MentalModelInsight,
-    MentalModelAssumption,
-)
-
-from .decision_framework import (
-    DecisionFrameworkAnalyzer,
-    DecisionFrameworkContext,
-    DecisionFrameworkResult,
-    DecisionMethodType,
-    CriteriaType,
-    RiskLevel,
-    DecisionCriteria,
-    DecisionOption,
-    DecisionMatrix,
-)
-
-from .scientific_method import (
-    ScientificMethodAnalyzer,
-    ScientificMethodContext,
-    ScientificMethodResult,
-    HypothesisType,
-    EvidenceType,
-    TestResult,
-    Hypothesis,
-    Evidence,
-    Experiment,
-)
-
-# Cognitive Tools - Analysis & Problem Solving
-from .design_patterns import (
-    DesignPatternsAnalyzer,
-    DesignPatternsContext,
-    DesignPatternsResult,
-    PatternCategory,
-    DesignPattern,
-    PatternApplication,
-)
-
-from .programming_paradigms import (
-    ProgrammingParadigmsAnalyzer,
-    ProgrammingParadigmsContext,
-    ProgrammingParadigmsResult,
-    ProgrammingParadigm,
-    ParadigmProfile,
-    ParadigmAnalysis,
-)
-
-from .debugging_approaches import (
+from pyclarity.tools.debugging_approaches import (
     DebuggingApproachesAnalyzer,
     DebuggingApproachesContext,
     DebuggingApproachesResult,
@@ -78,46 +22,26 @@ from .debugging_approaches import (
     ErrorCategory,
     ErrorClassification,
 )
-
-from .visual_reasoning import (
-    VisualReasoningAnalyzer,
-    VisualReasoningContext,
-    VisualReasoningResult,
-    VisualRepresentationType,
-    SpatialRelationship,
-    PatternType,
-    VisualElement,
+from pyclarity.tools.decision_framework import (
+    CriteriaType,
+    DecisionCriteria,
+    DecisionFrameworkAnalyzer,
+    DecisionFrameworkContext,
+    DecisionFrameworkResult,
+    DecisionMatrix,
+    DecisionMethodType,
+    DecisionOption,
+    RiskLevel,
 )
 
-from .structured_argumentation import (
-    StructuredArgumentationAnalyzer,
-    StructuredArgumentationContext,
-    StructuredArgumentationResult,
-    ArgumentType,
-    LogicalFallacy,
-    EvidenceType,
-    StrengthLevel,
-)
-
-# Missing imports that have implementations
-from .collaborative_reasoning import (
-    CollaborativeReasoningAnalyzer,
-    CollaborativeReasoningContext,
-    CollaborativeReasoningResult,
-    PersonaType,
-    ConsensusStrategy,
-    ReasoningStyle,
-    DialogueStyle,
-)
-
-from .metacognitive_monitoring import (
-    MetacognitiveMonitoringAnalyzer,
-    MetacognitiveMonitoringContext,
-    MetacognitiveMonitoringResult,
-    BiasType,
-    MetaStrategies,
-    MonitoringDepth,
-    MonitoringFrequency,
+# Cognitive Tools - Analysis & Problem Solving
+from pyclarity.tools.design_patterns import (
+    DesignPattern,
+    DesignPatternsAnalyzer,
+    DesignPatternsContext,
+    DesignPatternsResult,
+    PatternApplication,
+    PatternCategory,
 )
 
 # Temporarily comment out impact_propagation due to generic type issues
@@ -131,63 +55,127 @@ from .metacognitive_monitoring import (
 #     PropagationSpeed,
 #     EffectMagnitude,
 # )
-
 # New FastMCP tools
-from .iterative_validation import (
+from pyclarity.tools.iterative_validation import (
+    ConfidenceLevel,
+    Hypothesis,
     IterativeValidationAnalyzer,
     IterativeValidationContext,
     IterativeValidationResult,
-    ValidationStatus,
-    TestType,
-    ConfidenceLevel,
+    Learning,
     LearningType,
-    Hypothesis,
+    Refinement,
     TestDesign,
     TestResults,
-    Learning,
-    Refinement,
+    TestType,
     ValidationCycle,
+    ValidationStatus,
 )
 
-from .multi_perspective import (
+# Cognitive Tools - Core Reasoning
+from pyclarity.tools.mental_models import (
+    MentalModelAssumption,
+    MentalModelContext,
+    MentalModelInsight,
+    MentalModelResult,
+    MentalModelsAnalyzer,
+    MentalModelType,
+)
+from pyclarity.tools.metacognitive_monitoring import (
+    BiasType,
+    MetacognitiveMonitoringAnalyzer,
+    MetacognitiveMonitoringContext,
+    MetacognitiveMonitoringResult,
+    MetaStrategies,
+    MonitoringDepth,
+    MonitoringFrequency,
+)
+from pyclarity.tools.multi_perspective import (
+    ConflictSeverity,
+    IntegrationApproach,
+    IntegrationStrategy,
     MultiPerspectiveAnalyzer,
     MultiPerspectiveContext,
     MultiPerspectiveResult,
-    StakeholderType,
-    ConflictSeverity,
-    IntegrationApproach,
     Perspective,
-    ViewpointAnalysis,
+    StakeholderType,
     SynergyConflict,
-    IntegrationStrategy,
+    ViewpointAnalysis,
 )
-
-from .sequential_readiness import (
+from pyclarity.tools.programming_paradigms import (
+    ParadigmAnalysis,
+    ParadigmProfile,
+    ProgrammingParadigm,
+    ProgrammingParadigmsAnalyzer,
+    ProgrammingParadigmsContext,
+    ProgrammingParadigmsResult,
+)
+from pyclarity.tools.scientific_method import (
+    Evidence,
+    EvidenceType,
+    Experiment,
+    Hypothesis,
+    HypothesisType,
+    ScientificMethodAnalyzer,
+    ScientificMethodContext,
+    ScientificMethodResult,
+    TestResult,
+)
+from pyclarity.tools.sequential_readiness import (
+    Dependency,
+    GapSeverity,
+    Intervention,
+    InterventionType,
+    ReadinessGap,
+    ReadinessLevel,
+    ReadinessState,
     SequentialReadinessAnalyzer,
     SequentialReadinessContext,
     SequentialReadinessResult,
-    ReadinessLevel,
-    TransitionType,
-    GapSeverity,
-    InterventionType,
-    ReadinessState,
     StateTransition,
-    ReadinessGap,
-    Intervention,
-    Dependency,
+    TransitionType,
 )
 
+from .sequential_thinking import (
+    BranchStrategy,
+    ComplexityLevel,
+    SequentialThinkingAnalyzer,
+    SequentialThinkingContext,
+    SequentialThinkingResult,
+    ThoughtBranch,
+    ThoughtRevision,
+    ThoughtStep,
+    ThoughtStepStatus,
+    ThoughtStepType,
+)
+from .structured_argumentation import (
+    ArgumentType,
+    LogicalFallacy,
+    StrengthLevel,
+    StructuredArgumentationAnalyzer,
+    StructuredArgumentationContext,
+    StructuredArgumentationResult,
+)
 from .triple_constraint import (
+    Constraint,
+    ConstraintDimension,
+    ConstraintPriority,
+    OptimizationStrategy,
+    Scenario,
+    Tradeoff,
+    TradeoffImpact,
     TripleConstraintAnalyzer,
     TripleConstraintContext,
     TripleConstraintResult,
-    ConstraintDimension,
-    ConstraintPriority,
-    TradeoffImpact,
-    OptimizationStrategy,
-    Constraint,
-    Tradeoff,
-    Scenario,
+)
+from .visual_reasoning import (
+    PatternType,
+    SpatialRelationship,
+    VisualElement,
+    VisualReasoningAnalyzer,
+    VisualReasoningContext,
+    VisualReasoningResult,
+    VisualRepresentationType,
 )
 
 __all__ = [
@@ -202,7 +190,6 @@ __all__ = [
     "ThoughtStep",
     "ThoughtRevision",
     "ThoughtBranch",
-    
     # Mental Models
     "MentalModelsAnalyzer",
     "MentalModelContext",
@@ -210,7 +197,6 @@ __all__ = [
     "MentalModelType",
     "MentalModelInsight",
     "MentalModelAssumption",
-    
     # Decision Framework
     "DecisionFrameworkAnalyzer",
     "DecisionFrameworkContext",
@@ -221,7 +207,6 @@ __all__ = [
     "DecisionCriteria",
     "DecisionOption",
     "DecisionMatrix",
-    
     # Scientific Method
     "ScientificMethodAnalyzer",
     "ScientificMethodContext",
@@ -232,7 +217,6 @@ __all__ = [
     "Hypothesis",
     "Evidence",
     "Experiment",
-    
     # Design Patterns
     "DesignPatternsAnalyzer",
     "DesignPatternsContext",
@@ -240,7 +224,6 @@ __all__ = [
     "PatternCategory",
     "DesignPattern",
     "PatternApplication",
-    
     # Programming Paradigms
     "ProgrammingParadigmsAnalyzer",
     "ProgrammingParadigmsContext",
@@ -248,7 +231,6 @@ __all__ = [
     "ProgrammingParadigm",
     "ParadigmProfile",
     "ParadigmAnalysis",
-    
     # Debugging Approaches
     "DebuggingApproachesAnalyzer",
     "DebuggingApproachesContext",
@@ -256,8 +238,7 @@ __all__ = [
     "DebuggingStrategy",
     "ErrorCategory",
     "ErrorClassification",
-    
-    # Visual Reasoning  
+    # Visual Reasoning
     "VisualReasoningAnalyzer",
     "VisualReasoningContext",
     "VisualReasoningResult",
@@ -265,7 +246,6 @@ __all__ = [
     "SpatialRelationship",
     "PatternType",
     "VisualElement",
-    
     # Structured Argumentation
     "StructuredArgumentationAnalyzer",
     "StructuredArgumentationContext",
@@ -274,25 +254,22 @@ __all__ = [
     "LogicalFallacy",
     "EvidenceType",
     "StrengthLevel",
-    
     # Collaborative Reasoning
     "CollaborativeReasoningAnalyzer",
-    "CollaborativeReasoningContext", 
+    "CollaborativeReasoningContext",
     "CollaborativeReasoningResult",
     "PersonaType",
     "ConsensusStrategy",
     "ReasoningStyle",
     "DialogueStyle",
-    
     # Metacognitive Monitoring
     "MetacognitiveMonitoringAnalyzer",
     "MetacognitiveMonitoringContext",
-    "MetacognitiveMonitoringResult", 
+    "MetacognitiveMonitoringResult",
     "BiasType",
     "MetaStrategies",
     "MonitoringDepth",
     "MonitoringFrequency",
-    
     # Impact Propagation - temporarily disabled
     # "ImpactPropagationAnalyzer",
     # "ImpactPropagationContext",
@@ -302,7 +279,6 @@ __all__ = [
     # "Node",
     # "PropagationSpeed",
     # "EffectMagnitude",
-    
     # Iterative Validation
     "IterativeValidationAnalyzer",
     "IterativeValidationContext",
@@ -317,7 +293,6 @@ __all__ = [
     "Learning",
     "Refinement",
     "ValidationCycle",
-    
     # Multi-Perspective
     "MultiPerspectiveAnalyzer",
     "MultiPerspectiveContext",
@@ -329,7 +304,6 @@ __all__ = [
     "ViewpointAnalysis",
     "SynergyConflict",
     "IntegrationStrategy",
-    
     # Sequential Readiness
     "SequentialReadinessAnalyzer",
     "SequentialReadinessContext",
@@ -343,7 +317,6 @@ __all__ = [
     "ReadinessGap",
     "Intervention",
     "Dependency",
-    
     # Triple Constraint
     "TripleConstraintAnalyzer",
     "TripleConstraintContext",
