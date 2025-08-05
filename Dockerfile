@@ -17,8 +17,20 @@ RUN --mount=type=cache,target=/var/cache/apt/ \
     groupadd --gid 1000 user && \
     useradd --create-home --no-log-init --gid 1000 --uid 1000 --shell /usr/bin/bash user && \
     chown user:user /opt/ && \
-    apt-get update && apt-get install --no-install-recommends --yes sudo && \
+    apt-get update && apt-get install --no-install-recommends --yes sudo curl && \
     echo 'user ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/user && chmod 0440 /etc/sudoers.d/user
+
+# Install Starship prompt
+RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes && \
+    echo 'export PATH="/home/user/.local/bin:$PATH"' >> /home/user/.bashrc && \
+    mkdir -p /home/user/.cache && \
+    chown -R user:user /home/user/.cache
+
+# Set up UV cache directory with proper permissions
+USER user
+RUN mkdir -p ~/.cache/uv && \
+    mkdir -p ~/.local/bin
+USER root
 USER user
 
 # Configure the non-root user's shell.
@@ -26,4 +38,10 @@ RUN mkdir ~/.history/ && \
     echo 'HISTFILE=~/.history/.bash_history' >> ~/.bashrc && \
     echo 'bind "\"\e[A\": history-search-backward"' >> ~/.bashrc && \
     echo 'bind "\"\e[B\": history-search-forward"' >> ~/.bashrc && \
-    echo 'eval "$(starship init bash)"' >> ~/.bashrc
+    echo 'eval "$(starship init bash)"' >> ~/.bashrc && \
+    mkdir -p ~/.config && \
+    echo 'format = "$directory$git_branch$git_status$character"' > ~/.config/starship.toml && \
+    echo 'directory = { style = "blue bold" }' >> ~/.config/starship.toml && \
+    echo 'git_branch = { style = "green bold" }' >> ~/.config/starship.toml && \
+    echo 'git_status = { style = "red bold" }' >> ~/.config/starship.toml && \
+    echo 'character = { success_symbol = "[➜](green)", error_symbol = "[✗](red)" }' >> ~/.config/starship.toml

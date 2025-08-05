@@ -1,26 +1,76 @@
 services:
 
+  # Development container - mounts code for live development
   devcontainer:
     build:
       target: dev
     volumes:
-      - ..:/workspaces
+      - .:/workspaces
       - command-history-volume:/home/user/.history/
+      - uv-cache-volume:/opt/venv
+      - uv-cache-volume:/home/user/.cache/uv
     environment:
       - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+      - PYTHONPATH=/workspaces/src
+    working_dir: /workspaces
     depends_on:
       postgres:
         condition: service_healthy
+    # Keep running for development
+    command: tail -f /dev/null
+
+  # Test container - runs tests then dies
+  testcontainer:
+    build:
+      target: dev
+    volumes:
+      - .:/workspaces
+      - command-history-volume:/home/user/.history/
+      - uv-cache-volume:/opt/venv
+      - uv-cache-volume:/home/user/.cache/uv
+    environment:
+      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+      - PYTHONPATH=/workspaces/src
+    working_dir: /workspaces
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # This container will run tests and exit
+    command: echo "Test container ready - use run_tests_in_container.sh to execute tests"
+    profiles:
+      - test
+
+  # Snapshot container - for creating reproducible test environments
+  snapshotcontainer:
+    build:
+      target: dev
+    volumes:
+      - .:/workspaces
+      - command-history-volume:/home/user/.history/
+      - uv-cache-volume:/opt/venv
+      - uv-cache-volume:/home/user/.cache/uv
+    environment:
+      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+      - PYTHONPATH=/workspaces/src
+    working_dir: /workspaces
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Keep running for snapshot operations
+    command: tail -f /dev/null
+    profiles:
+      - snapshot
 
   postgres:
-    image: pgvector/pgvector:pg17
+    image: pgvector/pgvector:0.8.0-pg17-bookworm
     restart: unless-stopped
     environment:
       POSTGRES_USER: pyclarity
       POSTGRES_PASSWORD: pyclarity
       POSTGRES_DB: pyclarity
-    ports:
-      - "5432:5432"
+    # Remove port exposure to avoid conflicts - containers will use internal networking
+    # ports:
+    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db:/docker-entrypoint-initdb.d
@@ -33,3 +83,4 @@ services:
 volumes:
   command-history-volume:
   postgres_data:
+  uv-cache-volume:

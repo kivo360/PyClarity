@@ -41,6 +41,8 @@ dependencies = [
   "groq>=0.30.0",
   "reward-kit[trl]>=0.4.1",
   "bs4>=0.0.2",
+  # Database
+  "asyncpg>=0.29.0",
 ]
 
 [project.scripts]  # https://docs.astral.sh/uv/concepts/projects/config/#command-line-interfaces

@@ -1,0 +1,147 @@
+{
+  "tool_name": "progressive_sequential_thinking",
+  "description": "Process thoughts one at a time with session state",
+  "input_schema": {
+    "description": "Request for a single progressive thought step.",
+    "properties": {
+      "session_id": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Session ID for continuing existing session",
+        "title": "Session Id"
+      },
+      "thought": {
+        "description": "The current thought to process",
+        "title": "Thought",
+        "type": "string"
+      },
+      "thought_number": {
+        "default": 1,
+        "description": "The number of this thought in the sequence",
+        "title": "Thought Number",
+        "type": "integer"
+      },
+      "total_thoughts": {
+        "default": 5,
+        "description": "Total expected thoughts in this sequence",
+        "title": "Total Thoughts",
+        "type": "integer"
+      },
+      "next_thought_needed": {
+        "default": true,
+        "description": "Whether another thought is needed",
+        "title": "Next Thought Needed",
+        "type": "boolean"
+      },
+      "is_revision": {
+        "default": false,
+        "description": "Whether this revises a previous thought",
+        "title": "Is Revision",
+        "type": "boolean"
+      },
+      "revises_thought": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Which thought this revises",
+        "title": "Revises Thought"
+      },
+      "branch_from_thought": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Thought number to branch from",
+        "title": "Branch From Thought"
+      },
+      "branch_id": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Unique identifier for this branch",
+        "title": "Branch Id"
+      },
+      "needs_more_thoughts": {
+        "default": false,
+        "description": "Whether more thoughts are needed beyond total",
+        "title": "Needs More Thoughts",
+        "type": "boolean"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "description": "Additional metadata",
+        "title": "Metadata",
+        "type": "object"
+      }
+    },
+    "required": [
+      "thought"
+    ],
+    "title": "ProgressiveThoughtRequest",
+    "type": "object"
+  },
+  "input_examples": [
+    {
+      "thought": "Let me analyze this step-by-step problem about improving user engagement",
+      "thought_number": 1,
+      "total_thoughts": 5,
+      "next_thought_needed": true
+    },
+    {
+      "session_id": "example-session-123",
+      "thought": "I need to explore an alternative approach to this problem",
+      "thought_number": 3,
+      "total_thoughts": 7,
+      "branch_from_thought": 2,
+      "branch_id": "alternative-approach",
+      "next_thought_needed": true
+    },
+    {
+      "session_id": "example-session-456",
+      "thought": "Based on new evidence, I need to revise my earlier hypothesis",
+      "thought_number": 4,
+      "total_thoughts": 6,
+      "is_revision": true,
+      "revises_thought": 2,
+      "next_thought_needed": true
+    }
+  ],
+  "example_descriptions": [
+    {
+      "name": "simple_problem_solving",
+      "description": "Basic problem decomposition and analysis"
+    },
+    {
+      "name": "branching_analysis",
+      "description": "Creating alternative hypothesis branches"
+    },
+    {
+      "name": "thought_revision",
+      "description": "Revising a previous thought with new insights"
+    }
+  ]
+}
