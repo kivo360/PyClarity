@@ -6,9 +6,10 @@ First Principles Thinking, Opportunity Cost Analysis, Error Propagation,
 Rubber Duck Debugging, Pareto Principle, and Occam's Razor.
 """
 
-from pydantic import BaseModel, Field, field_validator, model_validator
-from typing import List, Dict, Any, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class ComplexityLevel(str, Enum):
@@ -21,14 +22,14 @@ class ComplexityLevel(str, Enum):
 
 class MentalModelType(str, Enum):
     """Available mental model frameworks"""
-    
+
     FIRST_PRINCIPLES = "first_principles"
     OPPORTUNITY_COST = "opportunity_cost"
     ERROR_PROPAGATION = "error_propagation"
     RUBBER_DUCK = "rubber_duck"
     PARETO_PRINCIPLE = "pareto_principle"
     OCCAMS_RAZOR = "occams_razor"
-    
+
     @property
     def description(self) -> str:
         """Get description of the mental model"""
@@ -45,33 +46,33 @@ class MentalModelType(str, Enum):
 
 class MentalModelInsight(BaseModel):
     """Individual insight from mental model analysis"""
-    
+
     insight: str = Field(
         ...,
         description="The insight description",
         min_length=20,
         max_length=500
     )
-    
+
     relevance_score: float = Field(
         ...,
         ge=0.0,
         le=1.0,
         description="How relevant this insight is to the problem"
     )
-    
-    supporting_evidence: Optional[str] = Field(
+
+    supporting_evidence: str | None = Field(
         None,
         description="Evidence or reasoning supporting this insight",
         max_length=300
     )
-    
-    category: Optional[str] = Field(
+
+    category: str | None = Field(
         None,
         description="Category or theme of the insight",
         max_length=50
     )
-    
+
     @field_validator('insight')
     @classmethod
     def validate_insight_content(cls, v):
@@ -83,34 +84,34 @@ class MentalModelInsight(BaseModel):
 
 class MentalModelAssumption(BaseModel):
     """Assumption identified during analysis"""
-    
+
     assumption: str = Field(
         ...,
         description="The assumption being made",
         min_length=10,
         max_length=300
     )
-    
+
     confidence: float = Field(
         ...,
         ge=0.0,
         le=1.0,
         description="Confidence that this assumption is valid"
     )
-    
+
     impact_if_wrong: str = Field(
         ...,
         description="What happens if this assumption is incorrect",
         min_length=10,
         max_length=200
     )
-    
-    verification_method: Optional[str] = Field(
+
+    verification_method: str | None = Field(
         None,
         description="How to verify or test this assumption",
         max_length=200
     )
-    
+
     @field_validator('assumption', 'impact_if_wrong')
     @classmethod
     def validate_string_fields(cls, v):
@@ -122,42 +123,42 @@ class MentalModelAssumption(BaseModel):
 
 class MentalModelContext(BaseModel):
     """Context for mental model analysis"""
-    
+
     problem: str = Field(
         ...,
         description="The problem or question to analyze",
         min_length=20,
         max_length=2000
     )
-    
+
     model_type: MentalModelType = Field(
         ...,
         description="Type of mental model to apply"
     )
-    
+
     complexity_level: ComplexityLevel = Field(
         ComplexityLevel.MODERATE,
         description="Complexity level of analysis to perform"
     )
-    
-    focus_areas: Optional[List[str]] = Field(
+
+    focus_areas: list[str] | None = Field(
         None,
         description="Specific areas to focus the analysis on",
-        max_items=5
+        max_length=5
     )
-    
-    constraints: Optional[List[str]] = Field(
+
+    constraints: list[str] | None = Field(
         None,
         description="Known constraints or limitations",
-        max_items=8
+        max_length=8
     )
-    
-    domain_expertise: Optional[str] = Field(
+
+    domain_expertise: str | None = Field(
         None,
         description="Relevant domain expertise level to apply",
         max_length=100
     )
-    
+
     @field_validator('problem')
     @classmethod
     def validate_problem_for_mental_model(cls, v):
@@ -166,7 +167,7 @@ class MentalModelContext(BaseModel):
         if len(v) < 20:
             raise ValueError("Mental model analysis requires detailed problem descriptions (min 20 chars)")
         return v
-    
+
     @field_validator('focus_areas')
     @classmethod
     def validate_focus_areas(cls, v):
@@ -178,7 +179,7 @@ class MentalModelContext(BaseModel):
                 return None
             return cleaned[:5]  # Limit to 5 items
         return v
-    
+
     @field_validator('constraints')
     @classmethod
     def validate_constraints(cls, v):
@@ -191,96 +192,96 @@ class MentalModelContext(BaseModel):
 
 class MentalModelResult(BaseModel):
     """Result of mental model analysis"""
-    
+
     model_applied: MentalModelType = Field(
         ...,
         description="Mental model that was applied"
     )
-    
-    key_insights: List[MentalModelInsight] = Field(
+
+    key_insights: list[MentalModelInsight] = Field(
         ...,
         description="List of key insights from the analysis",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
-    
-    recommendations: List[str] = Field(
+
+    recommendations: list[str] = Field(
         ...,
         description="Actionable recommendations based on the analysis",
-        min_items=1,
-        max_items=8
+        min_length=1,
+        max_length=8
     )
-    
-    assumptions_identified: List[MentalModelAssumption] = Field(
+
+    assumptions_identified: list[MentalModelAssumption] = Field(
         default_factory=list,
         description="Assumptions identified during analysis",
-        max_items=6
+        max_length=6
     )
-    
-    fundamental_elements: Optional[List[str]] = Field(
+
+    fundamental_elements: list[str] | None = Field(
         None,
         description="Fundamental elements identified (for first principles)",
-        max_items=8
+        max_length=8
     )
-    
-    trade_offs: Optional[List[Dict[str, str]]] = Field(
+
+    trade_offs: list[dict[str, str]] | None = Field(
         None,
         description="Trade-offs identified (for opportunity cost)",
-        max_items=5
+        max_length=5
     )
-    
-    error_paths: Optional[List[str]] = Field(
+
+    error_paths: list[str] | None = Field(
         None,
         description="Error propagation paths identified",
-        max_items=6
+        max_length=6
     )
-    
-    critical_factors: Optional[List[str]] = Field(
+
+    critical_factors: list[str] | None = Field(
         None,
         description="Critical 20% factors (for Pareto analysis)",
-        max_items=5
+        max_length=5
     )
-    
-    simplified_explanation: Optional[str] = Field(
+
+    simplified_explanation: str | None = Field(
         None,
         description="Simplified explanation (for Occam's Razor)",
         max_length=500
     )
-    
-    limitations: Optional[str] = Field(
+
+    limitations: str | None = Field(
         None,
         description="Limitations of this analysis",
         max_length=300
     )
-    
-    next_steps: Optional[List[str]] = Field(
+
+    next_steps: list[str] | None = Field(
         None,
         description="Suggested next steps based on analysis",
-        max_items=5
+        max_length=5
     )
-    
+
     processing_time_ms: int = Field(
         0,
         description="Time taken to process in milliseconds"
     )
-    
+
     @field_validator('key_insights')
     @classmethod
     def validate_key_insights(cls, v):
         """Validate key insights list"""
         if not v:
             raise ValueError("At least one key insight is required")
-        
+
         # Sort by relevance score (highest first)
         return sorted(v, key=lambda x: x.relevance_score, reverse=True)
-    
+
     @field_validator('recommendations')
     @classmethod
     def validate_recommendations(cls, v):
         """Validate recommendations list"""
         if not v:
             raise ValueError("At least one recommendation is required")
-        
+
         # Clean and validate each recommendation
         cleaned = []
         for rec in v:
@@ -288,12 +289,12 @@ class MentalModelResult(BaseModel):
                 cleaned_rec = ' '.join(rec.split())
                 if len(cleaned_rec) >= 10:  # Minimum meaningful length
                     cleaned.append(cleaned_rec)
-        
+
         if not cleaned:
             raise ValueError("All recommendations must be meaningful (min 10 chars)")
-        
+
         return cleaned
-    
+
     @field_validator('trade_offs')
     @classmethod
     def validate_trade_offs(cls, v):
@@ -302,13 +303,13 @@ class MentalModelResult(BaseModel):
             for trade_off in v:
                 if not isinstance(trade_off, dict):
                     raise ValueError("Trade-offs must be dictionaries")
-                
+
                 required_keys = ['option', 'benefit', 'cost']
                 if not all(key in trade_off for key in required_keys):
                     raise ValueError(f"Trade-offs must contain keys: {required_keys}")
-        
+
         return v
-    
+
     @field_validator('fundamental_elements', 'error_paths', 'critical_factors', 'next_steps')
     @classmethod
     def validate_string_lists(cls, v):
@@ -321,12 +322,12 @@ class MentalModelResult(BaseModel):
     def get_model_description(self) -> str:
         """Get description of the applied mental model"""
         return self.model_applied.description
-    
-    def get_top_insights(self, n: int = 3) -> List[MentalModelInsight]:
+
+    def get_top_insights(self, n: int = 3) -> list[MentalModelInsight]:
         """Get top N insights by relevance score"""
         return sorted(self.key_insights, key=lambda x: x.relevance_score, reverse=True)[:n]
-    
-    def get_high_confidence_assumptions(self, threshold: float = 0.7) -> List[MentalModelAssumption]:
+
+    def get_high_confidence_assumptions(self, threshold: float = 0.7) -> list[MentalModelAssumption]:
         """Get assumptions with confidence above threshold"""
         return [
             assumption for assumption in self.assumptions_identified
@@ -337,12 +338,12 @@ class MentalModelResult(BaseModel):
 # Utility functions for mental model processing
 class MentalModelUtils:
     """Utility functions for mental model processing"""
-    
+
     @staticmethod
     def validate_model_compatibility(problem: str, model_type: MentalModelType) -> bool:
         """Check if problem is suitable for the mental model"""
         problem_lower = problem.lower()
-        
+
         compatibility = {
             MentalModelType.FIRST_PRINCIPLES: [
                 'how', 'why', 'fundamental', 'basic', 'core', 'foundation'
@@ -363,21 +364,21 @@ class MentalModelUtils:
                 'complex', 'simple', 'elegant', 'straightforward', 'multiple solutions'
             ]
         }
-        
+
         keywords = compatibility.get(model_type, [])
         return any(keyword in problem_lower for keyword in keywords)
-    
+
     @staticmethod
-    def suggest_mental_model(problem: str) -> List[MentalModelType]:
+    def suggest_mental_model(problem: str) -> list[MentalModelType]:
         """Suggest appropriate mental models for a problem"""
         suggestions = []
-        
+
         for model_type in MentalModelType:
             if MentalModelUtils.validate_model_compatibility(problem, model_type):
                 suggestions.append(model_type)
-        
+
         # If no specific matches, suggest first principles as default
         if not suggestions:
             suggestions.append(MentalModelType.FIRST_PRINCIPLES)
-        
+
         return suggestions

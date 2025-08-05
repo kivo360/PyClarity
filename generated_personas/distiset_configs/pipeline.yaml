@@ -1,0 +1,247 @@
+distilabel:
+  version: 1.5.3
+pipeline:
+  connections:
+  - from: text_generation_0
+    to: []
+  - from: load_data_from_hub_0
+    to:
+    - text_generation_0
+  description: null
+  name: pipeline_text_generation_0
+  routing_batch_functions: []
+  steps:
+  - name: text_generation_0
+    step:
+      add_raw_input: true
+      add_raw_output: true
+      columns:
+      - instruction
+      group_generations: false
+      input_batch_size: 50
+      input_mappings: {}
+      llm:
+        generation_kwargs:
+          max_new_tokens: 1024
+          temperature: 0.8
+        jobs_ids: null
+        model: fireworks_ai/accounts/fireworks/models/glm-4p5-air
+        offline_batch_generation_block_until_done: null
+        structured_output: null
+        type_info:
+          module: distilabel.models.llms.litellm
+          name: LiteLLM
+        use_offline_batch_generation: false
+        verbose: false
+      name: text_generation_0
+      num_generations: 1
+      output_mappings: {}
+      resources:
+        cpus: null
+        gpus: null
+        memory: null
+        replicas: 1
+        resources: null
+      runtime_parameters_info:
+      - name: resources
+        runtime_parameters_info:
+        - description: The number of replicas for the step.
+          name: replicas
+          optional: true
+        - description: The number of CPUs assigned to each step replica.
+          name: cpus
+          optional: true
+        - description: The number of GPUs assigned to each step replica.
+          name: gpus
+          optional: true
+        - description: The memory in bytes required for each step replica.
+          name: memory
+          optional: true
+        - description: A dictionary containing names of custom resources and the number
+            of those resources required for each step replica.
+          name: resources
+          optional: true
+      - description: The number of rows that will contain the batches processed by
+          the step.
+        name: input_batch_size
+        optional: true
+      - name: llm
+        runtime_parameters_info:
+        - description: The kwargs to be propagated to either `generate` or `agenerate`
+            methods within each `LLM`.
+          keys:
+          - description: a list of functions to apply to the conversation messages.
+              Defaults to  `None`.
+            name: functions
+            optional: true
+          - description: the name of the function to call within the conversation.
+              Defaults  to `None`.
+            name: function_call
+            optional: true
+          - description: the temperature to use for the generation. Defaults to `1.0`.
+            name: temperature
+            optional: true
+          - description: the top-p value to use for the generation. Defaults to `1.0`.
+            name: top_p
+            optional: true
+          - description: Up to 4 sequences where the LLM API will stop generating
+              further tokens.  Defaults to `None`.
+            name: stop
+            optional: true
+          - description: The maximum number of tokens in the generated completion.
+              Defaults to  `None`.
+            name: max_tokens
+            optional: true
+          - description: It is used to penalize new tokens based on their existence
+              in the  text so far. Defaults to `None`.
+            name: presence_penalty
+            optional: true
+          - description: It is used to penalize new tokens based on their frequency
+              in the  text so far. Defaults to `None`.
+            name: frequency_penalty
+            optional: true
+          - description: Used to modify the probability of specific tokens appearing
+              in the  completion. Defaults to `None`.
+            name: logit_bias
+            optional: true
+          - description: A unique identifier representing your end-user. This can
+              help the LLM provider  to monitor and detect abuse. Defaults to `None`.
+            name: user
+            optional: true
+          - description: Pass in additional metadata to tag your completion calls
+              - eg. prompt  version, details, etc. Defaults to `None`.
+            name: metadata
+            optional: true
+          - description: Base URL for the API. Defaults to `None`.
+            name: api_base
+            optional: true
+          - description: API version. Defaults to `None`.
+            name: api_version
+            optional: true
+          - description: API key. Defaults to `None`.
+            name: api_key
+            optional: true
+          - description: List of api base, version, keys. Defaults to `None`.
+            name: model_list
+            optional: true
+          - description: If provided, return a mock completion response for testing
+              or debugging  purposes. Defaults to `None`.
+            name: mock_response
+            optional: true
+          - description: The maximum execution time in seconds for the completion
+              request.  Defaults to `600`.
+            name: force_timeout
+            optional: true
+          - description: Used for Non-OpenAI LLMs, Example usage for bedrock, set(iterable)  model="amazon.titan-tg1-large"
+              and custom_llm_provider="bedrock". Defaults to  `None`.
+            name: custom_llm_provider
+            optional: true
+          name: generation_kwargs
+        - description: Whether to use the `offline_batch_generate` method to generate
+            the responses.
+          name: use_offline_batch_generation
+          optional: true
+        - description: If provided, then polling will be done until the `ofline_batch_generate`
+            method is able to retrieve the results. The value indicate the time to
+            wait between each polling.
+          name: offline_batch_generation_block_until_done
+          optional: true
+        - description: Whether to log the LiteLLM client's logs.
+          name: verbose
+          optional: true
+        - description: The structured output format to use across all the generations.
+          name: structured_output
+          optional: true
+      - description: Whether to include the raw output of the LLM in the key `raw_output_<TASK_NAME>`
+          of the `distilabel_metadata` dictionary output column
+        name: add_raw_output
+        optional: true
+      - description: Whether to include the raw input of the LLM in the key `raw_input_<TASK_NAME>`
+          of the `distilabel_metadata` dictionary column
+        name: add_raw_input
+        optional: true
+      - description: The number of generations to be produced per input.
+        name: num_generations
+        optional: true
+      system_prompt: You are an expert persona designer who creates detailed, realistic
+        personas for various purposes. Each persona should include demographic details,
+        personality traits, goals, challenges, professional background, personal interests,
+        and behavioral patterns. Make each persona unique, diverse, and believable.
+      template: '{{ instruction }}'
+      type_info:
+        module: distilabel.steps.tasks.text_generation
+        name: TextGeneration
+      use_cache: true
+      use_default_structured_output: false
+      use_system_prompt: true
+  - name: load_data_from_hub_0
+    step:
+      batch_size: 50
+      config: null
+      input_mappings: {}
+      name: load_data_from_hub_0
+      num_examples: 30
+      output_mappings: {}
+      repo_id: default_name
+      resources:
+        cpus: null
+        gpus: null
+        memory: null
+        replicas: 1
+        resources: null
+      revision: null
+      runtime_parameters_info:
+      - name: resources
+        runtime_parameters_info:
+        - description: The number of replicas for the step.
+          name: replicas
+          optional: true
+        - description: The number of CPUs assigned to each step replica.
+          name: cpus
+          optional: true
+        - description: The number of GPUs assigned to each step replica.
+          name: gpus
+          optional: true
+        - description: The memory in bytes required for each step replica.
+          name: memory
+          optional: true
+        - description: A dictionary containing names of custom resources and the number
+            of those resources required for each step replica.
+          name: resources
+          optional: true
+      - description: The number of rows that will contain the batches generated by
+          the step.
+        name: batch_size
+        optional: true
+      - description: The Hugging Face Hub repository ID of the dataset to load.
+        name: repo_id
+        optional: false
+      - description: The split of the dataset to load. Defaults to 'train'.
+        name: split
+        optional: true
+      - description: The configuration of the dataset to load. This is optional and
+          only needed if the dataset has multiple configurations.
+        name: config
+        optional: true
+      - description: The revision of the dataset to load. Defaults to the latest revision.
+        name: revision
+        optional: true
+      - description: Whether to load the dataset in streaming mode or not. Defaults
+          to False.
+        name: streaming
+        optional: true
+      - description: The number of examples to load from the dataset. By default will
+          load all examples.
+        name: num_examples
+        optional: true
+      split: train
+      storage_options: null
+      streaming: false
+      type_info:
+        module: distilabel.steps.generators.huggingface
+        name: LoadDataFromHub
+      use_cache: true
+  type_info:
+    module: distilabel.pipeline.local
+    name: Pipeline
+requirements: []

@@ -6,112 +6,112 @@ self-reflection and thinking about thinking capabilities through reasoning
 process monitoring, bias detection, and strategy evaluation.
 """
 
-from typing import List, Dict, Any, Optional, Tuple
 import asyncio
 import random
 import time
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 from .models import (
-    MetacognitiveMonitoringContext,
-    MetacognitiveMonitoringResult,
     BiasDetection,
     BiasType,
-    ReasoningMonitor,
-    MonitoringFrequency,
     ConfidenceAssessment,
     ConfidenceCalibration,
-    StrategyEvaluation,
+    MetacognitiveMonitoringContext,
+    MetacognitiveMonitoringResult,
     MetaLearningInsight,
     MetaStrategies,
     MonitoringDepth,
+    MonitoringFrequency,
+    ReasoningMonitor,
+    StrategyEvaluation,
 )
 
 
 class MetacognitiveMonitoringAnalyzer:
     """Metacognitive monitoring cognitive tool analyzer"""
-    
+
     def __init__(self):
         """Initialize the metacognitive monitoring analyzer"""
         self.tool_name = "Metacognitive Monitoring"
         self.version = "2.0.0"
-        
+
         # Internal state for processing
         self._processing_start_time = 0.0
-        self._active_monitors: List[ReasoningMonitor] = []
-        self._detected_biases: List[BiasDetection] = []
-        self._strategy_scores: Dict[str, float] = {}
-    
+        self._active_monitors: list[ReasoningMonitor] = []
+        self._detected_biases: list[BiasDetection] = []
+        self._strategy_scores: dict[str, float] = {}
+
     async def analyze(self, context: MetacognitiveMonitoringContext) -> MetacognitiveMonitoringResult:
         """
         Analyze reasoning process using metacognitive monitoring.
-        
+
         Args:
             context: Metacognitive monitoring context with target and parameters
-            
+
         Returns:
             MetacognitiveMonitoringResult with monitoring insights and recommendations
         """
         self._processing_start_time = time.time()
-        
+
         # Initialize internal state
         self._active_monitors = []
         self._detected_biases = []
         self._strategy_scores = {}
-        
+
         # Set up reasoning monitors
         reasoning_monitors = await self._setup_reasoning_monitors(context)
         self._active_monitors = reasoning_monitors
-        
+
         # Detect biases if enabled
         bias_detections = []
         if context.bias_detection_enabled:
             bias_detections = await self._detect_biases(context)
             self._detected_biases = bias_detections
-        
+
         # Assess confidence calibration if enabled
         confidence_assessment = await self._assess_confidence(context)
-        
+
         # Evaluate strategies if enabled
         strategy_evaluations = []
         if context.strategy_evaluation_enabled:
             strategy_evaluations = await self._evaluate_strategies(context)
-        
+
         # Extract meta-learning insights if enabled
         meta_learning_insights = []
         if context.meta_learning_enabled:
             meta_learning_insights = await self._extract_meta_learning_insights(context)
-        
+
         # Calculate overall metrics
         overall_quality = await self._calculate_overall_quality(
             bias_detections, confidence_assessment, strategy_evaluations
         )
-        
+
         metacognitive_awareness = await self._calculate_metacognitive_awareness(
             context, reasoning_monitors, bias_detections
         )
-        
+
         metacognitive_efficiency = await self._calculate_efficiency(
             context, len(reasoning_monitors), len(bias_detections)
         )
-        
+
         # Generate recommendations and alerts
         improvement_recommendations = await self._generate_recommendations(
             context, bias_detections, confidence_assessment, strategy_evaluations
         )
-        
+
         intervention_alerts = await self._generate_intervention_alerts(
             context, bias_detections, confidence_assessment
         )
-        
+
         # Identify reasoning patterns
         reasoning_patterns = await self._identify_reasoning_patterns(
             context, bias_detections, strategy_evaluations
         )
-        
+
         # Calculate processing time
         monitoring_duration = time.time() - self._processing_start_time
-        
+
         return MetacognitiveMonitoringResult(
             bias_detections=bias_detections,
             reasoning_monitors=reasoning_monitors,
@@ -129,15 +129,15 @@ class MetacognitiveMonitoringAnalyzer:
             metacognitive_efficiency=metacognitive_efficiency,
             processing_time_ms=round(monitoring_duration * 1000)
         )
-    
+
     async def _setup_reasoning_monitors(
-        self, 
+        self,
         context: MetacognitiveMonitoringContext
-    ) -> List[ReasoningMonitor]:
+    ) -> list[ReasoningMonitor]:
         """Set up monitors for tracking reasoning process"""
-        
+
         monitors = []
-        
+
         # Logic consistency monitor
         logic_monitor = ReasoningMonitor(
             monitoring_target="Logical consistency and coherence",
@@ -162,7 +162,7 @@ class MetacognitiveMonitoringAnalyzer:
             }
         )
         monitors.append(logic_monitor)
-        
+
         # Progress tracking monitor
         if context.monitoring_depth in [MonitoringDepth.MODERATE, MonitoringDepth.DEEP]:
             progress_monitor = ReasoningMonitor(
@@ -188,7 +188,7 @@ class MetacognitiveMonitoringAnalyzer:
                 }
             )
             monitors.append(progress_monitor)
-        
+
         # Quality assurance monitor
         if context.monitoring_depth == MonitoringDepth.DEEP:
             quality_monitor = ReasoningMonitor(
@@ -214,15 +214,15 @@ class MetacognitiveMonitoringAnalyzer:
                 }
             )
             monitors.append(quality_monitor)
-        
+
         # Add alerts and interventions based on threshold violations
         for monitor in monitors:
             alerts = []
             interventions = []
-            
+
             for metric, current_value in monitor.current_values.items():
                 threshold = monitor.thresholds.get(metric, 0.5)
-                
+
                 if metric == "reasoning_gaps" or metric == "backtracking_frequency":
                     # For these metrics, lower is better
                     if current_value > threshold:
@@ -233,21 +233,21 @@ class MetacognitiveMonitoringAnalyzer:
                     if current_value < threshold:
                         alerts.append(f"{metric} below minimum threshold")
                         interventions.append(f"Improve {metric} through focused attention")
-            
+
             monitor.alerts_triggered = alerts
             monitor.interventions_suggested = interventions
-        
+
         return monitors
-    
+
     async def _detect_biases(
-        self, 
+        self,
         context: MetacognitiveMonitoringContext
-    ) -> List[BiasDetection]:
+    ) -> list[BiasDetection]:
         """Detect cognitive biases in the reasoning process"""
-        
+
         biases = []
         reasoning_text = context.reasoning_target.lower()
-        
+
         # Confirmation bias detection
         if any(phrase in reasoning_text for phrase in [
             "as expected", "confirms my", "proves that", "obviously", "clearly shows"
@@ -270,7 +270,7 @@ class MetacognitiveMonitoringAnalyzer:
                 ]
             )
             biases.append(confirmation_bias)
-        
+
         # Anchoring bias detection
         if any(phrase in reasoning_text for phrase in [
             "initial", "first impression", "baseline", "starting point", "originally"
@@ -293,7 +293,7 @@ class MetacognitiveMonitoringAnalyzer:
                 ]
             )
             biases.append(anchoring_bias)
-        
+
         # Availability heuristic detection
         if any(phrase in reasoning_text for phrase in [
             "recent", "memorable", "vivid", "striking example", "comes to mind"
@@ -316,7 +316,7 @@ class MetacognitiveMonitoringAnalyzer:
                 ]
             )
             biases.append(availability_bias)
-        
+
         # Overconfidence bias detection
         if any(phrase in reasoning_text for phrase in [
             "certain", "definitely", "no doubt", "guaranteed", "impossible to be wrong"
@@ -340,27 +340,27 @@ class MetacognitiveMonitoringAnalyzer:
                 ]
             )
             biases.append(overconfidence_bias)
-        
+
         return biases
-    
+
     async def _assess_confidence(
-        self, 
+        self,
         context: MetacognitiveMonitoringContext
     ) -> ConfidenceAssessment:
         """Assess and calibrate confidence levels"""
-        
+
         # Simulate stated confidence based on reasoning language
         reasoning_text = context.reasoning_target.lower()
-        
+
         # Count confidence indicators
         high_confidence_words = sum(1 for word in [
             "certain", "definitely", "clearly", "obviously", "undoubtedly"
         ] if word in reasoning_text)
-        
+
         low_confidence_words = sum(1 for word in [
             "maybe", "perhaps", "possibly", "might", "could be"
         ] if word in reasoning_text)
-        
+
         # Calculate stated confidence
         if high_confidence_words > low_confidence_words:
             stated_confidence = min(0.95, 0.7 + (high_confidence_words * 0.05))
@@ -368,34 +368,34 @@ class MetacognitiveMonitoringAnalyzer:
             stated_confidence = max(0.3, 0.6 - (low_confidence_words * 0.05))
         else:
             stated_confidence = 0.65
-        
+
         # Calibrate confidence based on method
         calibration_factors = []
-        
+
         if context.calibration_method == ConfidenceCalibration.EVIDENCE_BASED:
             # Adjust based on evidence quality
             evidence_adjustment = random.uniform(-0.15, 0.1)
             calibration_factors.append("Quality and quantity of supporting evidence")
             calibration_factors.append("Strength of logical arguments")
-        
+
         elif context.calibration_method == ConfidenceCalibration.HISTORICAL_PERFORMANCE:
             # Adjust based on past accuracy
             historical_adjustment = random.uniform(-0.1, 0.05)
             evidence_adjustment = historical_adjustment
             calibration_factors.append("Historical accuracy in similar domains")
             calibration_factors.append("Past calibration performance")
-        
+
         elif context.calibration_method == ConfidenceCalibration.PEER_COMPARISON:
             # Adjust based on peer benchmarks
             peer_adjustment = random.uniform(-0.12, 0.08)
             evidence_adjustment = peer_adjustment
             calibration_factors.append("Comparison with peer assessments")
             calibration_factors.append("Expert consensus levels")
-        
+
         else:
             evidence_adjustment = random.uniform(-0.1, 0.05)
             calibration_factors.append("General calibration heuristics")
-        
+
         # Add complexity adjustment
         complexity_adjustment = {
             "simple": 0.05,
@@ -403,24 +403,24 @@ class MetacognitiveMonitoringAnalyzer:
             "complex": -0.05,
             "very_complex": -0.1
         }.get(context.complexity_level.value, 0.0)
-        
+
         calibration_factors.append(f"Complexity level: {context.complexity_level.value}")
-        
+
         # Calculate calibrated confidence
-        calibrated_confidence = max(0.0, min(1.0, 
+        calibrated_confidence = max(0.0, min(1.0,
             stated_confidence + evidence_adjustment + complexity_adjustment
         ))
-        
+
         # Calculate confidence interval
         interval_width = 0.15 if context.complexity_level.value in ["simple", "moderate"] else 0.25
         confidence_interval = {
             "lower": max(0.0, calibrated_confidence - interval_width),
             "upper": min(1.0, calibrated_confidence + interval_width)
         }
-        
+
         # Calculate reliability score
         reliability_score = 0.8 if abs(stated_confidence - calibrated_confidence) < 0.15 else 0.6
-        
+
         return ConfidenceAssessment(
             stated_confidence=stated_confidence,
             calibrated_confidence=calibrated_confidence,
@@ -431,18 +431,18 @@ class MetacognitiveMonitoringAnalyzer:
             confidence_interval=confidence_interval,
             reliability_score=reliability_score
         )
-    
+
     async def _evaluate_strategies(
-        self, 
+        self,
         context: MetacognitiveMonitoringContext
-    ) -> List[StrategyEvaluation]:
+    ) -> list[StrategyEvaluation]:
         """Evaluate reasoning strategies used"""
-        
+
         evaluations = []
-        
+
         # Analyze reasoning text for strategy indicators
         reasoning_text = context.reasoning_target.lower()
-        
+
         # Analytical strategy evaluation
         if any(phrase in reasoning_text for phrase in [
             "analyze", "break down", "component", "systematic", "step by step"
@@ -477,7 +477,7 @@ class MetacognitiveMonitoringAnalyzer:
             )
             evaluations.append(analytical_eval)
             self._strategy_scores["analytical"] = analytical_eval.effectiveness_score
-        
+
         # Creative strategy evaluation
         if any(phrase in reasoning_text for phrase in [
             "creative", "innovative", "novel", "brainstorm", "imagine"
@@ -512,7 +512,7 @@ class MetacognitiveMonitoringAnalyzer:
             )
             evaluations.append(creative_eval)
             self._strategy_scores["creative"] = creative_eval.effectiveness_score
-        
+
         # Evidence-based strategy evaluation
         if any(phrase in reasoning_text for phrase in [
             "evidence", "data", "research", "study", "empirical"
@@ -548,17 +548,17 @@ class MetacognitiveMonitoringAnalyzer:
             )
             evaluations.append(evidence_eval)
             self._strategy_scores["evidence_based"] = evidence_eval.effectiveness_score
-        
+
         return evaluations
-    
+
     async def _extract_meta_learning_insights(
-        self, 
+        self,
         context: MetacognitiveMonitoringContext
-    ) -> List[MetaLearningInsight]:
+    ) -> list[MetaLearningInsight]:
         """Extract insights from the meta-learning process"""
-        
+
         insights = []
-        
+
         # Pattern recognition insight
         if self._detected_biases:
             bias_pattern_insight = MetaLearningInsight(
@@ -580,7 +580,7 @@ class MetacognitiveMonitoringAnalyzer:
                 confidence_in_insight=0.8
             )
             insights.append(bias_pattern_insight)
-        
+
         # Strategy effectiveness insight
         if self._strategy_scores:
             best_strategy = max(self._strategy_scores.items(), key=lambda x: x[1])
@@ -603,14 +603,14 @@ class MetacognitiveMonitoringAnalyzer:
                 confidence_in_insight=0.85
             )
             insights.append(strategy_insight)
-        
+
         # Performance optimization insight
         if self._active_monitors:
             avg_performance = sum(
                 sum(m.current_values.values()) / len(m.current_values)
                 for m in self._active_monitors
             ) / len(self._active_monitors)
-            
+
             performance_insight = MetaLearningInsight(
                 insight_type="performance",
                 insight_description=f"Overall reasoning performance averages {avg_performance:.2f}, with notable variations across different monitoring dimensions. Key performance drivers include logical consistency and evidence quality. Targeted improvements in lowest-scoring areas could yield significant overall gains.",
@@ -630,7 +630,7 @@ class MetacognitiveMonitoringAnalyzer:
                 confidence_in_insight=0.75
             )
             insights.append(performance_insight)
-        
+
         # Context sensitivity insight
         context_insight = MetaLearningInsight(
             insight_type="context",
@@ -651,20 +651,20 @@ class MetacognitiveMonitoringAnalyzer:
             confidence_in_insight=0.8
         )
         insights.append(context_insight)
-        
+
         return insights
-    
+
     async def _calculate_overall_quality(
         self,
-        biases: List[BiasDetection],
+        biases: list[BiasDetection],
         confidence: ConfidenceAssessment,
-        strategies: List[StrategyEvaluation]
+        strategies: list[StrategyEvaluation]
     ) -> float:
         """Calculate overall reasoning quality score"""
-        
+
         # Base quality from confidence calibration
         confidence_quality = confidence.reliability_score
-        
+
         # Penalty for biases (weighted by severity)
         bias_penalty = 0.0
         if biases:
@@ -673,33 +673,33 @@ class MetacognitiveMonitoringAnalyzer:
                 severity_weights.get(bias.severity, 0.1) * bias.confidence_level
                 for bias in biases
             ) / len(biases)
-        
+
         # Bonus for effective strategies
         strategy_bonus = 0.0
         if strategies:
             avg_effectiveness = sum(s.effectiveness_score for s in strategies) / len(strategies)
             strategy_bonus = avg_effectiveness * 0.15
-        
+
         # Calculate final quality
         quality = confidence_quality - bias_penalty + strategy_bonus
-        
+
         # Ensure quality is within bounds
         return max(0.0, min(1.0, quality))
-    
+
     async def _calculate_metacognitive_awareness(
         self,
         context: MetacognitiveMonitoringContext,
-        monitors: List[ReasoningMonitor],
-        biases: List[BiasDetection]
+        monitors: list[ReasoningMonitor],
+        biases: list[BiasDetection]
     ) -> float:
         """Calculate level of metacognitive awareness"""
-        
+
         # Base awareness from monitoring setup
         monitoring_score = len(monitors) / 5.0  # Normalize by expected max monitors
-        
+
         # Awareness from bias recognition
         bias_recognition = len(biases) * 0.1 if biases else 0.0
-        
+
         # Awareness from monitoring depth
         depth_scores = {
             MonitoringDepth.SURFACE: 0.5,
@@ -707,12 +707,12 @@ class MetacognitiveMonitoringAnalyzer:
             MonitoringDepth.DEEP: 1.0
         }
         depth_score = depth_scores.get(context.monitoring_depth, 0.75)
-        
+
         # Combine scores
         awareness = (monitoring_score + bias_recognition + depth_score) / 3.0
-        
+
         return min(1.0, awareness)
-    
+
     async def _calculate_efficiency(
         self,
         context: MetacognitiveMonitoringContext,
@@ -720,48 +720,48 @@ class MetacognitiveMonitoringAnalyzer:
         biases_count: int
     ) -> float:
         """Calculate metacognitive process efficiency"""
-        
+
         # Efficiency based on focused monitoring
         focus_efficiency = 1.0 if context.monitoring_focus else 0.8
-        
+
         # Efficiency based on appropriate depth
         depth_efficiency = {
             MonitoringDepth.SURFACE: 0.9,
             MonitoringDepth.MODERATE: 0.85,
             MonitoringDepth.DEEP: 0.7
         }.get(context.monitoring_depth, 0.85)
-        
+
         # Efficiency from selective activation
         activation_efficiency = 1.0 - (monitors_count * 0.05)
-        
+
         # Combine efficiencies
         efficiency = (focus_efficiency + depth_efficiency + activation_efficiency) / 3.0
-        
+
         return max(0.0, min(1.0, efficiency))
-    
+
     async def _generate_recommendations(
         self,
         context: MetacognitiveMonitoringContext,
-        biases: List[BiasDetection],
+        biases: list[BiasDetection],
         confidence: ConfidenceAssessment,
-        strategies: List[StrategyEvaluation]
-    ) -> List[str]:
+        strategies: list[StrategyEvaluation]
+    ) -> list[str]:
         """Generate improvement recommendations"""
-        
+
         recommendations = []
-        
+
         # Bias-related recommendations
         if biases:
             most_severe = max(biases, key=lambda b: (b.severity == "high", b.confidence_level))
             recommendations.append(
                 f"Address {most_severe.bias_type.value} through {most_severe.correction_suggestions[0]}"
             )
-            
+
             if len(biases) > 2:
                 recommendations.append(
                     "Implement systematic bias checking protocol for complex decisions"
                 )
-        
+
         # Confidence calibration recommendations
         if confidence.overconfidence_detected:
             recommendations.append(
@@ -771,7 +771,7 @@ class MetacognitiveMonitoringAnalyzer:
             recommendations.append(
                 "Build confidence through systematic validation of reasoning steps"
             )
-        
+
         # Strategy recommendations
         if strategies:
             lowest_scoring = min(strategies, key=lambda s: s.effectiveness_score)
@@ -779,13 +779,13 @@ class MetacognitiveMonitoringAnalyzer:
                 recommendations.append(
                     f"Improve {lowest_scoring.strategy_name} effectiveness through: {lowest_scoring.improvement_suggestions[0]}"
                 )
-        
+
         # General recommendations based on monitoring
         if context.monitoring_depth == MonitoringDepth.SURFACE:
             recommendations.append(
                 "Consider deeper monitoring for complex decisions to catch subtle issues"
             )
-        
+
         # Add recommendations for high complexity problems
         if context.complexity_level.value in ["complex", "very_complex"]:
             recommendations.append(
@@ -794,52 +794,52 @@ class MetacognitiveMonitoringAnalyzer:
             recommendations.append(
                 "Break complex reasoning into verifiable intermediate steps"
             )
-        
+
         return recommendations[:10]  # Limit to 10 recommendations
-    
+
     async def _generate_intervention_alerts(
         self,
         context: MetacognitiveMonitoringContext,
-        biases: List[BiasDetection],
+        biases: list[BiasDetection],
         confidence: ConfidenceAssessment
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate alerts for immediate interventions"""
-        
+
         alerts = []
-        
+
         # High severity bias alerts
         high_severity_biases = [b for b in biases if b.severity == "high"]
         for bias in high_severity_biases:
             alerts.append(
                 f"HIGH PRIORITY: {bias.bias_type.value} detected with {bias.confidence_level:.0%} confidence"
             )
-        
+
         # Extreme confidence miscalibration alerts
         confidence_diff = abs(confidence.calibrated_confidence - confidence.stated_confidence)
         if confidence_diff > 0.3:
             alerts.append(
                 f"CONFIDENCE MISCALIBRATION: {confidence_diff:.0%} gap between stated and calibrated confidence"
             )
-        
+
         # Monitor threshold violations
         for monitor in self._active_monitors:
             if monitor.alerts_triggered:
                 alerts.append(
                     f"MONITOR ALERT: {monitor.monitoring_target} - {monitor.alerts_triggered[0]}"
                 )
-        
+
         return alerts[:5]  # Limit to 5 most important alerts
-    
+
     async def _identify_reasoning_patterns(
         self,
         context: MetacognitiveMonitoringContext,
-        biases: List[BiasDetection],
-        strategies: List[StrategyEvaluation]
-    ) -> List[str]:
+        biases: list[BiasDetection],
+        strategies: list[StrategyEvaluation]
+    ) -> list[str]:
         """Identify patterns in the reasoning process"""
-        
+
         patterns = []
-        
+
         # Bias clustering patterns
         if len(biases) >= 2:
             bias_types = [b.bias_type.value for b in biases]
@@ -847,7 +847,7 @@ class MetacognitiveMonitoringAnalyzer:
                 patterns.append(
                     "Tendency toward fixed thinking: confirmation and anchoring biases reinforce each other"
                 )
-        
+
         # Strategy consistency patterns
         if strategies:
             effectiveness_scores = [s.effectiveness_score for s in strategies]
@@ -859,23 +859,23 @@ class MetacognitiveMonitoringAnalyzer:
                 patterns.append(
                     "Inconsistent strategy effectiveness suggesting need for adaptive approach"
                 )
-        
+
         # Complexity handling patterns
         if context.complexity_level.value in ["complex", "very_complex"]:
             patterns.append(
                 "Complex problem decomposition pattern with systematic sub-problem analysis"
             )
-        
+
         # Monitoring adaptation patterns
         if context.monitoring_depth == MonitoringDepth.DEEP and len(self._active_monitors) > 2:
             patterns.append(
                 "Comprehensive monitoring pattern indicating high metacognitive engagement"
             )
-        
+
         # Evidence usage patterns
         if "evidence" in context.reasoning_target.lower():
             patterns.append(
                 "Evidence-driven reasoning pattern with emphasis on empirical support"
             )
-        
+
         return patterns[:8]  # Limit to 8 patterns

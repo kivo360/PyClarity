@@ -1,0 +1,74 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "text_generation_0",
+  "dataset_name": "parquet",
+  "dataset_size": 154830,
+  "description": "",
+  "download_checksums": {
+    "/Users/kevinhill/.cache/distilabel/pipelines/pipeline_text_generation_0/53bedcbb53ca1db3fed4f15c1fb88e4d8a6089c8/executions/f382dbb4836aeb233b37f4f63effa660d370ab1b/data/steps_outputs/text_generation_0/00001.parquet": {
+      "num_bytes": 85320,
+      "checksum": null
+    }
+  },
+  "download_size": 85320,
+  "features": {
+    "instruction": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "generation": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "distilabel_metadata": {
+      "raw_input_text_generation_0": [
+        {
+          "content": {
+            "dtype": "string",
+            "_type": "Value"
+          },
+          "role": {
+            "dtype": "string",
+            "_type": "Value"
+          }
+        }
+      ],
+      "raw_output_text_generation_0": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "statistics_text_generation_0": {
+        "input_tokens": {
+          "dtype": "int64",
+          "_type": "Value"
+        },
+        "output_tokens": {
+          "dtype": "int64",
+          "_type": "Value"
+        }
+      }
+    },
+    "model_name": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 240150,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 154830,
+      "num_examples": 30,
+      "dataset_name": "parquet"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

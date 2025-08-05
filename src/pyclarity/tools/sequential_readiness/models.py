@@ -6,9 +6,10 @@ applicable to change management, skill development, system maturity, or any
 domain with sequential dependencies.
 """
 
-from typing import List, Dict, Optional, Literal, Any
-from pydantic import BaseModel, Field, field_validator
 from enum import Enum
+from typing import Any, Dict, List, Literal, Optional
+
+from pydantic import BaseModel, Field, field_validator
 
 from ..base import ComplexityLevel
 
@@ -61,40 +62,40 @@ class InterventionType(str, Enum):
 
 class State(BaseModel):
     """Represents a single state in the sequence."""
-    
+
     name: str = Field(
         description="Name of the state (e.g., 'Awareness', 'Understanding', 'Commitment')"
     )
-    
+
     description: str = Field(
         description="What this state represents"
     )
-    
-    indicators: List[str] = Field(
+
+    indicators: list[str] = Field(
         description="Observable indicators that show this state is achieved",
         min_length=1
     )
-    
-    prerequisites: List[str] = Field(
+
+    prerequisites: list[str] = Field(
         default_factory=list,
         description="What must be in place before this state"
     )
-    
-    blockers: List[str] = Field(
+
+    blockers: list[str] = Field(
         default_factory=list,
         description="Common obstacles preventing this state"
     )
-    
-    enablers: List[str] = Field(
+
+    enablers: list[str] = Field(
         default_factory=list,
         description="Factors that facilitate reaching this state"
     )
-    
-    typical_duration: Optional[str] = Field(
+
+    typical_duration: str | None = Field(
         None,
         description="Typical time to achieve this state"
     )
-    
+
     readiness_level: ReadinessLevel = Field(
         default=ReadinessLevel.NOT_STARTED,
         description="Current readiness level for this state"
@@ -103,35 +104,35 @@ class State(BaseModel):
 
 class StateTransition(BaseModel):
     """Represents a transition between states."""
-    
+
     from_state: str = Field(
         description="Starting state name"
     )
-    
+
     to_state: str = Field(
         description="Target state name"
     )
-    
+
     transition_type: TransitionType = Field(
         description="Type of transition"
     )
-    
-    requirements: List[str] = Field(
+
+    requirements: list[str] = Field(
         description="Requirements for successful transition",
         min_length=1
     )
-    
-    risks: List[str] = Field(
+
+    risks: list[str] = Field(
         default_factory=list,
         description="Risks during transition"
     )
-    
-    strategies: List[str] = Field(
+
+    strategies: list[str] = Field(
         description="Strategies to facilitate transition",
         min_length=1
     )
-    
-    success_rate: Optional[float] = Field(
+
+    success_rate: float | None = Field(
         None,
         description="Historical success rate for this transition (0.0-1.0)",
         ge=0.0,
@@ -141,35 +142,35 @@ class StateTransition(BaseModel):
 
 class GapAnalysis(BaseModel):
     """Analysis of gaps between current and target states."""
-    
+
     state_name: str = Field(
         description="Name of the state being analyzed"
     )
-    
+
     current_readiness: ReadinessLevel = Field(
         description="Current readiness level"
     )
-    
+
     target_readiness: ReadinessLevel = Field(
         description="Target readiness level"
     )
-    
+
     gap_size: str = Field(
         description="Size of the gap (small, medium, large)"
     )
-    
-    missing_elements: List[str] = Field(
+
+    missing_elements: list[str] = Field(
         description="What's missing to reach target readiness"
     )
-    
-    recommended_actions: List[str] = Field(
+
+    recommended_actions: list[str] = Field(
         description="Actions to close the gap"
     )
-    
+
     estimated_effort: str = Field(
         description="Estimated effort to close gap"
     )
-    
+
     priority: str = Field(
         description="Priority for addressing this gap (high, medium, low)"
     )
@@ -177,37 +178,37 @@ class GapAnalysis(BaseModel):
 
 class ProgressionPlan(BaseModel):
     """Plan for progressing through sequential states."""
-    
+
     strategy: ProgressionStrategy = Field(
         description="Overall progression strategy"
     )
-    
+
     rationale: str = Field(
         description="Why this strategy is recommended"
     )
-    
-    phases: List[Dict[str, Any]] = Field(
+
+    phases: list[dict[str, Any]] = Field(
         description="Phases of the progression plan"
     )
-    
-    milestones: List[str] = Field(
+
+    milestones: list[str] = Field(
         description="Key milestones to track progress"
     )
-    
-    timeline: Optional[str] = Field(
+
+    timeline: str | None = Field(
         None,
         description="Overall timeline estimate"
     )
-    
-    success_criteria: List[str] = Field(
+
+    success_criteria: list[str] = Field(
         description="How to measure successful progression"
     )
-    
-    risk_mitigation: List[str] = Field(
+
+    risk_mitigation: list[str] = Field(
         default_factory=list,
         description="Strategies to mitigate progression risks"
     )
-    
+
     confidence_level: float = Field(
         description="Confidence in plan success (0.0-1.0)",
         ge=0.0,
@@ -221,9 +222,9 @@ class ReadinessState(BaseModel):
     name: str = Field(description="Name of the state")
     description: str = Field(description="Description of what this state represents")
     readiness_level: ReadinessLevel = Field(description="Current readiness level")
-    criteria: List[str] = Field(description="Criteria to achieve this state")
+    criteria: list[str] = Field(description="Criteria to achieve this state")
     achieved: bool = Field(default=False, description="Whether the state has been achieved")
-    dependencies: List[str] = Field(default_factory=list, description="Other states this depends on")
+    dependencies: list[str] = Field(default_factory=list, description="Other states this depends on")
 
 
 class Dependency(BaseModel):
@@ -241,7 +242,7 @@ class ReadinessGap(BaseModel):
     description: str = Field(description="Description of the gap")
     severity: GapSeverity = Field(description="Severity of the gap")
     impact: str = Field(description="Impact if gap is not addressed")
-    remediation_options: List[str] = Field(description="Options to close the gap")
+    remediation_options: list[str] = Field(description="Options to close the gap")
 
 
 class Intervention(BaseModel):
@@ -250,7 +251,7 @@ class Intervention(BaseModel):
     name: str = Field(description="Name of the intervention")
     description: str = Field(description="Description of the intervention")
     intervention_type: InterventionType = Field(description="Type of intervention")
-    target_gaps: List[str] = Field(description="Gap IDs this intervention addresses")
+    target_gaps: list[str] = Field(description="Gap IDs this intervention addresses")
     estimated_effort: str = Field(description="Estimated effort required")
     expected_impact: str = Field(description="Expected impact of the intervention")
     priority: int = Field(description="Priority of the intervention (1-10)", ge=1, le=10)
@@ -258,46 +259,46 @@ class Intervention(BaseModel):
 
 class SequentialReadinessContext(BaseModel):
     """Input for Sequential Readiness Framework analysis."""
-    
+
     scenario: str = Field(
         description="The process or change requiring sequential readiness analysis"
     )
-    
-    domain_context: Optional[str] = Field(
+
+    domain_context: str | None = Field(
         None,
         description="Domain context (e.g., 'change_management', 'skill_development', 'system_implementation')"
     )
-    
-    predefined_states: Optional[List[State]] = Field(
+
+    predefined_states: list[State] | None = Field(
         None,
         description="Pre-defined states if known"
     )
-    
-    current_status: Optional[Dict[str, ReadinessLevel]] = Field(
+
+    current_status: dict[str, ReadinessLevel] | None = Field(
         None,
         description="Current readiness levels for each state"
     )
-    
-    target_outcome: Optional[str] = Field(
+
+    target_outcome: str | None = Field(
         None,
         description="Desired end state or outcome"
     )
-    
-    constraints: Optional[Dict[str, str]] = Field(
+
+    constraints: dict[str, str] | None = Field(
         None,
         description="Constraints affecting progression (time, resources, dependencies)"
     )
-    
-    stakeholders: Optional[List[str]] = Field(
+
+    stakeholders: list[str] | None = Field(
         default_factory=list,
         description="Key stakeholders involved in the process"
     )
-    
-    success_factors: Optional[List[str]] = Field(
+
+    success_factors: list[str] | None = Field(
         default_factory=list,
         description="Critical success factors for progression"
     )
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -326,70 +327,70 @@ class SequentialReadinessContext(BaseModel):
 
 class SequentialReadinessResult(BaseModel):
     """Complete Sequential Readiness Framework analysis output."""
-    
+
     input_scenario: str = Field(
         description="The analyzed scenario"
     )
-    
-    identified_states: List[State] = Field(
+
+    identified_states: list[State] = Field(
         description="Sequential states identified for the process"
     )
-    
-    state_transitions: List[StateTransition] = Field(
+
+    state_transitions: list[StateTransition] = Field(
         description="Transitions between states"
     )
-    
+
     current_state_assessment: str = Field(
         description="Assessment of current position in the sequence"
     )
-    
-    gap_analyses: List[GapAnalysis] = Field(
+
+    gap_analyses: list[GapAnalysis] = Field(
         description="Gap analysis for each state"
     )
-    
+
     progression_plan: ProgressionPlan = Field(
         description="Recommended plan for progression"
     )
-    
-    critical_path: List[str] = Field(
+
+    critical_path: list[str] = Field(
         description="The critical path through states"
     )
-    
-    dependency_map: Dict[str, List[str]] = Field(
+
+    dependency_map: dict[str, list[str]] = Field(
         description="Dependencies between states"
     )
-    
+
     risk_assessment: str = Field(
         description="Overall risk assessment for the progression"
     )
-    
-    domain_specific_insights: List[str] = Field(
+
+    domain_specific_insights: list[str] = Field(
         description="Insights specific to the domain"
     )
-    
-    visual_representation: Optional[Dict[str, Any]] = Field(
+
+    visual_representation: dict[str, Any] | None = Field(
         None,
         description="Data for visualizing the sequential progression"
     )
-    
-    key_decisions: List[str] = Field(
+
+    key_decisions: list[str] = Field(
         description="Key decisions needed for progression"
     )
-    
-    monitoring_plan: List[str] = Field(
+
+    monitoring_plan: list[str] = Field(
         description="How to monitor progression through states"
     )
-    
+
     overall_recommendation: str = Field(
         description="Overall recommendation for managing the sequential process"
     )
-    
+
     confidence_score: float = Field(
         description="Overall confidence in the analysis (0.0-1.0)",
         ge=0.0,
         le=1.0
     )
-    processing_time_ms: Optional[float] = Field(
+    processing_time_ms: float | None = Field(
         None,
         description="Processing time in milliseconds"
     )

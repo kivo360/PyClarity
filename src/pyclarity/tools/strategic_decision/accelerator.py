@@ -6,29 +6,30 @@ quantum decision states, scenario modeling, and stakeholder alignment.
 """
 
 import asyncio
-import time
-import numpy as np
-from typing import Dict, List, Any, Optional, Tuple
-from datetime import datetime, timedelta
 import logging
+import time
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
+
+from .acceleration_engine import AccelerationEngine
 from .models import (
+    AccelerationAnalysis,
     DecisionContext,
-    DecisionState,
-    StrategicDecisionResult,
     DecisionCrystallization,
+    DecisionRoadmap,
+    DecisionState,
+    MonteCarloResults,
+    OptionEvaluation,
+    QuantumDecisionState,
+    ScenarioAnalysis,
     ScenarioModeling,
     StakeholderAlignment,
-    AccelerationAnalysis,
+    StrategicDecisionResult,
     ValidationFramework,
-    DecisionRoadmap,
-    QuantumDecisionState,
-    OptionEvaluation,
-    ScenarioAnalysis,
-    MonteCarloResults,
 )
 from .stakeholder_aligner import StakeholderAligner
-from .acceleration_engine import AccelerationEngine
 from .validation_orchestrator import ValidationOrchestrator
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 class DecisionCrystallizer:
     """Crystallizes decision options and quantum states."""
-    
+
     async def crystallize_decision(self, context: DecisionContext) -> DecisionCrystallization:
         """Crystallize decision options through quantum state analysis."""
         try:
@@ -44,16 +45,16 @@ class DecisionCrystallizer:
             option_evaluation = await self._evaluate_options(context)
             crystallization_quality = await self._assess_crystallization_quality(context)
             complexity_analysis = await self._analyze_complexity(context)
-            
+
             # Calculate readiness score based on quantum state and evaluation quality
             readiness_score = self._calculate_readiness_score(
                 quantum_state, option_evaluation, crystallization_quality
             )
-            
+
             recommendations = self._generate_crystallization_recommendations(
                 quantum_state, option_evaluation, complexity_analysis
             )
-            
+
             return DecisionCrystallization(
                 readiness_score=readiness_score,
                 quantum_decision_state=quantum_state,
@@ -64,24 +65,24 @@ class DecisionCrystallizer:
                 decision_complexity=complexity_analysis,
                 recommendations=recommendations
             )
-            
+
         except Exception as e:
             logger.error(f"Error in decision crystallization: {e}")
             raise
-    
+
     async def _determine_quantum_state(self, context: DecisionContext) -> QuantumDecisionState:
         """Determine current quantum decision state based on context."""
         # Analyze context factors to determine quantum state
         urgency_factor = self._map_urgency_to_factor(context.urgency_level)
         complexity_factor = self._map_complexity_to_factor(context.complexity_level)
         option_clarity = len(context.decision_options) / 5.0  # Normalize by typical number
-        
+
         # Calculate state characteristics
         information_sufficiency = min(1.0, (len(context.context) + len(context.constraints)) / 10.0)
         option_clarity_normalized = min(1.0, option_clarity)
         stakeholder_readiness = len(context.stakeholders.get('primary', [])) / 5.0
         urgency_pressure = urgency_factor
-        
+
         # Determine current state based on characteristics
         if information_sufficiency < 0.5 or option_clarity_normalized < 0.5:
             current_state = DecisionState.EXPLORATION
@@ -95,14 +96,14 @@ class DecisionCrystallizer:
         else:
             current_state = DecisionState.COMMITMENT
             state_confidence = 0.85
-        
+
         # Calculate state transitions
         state_transitions = {
             "exploration_to_convergence": min(1.0, information_sufficiency + option_clarity_normalized),
             "convergence_to_commitment": min(1.0, stakeholder_readiness + 0.2),
             "commitment_readiness": min(1.0, (information_sufficiency + stakeholder_readiness) / 2)
         }
-        
+
         # Identify next state triggers
         next_state_triggers = []
         if current_state == DecisionState.EXPLORATION:
@@ -111,7 +112,7 @@ class DecisionCrystallizer:
             next_state_triggers = ["stakeholder_alignment", "criteria_consensus"]
         elif current_state == DecisionState.COMMITMENT:
             next_state_triggers = ["resource_allocation", "implementation_planning"]
-        
+
         return QuantumDecisionState(
             current_state=current_state,
             state_confidence=state_confidence,
@@ -124,7 +125,7 @@ class DecisionCrystallizer:
             },
             next_state_triggers=next_state_triggers
         )
-    
+
     async def _evaluate_options(self, context: DecisionContext) -> OptionEvaluation:
         """Evaluate options against decision criteria."""
         # Define standard decision criteria with weights
@@ -136,48 +137,48 @@ class DecisionCrystallizer:
             "market_timing": 0.12,
             "competitive_advantage": 0.13
         }
-        
+
         evaluation_matrix = {}
         weighted_scores = {}
-        
+
         # Evaluate each option
         for option in context.decision_options:
             scores = {}
-            
+
             # Strategic alignment (use option's strategic_fit)
             scores["strategic_alignment"] = option.strategic_fit
-            
+
             # Financial impact (based on ROI if available)
             if option.expected_roi:
                 scores["financial_impact"] = min(10.0, option.expected_roi * 3.5)
             else:
                 scores["financial_impact"] = 6.0  # Default moderate score
-            
+
             # Risk profile (inverse of risk level)
             risk_mapping = {"low": 9.0, "medium": 7.0, "high": 5.0, "very_high": 3.0, "critical": 1.0}
             scores["risk_profile"] = risk_mapping.get(option.risk_level.value, 5.0)
-            
+
             # Resource feasibility (based on requirements description)
             resource_mapping = {"minimal": 9.0, "low": 8.0, "moderate": 7.0, "significant": 5.0, "high": 3.0}
             scores["resource_feasibility"] = resource_mapping.get(option.resource_requirements, 6.0)
-            
+
             # Market timing (based on timeline and urgency)
             timeline_factor = 8.0 if "months" in option.timeline.lower() else 6.0
             scores["market_timing"] = timeline_factor
-            
+
             # Competitive advantage (based on expected impact)
             impact_mapping = {"incremental": 5.0, "substantial": 7.5, "transformational": 9.5}
             scores["competitive_advantage"] = impact_mapping.get(option.expected_impact, 6.0)
-            
+
             evaluation_matrix[option.option_id] = scores
-            
+
             # Calculate weighted score
             weighted_score = sum(scores[criterion] * weight for criterion, weight in criteria.items())
             weighted_scores[option.option_id] = weighted_score
-        
+
         # Rank options by weighted score
         ranking = sorted(weighted_scores.keys(), key=lambda x: weighted_scores[x], reverse=True)
-        
+
         # Calculate evaluation confidence based on score spread
         scores_list = list(weighted_scores.values())
         if len(scores_list) > 1:
@@ -185,7 +186,7 @@ class DecisionCrystallizer:
             evaluation_confidence = min(1.0, score_std / np.mean(scores_list))
         else:
             evaluation_confidence = 0.8
-        
+
         return OptionEvaluation(
             evaluation_matrix=evaluation_matrix,
             weighted_scores=weighted_scores,
@@ -193,8 +194,8 @@ class DecisionCrystallizer:
             score_sensitivity="moderate",
             evaluation_confidence=evaluation_confidence
         )
-    
-    async def _assess_crystallization_quality(self, context: DecisionContext) -> Dict[str, float]:
+
+    async def _assess_crystallization_quality(self, context: DecisionContext) -> dict[str, float]:
         """Assess quality of decision crystallization."""
         # Calculate quality metrics
         clarity_score = min(10.0, len(context.decision_options) * 2.0)  # More options = more clarity
@@ -202,7 +203,7 @@ class DecisionCrystallizer:
         objectivity_score = 8.3  # Based on structured approach
         actionability_score = min(10.0, sum(1 for opt in context.decision_options if opt.timeline) * 2.5)
         stakeholder_understanding = min(10.0, len(context.stakeholders) * 2.0)
-        
+
         return {
             "clarity_score": clarity_score,
             "completeness_score": completeness_score,
@@ -211,24 +212,24 @@ class DecisionCrystallizer:
             "stakeholder_understanding": stakeholder_understanding,
             "crystallization_maturity": "high" if clarity_score > 7 else "moderate"
         }
-    
-    async def _analyze_complexity(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _analyze_complexity(self, context: DecisionContext) -> dict[str, Any]:
         """Analyze decision complexity factors."""
         complexity_factors = []
-        
+
         # Analyze stakeholder diversity
         stakeholder_count = sum(len(group) for group in context.stakeholders.values())
         if stakeholder_count > 10:
             complexity_factors.append({"factor": "stakeholder_diversity", "impact": "high"})
         elif stakeholder_count > 5:
             complexity_factors.append({"factor": "stakeholder_diversity", "impact": "medium"})
-        
+
         # Analyze constraint complexity
         if len(context.constraints) > 5:
             complexity_factors.append({"factor": "constraint_complexity", "impact": "high"})
         elif len(context.constraints) > 2:
             complexity_factors.append({"factor": "constraint_complexity", "impact": "medium"})
-        
+
         # Calculate complexity score
         complexity_score = (
             len(context.decision_options) * 1.5 +
@@ -236,30 +237,30 @@ class DecisionCrystallizer:
             len(context.constraints) * 1.0 +
             (5 if context.complexity_level.value == "very_high" else 3)
         )
-        
+
         return {
             "complexity_score": min(10.0, complexity_score),
             "complexity_factors": complexity_factors,
             "complexity_management": "adequate",
             "simplification_opportunities": ["stakeholder_grouping", "phased_implementation"]
         }
-    
-    def _calculate_readiness_score(self, quantum_state: QuantumDecisionState, 
+
+    def _calculate_readiness_score(self, quantum_state: QuantumDecisionState,
                                  option_evaluation: OptionEvaluation,
-                                 crystallization_quality: Dict[str, float]) -> float:
+                                 crystallization_quality: dict[str, float]) -> float:
         """Calculate overall decision readiness score."""
         state_factor = quantum_state.state_confidence * 30
         evaluation_factor = option_evaluation.evaluation_confidence * 25
         quality_factor = np.mean(list(crystallization_quality.values())[:5]) * 4.5
-        
+
         return min(100.0, state_factor + evaluation_factor + quality_factor)
-    
+
     def _generate_crystallization_recommendations(self, quantum_state: QuantumDecisionState,
                                                 option_evaluation: OptionEvaluation,
-                                                complexity_analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+                                                complexity_analysis: dict[str, Any]) -> list[dict[str, Any]]:
         """Generate crystallization improvement recommendations."""
         recommendations = []
-        
+
         if quantum_state.state_confidence < 0.8:
             recommendations.append({
                 "action": "Strengthen decision state analysis",
@@ -267,15 +268,15 @@ class DecisionCrystallizer:
                 "urgency": "high",
                 "category": "state_improvement"
             })
-        
+
         if option_evaluation.evaluation_confidence < 0.7:
             recommendations.append({
                 "action": "Refine option evaluation criteria",
                 "strategic_impact": 8.7,
-                "urgency": "high", 
+                "urgency": "high",
                 "category": "evaluation_improvement"
             })
-        
+
         if complexity_analysis["complexity_score"] > 7:
             recommendations.append({
                 "action": "Implement complexity reduction strategies",
@@ -283,10 +284,10 @@ class DecisionCrystallizer:
                 "urgency": "medium",
                 "category": "complexity_management"
             })
-        
+
         return recommendations
-    
-    def _define_criteria(self, context: DecisionContext) -> Dict[str, Any]:
+
+    def _define_criteria(self, context: DecisionContext) -> dict[str, Any]:
         """Define decision criteria based on context."""
         return {
             "criteria": [
@@ -301,7 +302,7 @@ class DecisionCrystallizer:
             "weight_stability": 0.91,
             "criteria_completeness": 0.87
         }
-    
+
     def _map_urgency_to_factor(self, urgency: Any) -> float:
         """Map urgency level to numeric factor."""
         mapping = {
@@ -312,7 +313,7 @@ class DecisionCrystallizer:
             "immediate": 1.0
         }
         return mapping.get(str(urgency).lower(), 0.5)
-    
+
     def _map_complexity_to_factor(self, complexity: Any) -> float:
         """Map complexity level to numeric factor."""
         mapping = {
@@ -327,7 +328,7 @@ class DecisionCrystallizer:
 
 class ScenarioModeler:
     """Models decision scenarios and outcomes."""
-    
+
     async def model_scenarios(self, context: DecisionContext) -> ScenarioModeling:
         """Model comprehensive decision scenarios."""
         try:
@@ -337,15 +338,15 @@ class ScenarioModeler:
             sensitivity_analysis = await self._perform_sensitivity_analysis(context)
             monte_carlo_results = await self._run_monte_carlo(context)
             scenario_planning = await self._plan_scenarios(context)
-            
+
             readiness_score = self._calculate_scenario_readiness(
                 scenario_analysis, monte_carlo_results, sensitivity_analysis
             )
-            
+
             recommendations = self._generate_scenario_recommendations(
                 scenario_analysis, risk_modeling, monte_carlo_results
             )
-            
+
             return ScenarioModeling(
                 readiness_score=readiness_score,
                 scenario_analysis=scenario_analysis,
@@ -356,23 +357,23 @@ class ScenarioModeler:
                 scenario_planning=scenario_planning,
                 recommendations=recommendations
             )
-            
+
         except Exception as e:
             logger.error(f"Error in scenario modeling: {e}")
             raise
-    
+
     async def _analyze_scenarios(self, context: DecisionContext) -> ScenarioAnalysis:
         """Analyze potential decision scenarios."""
         # Base probabilities based on decision type and complexity
         base_prob = 0.60
         optimistic_prob = 0.25
         pessimistic_prob = 0.15
-        
+
         # Adjust probabilities based on context
         if context.urgency_level.value in ["critical", "immediate"]:
             pessimistic_prob += 0.05
             base_prob -= 0.05
-        
+
         return ScenarioAnalysis(
             base_case={
                 "probability": base_prob,
@@ -395,8 +396,8 @@ class ScenarioModeler:
             scenario_robustness=0.82,
             scenario_diversity="appropriate"
         )
-    
-    async def _project_outcomes(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _project_outcomes(self, context: DecisionContext) -> dict[str, Any]:
         """Project potential outcomes for each scenario."""
         # Base projections - would be customized based on actual options
         financial_projections = {
@@ -404,25 +405,25 @@ class ScenarioModeler:
             "optimistic_case": {"revenue_impact": 24.6, "cost_impact": 9.1, "roi": 2.7, "payback_months": 14},
             "pessimistic_case": {"revenue_impact": 8.3, "cost_impact": 9.2, "roi": 0.9, "payback_months": 28}
         }
-        
+
         strategic_outcomes = {
             "market_position": {"base": "improved", "optimistic": "market_leader", "pessimistic": "maintained"},
             "competitive_advantage": {"base": "moderate", "optimistic": "significant", "pessimistic": "limited"},
             "organizational_capability": {"base": "enhanced", "optimistic": "transformed", "pessimistic": "strained"}
         }
-        
+
         return {
             "financial_projections": financial_projections,
             "strategic_outcomes": strategic_outcomes,
             "timeline_projections": {
                 "implementation_phase": "3-6 months",
-                "initial_results": "6-12 months", 
+                "initial_results": "6-12 months",
                 "full_impact": "12-24 months",
                 "breakeven_point": "14-20 months"
             }
         }
-    
-    async def _model_risks(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _model_risks(self, context: DecisionContext) -> dict[str, Any]:
         """Model risks across scenarios."""
         risk_categories = {
             "market_risks": {"probability": 0.35, "impact": "high", "mitigation": "market_diversification"},
@@ -430,14 +431,14 @@ class ScenarioModeler:
             "competitive_risks": {"probability": 0.30, "impact": "medium", "mitigation": "differentiation_strategy"},
             "resource_risks": {"probability": 0.25, "impact": "high", "mitigation": "resource_planning"}
         }
-        
+
         # Adjust risk probabilities based on complexity and urgency
         if context.complexity_level.value in ["high", "very_high"]:
             for risk in risk_categories.values():
                 risk["probability"] = min(0.8, risk["probability"] * 1.2)
-        
+
         overall_risk_score = np.mean([r["probability"] for r in risk_categories.values()]) * 10
-        
+
         return {
             "risk_categories": risk_categories,
             "risk_correlation": 0.42,
@@ -445,8 +446,8 @@ class ScenarioModeler:
             "risk_tolerance_alignment": "good",
             "mitigation_effectiveness": 0.78
         }
-    
-    async def _perform_sensitivity_analysis(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _perform_sensitivity_analysis(self, context: DecisionContext) -> dict[str, Any]:
         """Perform sensitivity analysis on key variables."""
         sensitivity_factors = [
             {"factor": "market_adoption_rate", "impact_on_outcome": 0.82, "variability": "high"},
@@ -454,41 +455,41 @@ class ScenarioModeler:
             {"factor": "resource_cost", "impact_on_outcome": 0.54, "variability": "medium"},
             {"factor": "competitive_response", "impact_on_outcome": 0.71, "variability": "high"}
         ]
-        
+
         most_sensitive = [f["factor"] for f in sensitivity_factors if f["impact_on_outcome"] > 0.7]
         robustness_score = 10 - (len(most_sensitive) * 1.5)
-        
+
         return {
             "sensitivity_factors": sensitivity_factors,
             "most_sensitive_variables": most_sensitive,
             "robustness_score": max(0, robustness_score),
             "sensitivity_insights": ["focus_on_market_validation", "competitive_intelligence_critical"]
         }
-    
+
     async def _run_monte_carlo(self, context: DecisionContext) -> MonteCarloResults:
         """Run Monte Carlo simulation."""
         # Simulate outcome distribution
         np.random.seed(42)  # For reproducible results
         simulations = 10000
-        
+
         # Generate random outcomes based on normal distribution
         outcomes = np.random.normal(7.8, 1.2, simulations)
         outcomes = np.clip(outcomes, 0, 10)  # Clip to valid range
-        
+
         mean_outcome = np.mean(outcomes)
         median_outcome = np.median(outcomes)
         std_outcome = np.std(outcomes)
-        
+
         # Calculate success probability (assuming target > 7.0)
         success_prob = np.sum(outcomes > 7.0) / simulations
         failure_prob = np.sum(outcomes < 5.0) / simulations
-        
+
         # Calculate confidence intervals
         percentile_10 = np.percentile(outcomes, 10)
         percentile_90 = np.percentile(outcomes, 90)
         percentile_5 = np.percentile(outcomes, 5)
         percentile_95 = np.percentile(outcomes, 95)
-        
+
         return MonteCarloResults(
             simulation_runs=simulations,
             outcome_distribution={
@@ -506,8 +507,8 @@ class ScenarioModeler:
             },
             simulation_quality="high"
         )
-    
-    async def _plan_scenarios(self, context: DecisionContext) -> Dict[str, Any]:
+
+    async def _plan_scenarios(self, context: DecisionContext) -> dict[str, Any]:
         """Plan scenario-based decision approach."""
         return {
             "scenario_triggers": [
@@ -523,23 +524,23 @@ class ScenarioModeler:
             "adaptive_planning": "enabled",
             "scenario_pivot_capability": "high"
         }
-    
+
     def _calculate_scenario_readiness(self, scenario_analysis: ScenarioAnalysis,
                                     monte_carlo: MonteCarloResults,
-                                    sensitivity: Dict[str, Any]) -> float:
+                                    sensitivity: dict[str, Any]) -> float:
         """Calculate scenario modeling readiness score."""
         robustness_factor = scenario_analysis.scenario_robustness * 30
         simulation_factor = monte_carlo.success_probability * 25
         sensitivity_factor = sensitivity["robustness_score"] * 3
-        
+
         return min(100.0, robustness_factor + simulation_factor + sensitivity_factor + 10)
-    
+
     def _generate_scenario_recommendations(self, scenario_analysis: ScenarioAnalysis,
-                                         risk_modeling: Dict[str, Any],
-                                         monte_carlo: MonteCarloResults) -> List[Dict[str, Any]]:
+                                         risk_modeling: dict[str, Any],
+                                         monte_carlo: MonteCarloResults) -> list[dict[str, Any]]:
         """Generate scenario modeling recommendations."""
         recommendations = []
-        
+
         if monte_carlo.success_probability < 0.7:
             recommendations.append({
                 "action": "Develop risk mitigation strategies",
@@ -547,7 +548,7 @@ class ScenarioModeler:
                 "urgency": "high",
                 "category": "risk_management"
             })
-        
+
         if scenario_analysis.scenario_robustness < 0.8:
             recommendations.append({
                 "action": "Enhance scenario diversity and depth",
@@ -555,24 +556,24 @@ class ScenarioModeler:
                 "urgency": "medium",
                 "category": "scenario_enhancement"
             })
-        
+
         return recommendations
 
 
 class StrategicDecisionAccelerator:
     """Main Strategic Decision Accelerator orchestrating all components."""
-    
+
     def __init__(self):
         self.decision_crystallizer = DecisionCrystallizer()
         self.scenario_modeler = ScenarioModeler()
         self.stakeholder_aligner = StakeholderAligner()
         self.acceleration_engine = AccelerationEngine()
         self.validation_orchestrator = ValidationOrchestrator()
-        
+
     async def accelerate_strategic_decision(self, context: DecisionContext) -> StrategicDecisionResult:
         """Accelerate strategic decision-making process."""
         start_time = time.time()
-        
+
         try:
             # Run core analysis components concurrently
             crystallization_task = self.decision_crystallizer.crystallize_decision(context)
@@ -580,7 +581,7 @@ class StrategicDecisionAccelerator:
             stakeholder_task = self.stakeholder_aligner.align_stakeholders(context)
             acceleration_task = self.acceleration_engine.analyze_acceleration_opportunities(context)
             validation_task = self.validation_orchestrator.orchestrate_validation(context)
-            
+
             # Execute all analyses concurrently
             results = await asyncio.gather(
                 crystallization_task,
@@ -590,26 +591,26 @@ class StrategicDecisionAccelerator:
                 validation_task,
                 return_exceptions=True
             )
-            
+
             # Handle any exceptions
             for i, result in enumerate(results):
                 if isinstance(result, Exception):
                     logger.error(f"Component {i} failed: {result}")
                     raise result
-            
+
             crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
-            
+
             # Calculate overall readiness score
             readiness_score = self._calculate_overall_readiness(results)
-            
+
             # Generate strategic recommendations
             strategic_recommendations = self._generate_strategic_recommendations(results)
-            
+
             # Create decision roadmap
             decision_roadmap = self._create_decision_roadmap(context, results)
-            
+
             analysis_duration = time.time() - start_time
-            
+
             return StrategicDecisionResult(
                 decision_readiness_score=readiness_score,
                 decision_crystallization=crystallization,
@@ -623,36 +624,36 @@ class StrategicDecisionAccelerator:
                 analysis_duration_seconds=analysis_duration,
                 analysis_quality_score=8.5
             )
-            
+
         except Exception as e:
             logger.error(f"Error in strategic decision acceleration: {e}")
             raise
-    
-    def _calculate_overall_readiness(self, results: List[Any]) -> float:
+
+    def _calculate_overall_readiness(self, results: list[Any]) -> float:
         """Calculate overall decision readiness score."""
         crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
-        
+
         # Weight each component's readiness score
         crystallization_score = crystallization.readiness_score * 0.25
         scenario_score = scenario_modeling.readiness_score * 0.20
         stakeholder_score = stakeholder_alignment.readiness_score * 0.20
         acceleration_score = acceleration_analysis.readiness_score * 0.20
         validation_score = validation_framework.readiness_score * 0.15
-        
-        return min(100.0, crystallization_score + scenario_score + stakeholder_score + 
+
+        return min(100.0, crystallization_score + scenario_score + stakeholder_score +
                    acceleration_score + validation_score)
-    
-    def _generate_strategic_recommendations(self, results: List[Any]) -> List[Dict[str, Any]]:
+
+    def _generate_strategic_recommendations(self, results: list[Any]) -> list[dict[str, Any]]:
         """Generate strategic recommendations from all components."""
         crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
-        
+
         recommendations = []
         recommendations.extend(crystallization.recommendations)
         recommendations.extend(scenario_modeling.recommendations)
         recommendations.extend(stakeholder_alignment.recommendations)
         recommendations.extend(acceleration_analysis.recommendations)
         recommendations.extend(validation_framework.recommendations)
-        
+
         # Sort by strategic impact and deduplicate
         seen = set()
         unique_recommendations = []
@@ -661,16 +662,16 @@ class StrategicDecisionAccelerator:
             if rec_key not in seen:
                 seen.add(rec_key)
                 unique_recommendations.append(rec)
-        
+
         return unique_recommendations[:10]  # Top 10 recommendations
-    
-    def _create_decision_roadmap(self, context: DecisionContext, results: List[Any]) -> DecisionRoadmap:
+
+    def _create_decision_roadmap(self, context: DecisionContext, results: list[Any]) -> DecisionRoadmap:
         """Create decision implementation roadmap."""
         crystallization, scenario_modeling, stakeholder_alignment, acceleration_analysis, validation_framework = results
-        
+
         # Derive phases from component analyses
         phases = []
-        
+
         # Phase 1: Decision Crystallization
         phases.append({
             "phase": "crystallization",
@@ -678,7 +679,7 @@ class StrategicDecisionAccelerator:
             "key_activities": ["option_analysis", "criteria_definition", "quantum_state_assessment"],
             "success_criteria": f"readiness_score > {crystallization.readiness_score * 0.8:.1f}"
         })
-        
+
         # Phase 2: Stakeholder Alignment
         if stakeholder_alignment.readiness_score < 80:
             phases.append({
@@ -687,7 +688,7 @@ class StrategicDecisionAccelerator:
                 "key_activities": ["engagement_campaign", "consensus_building", "resistance_mitigation"],
                 "success_criteria": "alignment_score > 0.7"
             })
-        
+
         # Phase 3: Validation & Testing
         phases.append({
             "phase": "validation",
@@ -695,7 +696,7 @@ class StrategicDecisionAccelerator:
             "key_activities": ["scenario_testing", "risk_validation", "metric_baseline"],
             "success_criteria": "validation_framework_active"
         })
-        
+
         # Phase 4: Commitment & Launch
         phases.append({
             "phase": "commitment",
@@ -703,7 +704,7 @@ class StrategicDecisionAccelerator:
             "key_activities": ["final_alignment", "resource_allocation", "communication_launch"],
             "success_criteria": "go_decision_confirmed"
         })
-        
+
         # Phase 5: Acceleration & Execution
         phases.append({
             "phase": "acceleration",
@@ -711,7 +712,7 @@ class StrategicDecisionAccelerator:
             "key_activities": ["implementation_launch", "momentum_building", "quick_wins_execution"],
             "success_criteria": "velocity_targets_met"
         })
-        
+
         # Extract critical milestones from analyses
         critical_milestones = [
             "decision_criteria_locked",
@@ -721,7 +722,7 @@ class StrategicDecisionAccelerator:
             "first_quick_win_delivered",
             "momentum_threshold_reached"
         ]
-        
+
         # Aggregate success metrics from all components
         success_metrics = list(set([
             "decision_quality_score",
@@ -731,7 +732,7 @@ class StrategicDecisionAccelerator:
             "risk_mitigation_effectiveness",
             "learning_loop_productivity"
         ]))
-        
+
         return DecisionRoadmap(
             decision_phases=phases,
             critical_milestones=critical_milestones,

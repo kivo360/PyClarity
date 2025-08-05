@@ -10,29 +10,28 @@ __author__ = "Kevin Hill"
 __email__ = "kevin@geodexes.com"
 
 # Export main components
+from .server import create_server, start_server
 from .tools import (
-    # Core analyzers
-    SequentialThinkingAnalyzer,
-    MentalModelsAnalyzer,
+    CollaborativeReasoningAnalyzer,
+    DebuggingApproachesAnalyzer,
     DecisionFrameworkAnalyzer,
-    ScientificMethodAnalyzer,
     # Analysis tools
     DesignPatternsAnalyzer,
-    ProgrammingParadigmsAnalyzer,
-    DebuggingApproachesAnalyzer,
-    VisualReasoningAnalyzer,
-    # Reasoning tools
-    StructuredArgumentationAnalyzer,
-    MetacognitiveMonitoringAnalyzer,
-    CollaborativeReasoningAnalyzer,
     # New FastMCP tools
     IterativeValidationAnalyzer,
+    MentalModelsAnalyzer,
+    MetacognitiveMonitoringAnalyzer,
     MultiPerspectiveAnalyzer,
+    ProgrammingParadigmsAnalyzer,
+    ScientificMethodAnalyzer,
     SequentialReadinessAnalyzer,
+    # Core analyzers
+    SequentialThinkingAnalyzer,
+    # Reasoning tools
+    StructuredArgumentationAnalyzer,
     TripleConstraintAnalyzer,
+    VisualReasoningAnalyzer,
 )
-
-from .server import create_server, start_server
 
 __all__ = [
     "__version__",
@@ -41,7 +40,7 @@ __all__ = [
     "start_server",
     # Core analyzers
     "SequentialThinkingAnalyzer",
-    "MentalModelsAnalyzer", 
+    "MentalModelsAnalyzer",
     "DecisionFrameworkAnalyzer",
     "ScientificMethodAnalyzer",
     # Analysis tools

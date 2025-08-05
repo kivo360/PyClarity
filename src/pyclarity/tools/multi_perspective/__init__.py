@@ -5,23 +5,22 @@ Analyzes scenarios from multiple stakeholder viewpoints to identify
 synergies, conflicts, and create comprehensive integration strategies.
 """
 
+from .analyzer import MultiPerspectiveAnalyzer
 from .models import (
-    # Enums
-    StakeholderType,
+    ComplexityLevel,
     ConflictSeverity,
     IntegrationApproach,
-    ComplexityLevel,
-    # Supporting models
-    Perspective,
-    ViewpointAnalysis,
-    SynergyConflict,
     IntegrationStrategy,
     # Main models
     MultiPerspectiveContext,
     MultiPerspectiveResult,
+    # Supporting models
+    Perspective,
+    # Enums
+    StakeholderType,
+    SynergyConflict,
+    ViewpointAnalysis,
 )
-
-from .analyzer import MultiPerspectiveAnalyzer
 
 __all__ = [
     # Enums

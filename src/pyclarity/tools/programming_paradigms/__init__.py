@@ -5,24 +5,23 @@ Provides analysis of Object-Oriented, Functional, Procedural, and other programm
 paradigms with selection criteria, optimization guidance, and paradigm combinations.
 """
 
+from .analyzer import ProgrammingParadigmsAnalyzer
 from .models import (
+    CodeStructureAnalysis,
     # Enums
     ComplexityLevel,
-    ProgrammingParadigm,
-    ParadigmCharacteristic,
-    ProblemDomain,
-    # Supporting models
-    ParadigmProfile,
     ParadigmAnalysis,
+    ParadigmCharacteristic,
     ParadigmComparison,
     ParadigmMix,
-    CodeStructureAnalysis,
+    # Supporting models
+    ParadigmProfile,
+    ProblemDomain,
+    ProgrammingParadigm,
     # Main models
     ProgrammingParadigmsContext,
     ProgrammingParadigmsResult,
 )
-
-from .analyzer import ProgrammingParadigmsAnalyzer
 
 __all__ = [
     # Enums

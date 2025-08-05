@@ -5,9 +5,10 @@ Analyzes scenarios from multiple stakeholder viewpoints to identify
 synergies, conflicts, and create comprehensive integration strategies.
 """
 
-from typing import List, Dict, Optional, Any
-from pydantic import BaseModel, Field
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field
 
 from ..base import ComplexityLevel
 
@@ -47,7 +48,7 @@ class IntegrationApproach(str, Enum):
 
 class Perspective(BaseModel):
     """Represents a single stakeholder perspective."""
-    
+
     perspective_id: str = Field(
         description="Unique identifier for the perspective"
     )
@@ -60,11 +61,11 @@ class Perspective(BaseModel):
     description: str = Field(
         description="Description of this perspective's viewpoint"
     )
-    primary_concerns: List[str] = Field(
+    primary_concerns: list[str] = Field(
         description="Main concerns from this perspective",
         min_length=1
     )
-    success_criteria: List[str] = Field(
+    success_criteria: list[str] = Field(
         description="What success looks like from this perspective",
         min_length=1
     )
@@ -78,11 +79,11 @@ class Perspective(BaseModel):
         ge=0.0,
         le=1.0
     )
-    historical_context: Optional[str] = Field(
+    historical_context: str | None = Field(
         None,
         description="Relevant history affecting this perspective"
     )
-    cultural_factors: Optional[List[str]] = Field(
+    cultural_factors: list[str] | None = Field(
         default_factory=list,
         description="Cultural elements influencing this perspective"
     )
@@ -90,36 +91,36 @@ class Perspective(BaseModel):
 
 class ViewpointAnalysis(BaseModel):
     """Analysis of scenario from a specific perspective."""
-    
+
     perspective_id: str = Field(
         description="ID of the analyzed perspective"
     )
-    priorities: List[str] = Field(
+    priorities: list[str] = Field(
         description="Prioritized objectives from this viewpoint",
         min_length=1
     )
-    constraints: List[str] = Field(
+    constraints: list[str] = Field(
         description="Limitations and constraints perceived"
     )
-    opportunities: List[str] = Field(
+    opportunities: list[str] = Field(
         description="Opportunities seen from this perspective"
     )
-    risks: List[str] = Field(
+    risks: list[str] = Field(
         description="Risks identified from this viewpoint"
     )
     preferred_approach: str = Field(
         description="Preferred solution approach"
     )
-    acceptable_compromises: List[str] = Field(
+    acceptable_compromises: list[str] = Field(
         description="Compromises this perspective would accept"
     )
-    deal_breakers: List[str] = Field(
+    deal_breakers: list[str] = Field(
         description="Non-negotiable requirements"
     )
-    emotional_factors: List[str] = Field(
+    emotional_factors: list[str] = Field(
         description="Emotional elements affecting decisions"
     )
-    communication_preferences: List[str] = Field(
+    communication_preferences: list[str] = Field(
         description="Preferred communication styles and channels"
     )
     influence_dynamics: str = Field(
@@ -134,7 +135,7 @@ class ViewpointAnalysis(BaseModel):
 
 class SynergyConflict(BaseModel):
     """Represents either a synergy or conflict between perspectives."""
-    
+
     item_id: str = Field(
         description="Unique identifier"
     )
@@ -164,11 +165,11 @@ class SynergyConflict(BaseModel):
     mutual_benefit: bool = Field(
         description="Whether this creates mutual benefit"
     )
-    exploitation_strategy: Optional[str] = Field(
+    exploitation_strategy: str | None = Field(
         None,
         description="How to leverage synergies"
     )
-    resolution_options: Optional[List[str]] = Field(
+    resolution_options: list[str] | None = Field(
         default_factory=list,
         description="Options for resolving conflicts"
     )
@@ -176,7 +177,7 @@ class SynergyConflict(BaseModel):
 
 class IntegrationStrategy(BaseModel):
     """Strategy for integrating multiple perspectives."""
-    
+
     strategy_id: str = Field(
         description="Unique identifier for the strategy"
     )
@@ -189,17 +190,17 @@ class IntegrationStrategy(BaseModel):
     approach_type: IntegrationApproach = Field(
         description="Type of integration approach"
     )
-    target_perspectives: List[str] = Field(
+    target_perspectives: list[str] = Field(
         description="Perspectives targeted by this strategy"
     )
-    implementation_steps: List[str] = Field(
+    implementation_steps: list[str] = Field(
         description="Steps to implement the strategy",
         min_length=1
     )
-    expected_outcomes: List[str] = Field(
+    expected_outcomes: list[str] = Field(
         description="Expected results from this approach"
     )
-    resource_requirements: List[str] = Field(
+    resource_requirements: list[str] = Field(
         description="Resources needed for implementation"
     )
     timeline: str = Field(
@@ -210,10 +211,10 @@ class IntegrationStrategy(BaseModel):
         ge=0.0,
         le=1.0
     )
-    key_risks: List[str] = Field(
+    key_risks: list[str] = Field(
         description="Main risks in this approach"
     )
-    contingency_plans: Optional[List[str]] = Field(
+    contingency_plans: list[str] | None = Field(
         default_factory=list,
         description="Backup plans if primary approach fails"
     )
@@ -221,46 +222,46 @@ class IntegrationStrategy(BaseModel):
 
 class MultiPerspectiveContext(BaseModel):
     """Input for Multi-Perspective Analysis."""
-    
+
     scenario: str = Field(
         description="The situation requiring multi-perspective analysis"
     )
-    
-    domain_context: Optional[str] = Field(
+
+    domain_context: str | None = Field(
         None,
         description="Domain or industry context"
     )
-    
-    predefined_perspectives: Optional[List[Perspective]] = Field(
+
+    predefined_perspectives: list[Perspective] | None = Field(
         None,
         description="Pre-identified perspectives to analyze"
     )
-    
-    focus_areas: Optional[List[str]] = Field(
+
+    focus_areas: list[str] | None = Field(
         default_factory=list,
         description="Specific areas to focus the analysis on"
     )
-    
-    known_constraints: Optional[List[str]] = Field(
+
+    known_constraints: list[str] | None = Field(
         default_factory=list,
         description="Known constraints affecting all perspectives"
     )
-    
-    desired_outcome: Optional[str] = Field(
+
+    desired_outcome: str | None = Field(
         None,
         description="Desired outcome from integration"
     )
-    
-    time_horizon: Optional[str] = Field(
+
+    time_horizon: str | None = Field(
         None,
         description="Time frame for implementation"
     )
-    
-    cultural_context: Optional[str] = Field(
+
+    cultural_context: str | None = Field(
         None,
         description="Cultural factors to consider"
     )
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -283,66 +284,66 @@ class MultiPerspectiveContext(BaseModel):
 
 class MultiPerspectiveResult(BaseModel):
     """Complete Multi-Perspective Analysis output."""
-    
+
     input_scenario: str = Field(
         description="The analyzed scenario"
     )
-    
-    identified_perspectives: List[Perspective] = Field(
+
+    identified_perspectives: list[Perspective] = Field(
         description="All perspectives analyzed"
     )
-    
-    viewpoint_analyses: List[ViewpointAnalysis] = Field(
+
+    viewpoint_analyses: list[ViewpointAnalysis] = Field(
         description="Detailed analysis from each perspective"
     )
-    
-    synergies_conflicts: List[SynergyConflict] = Field(
+
+    synergies_conflicts: list[SynergyConflict] = Field(
         description="Identified synergies and conflicts"
     )
-    
-    integration_strategies: List[IntegrationStrategy] = Field(
+
+    integration_strategies: list[IntegrationStrategy] = Field(
         description="Strategies for integrating perspectives"
     )
-    
-    common_ground: List[str] = Field(
+
+    common_ground: list[str] = Field(
         description="Areas of agreement across perspectives"
     )
-    
-    critical_divergences: List[str] = Field(
+
+    critical_divergences: list[str] = Field(
         description="Critical areas of disagreement"
     )
-    
-    negotiation_framework: Dict[str, Any] = Field(
+
+    negotiation_framework: dict[str, Any] = Field(
         description="Framework for negotiating differences"
     )
-    
-    communication_strategies: List[str] = Field(
+
+    communication_strategies: list[str] = Field(
         description="Strategies for communicating with each perspective"
     )
-    
-    win_win_opportunities: List[str] = Field(
+
+    win_win_opportunities: list[str] = Field(
         description="Opportunities benefiting multiple stakeholders"
     )
-    
-    implementation_roadmap: List[str] = Field(
+
+    implementation_roadmap: list[str] = Field(
         description="Roadmap for implementing integrated approach"
     )
-    
+
     feasibility_assessment: str = Field(
         description="Assessment of integration feasibility"
     )
-    
+
     overall_assessment: str = Field(
         description="Comprehensive assessment of multi-perspective integration"
     )
-    
+
     confidence_score: float = Field(
         description="Confidence in the analysis (0.0-1.0)",
         ge=0.0,
         le=1.0
     )
-    
-    processing_time_ms: Optional[float] = Field(
+
+    processing_time_ms: float | None = Field(
         None,
         description="Processing time in milliseconds"
     )

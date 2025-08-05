@@ -6,10 +6,11 @@ decision analysis (MCDA), weighted scoring, risk assessment, trade-off analysis,
 decision matrices and trees, and various decision methodologies.
 """
 
-from pydantic import BaseModel, Field, field_validator, model_validator
-from typing import List, Dict, Any, Optional, Union
-from enum import Enum
 import uuid
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
+
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class ComplexityLevel(str, Enum):
@@ -22,14 +23,14 @@ class ComplexityLevel(str, Enum):
 
 class DecisionMethodType(str, Enum):
     """Available decision analysis methods"""
-    
+
     WEIGHTED_SCORING = "weighted_scoring"
     AHP = "analytical_hierarchy_process"
     TOPSIS = "topsis"
     COST_BENEFIT = "cost_benefit"
     RISK_ADJUSTED = "risk_adjusted"
     MULTI_OBJECTIVE = "multi_objective"
-    
+
     @property
     def description(self) -> str:
         """Get description of the decision method"""
@@ -46,7 +47,7 @@ class DecisionMethodType(str, Enum):
 
 class CriteriaType(str, Enum):
     """Types of decision criteria"""
-    
+
     BENEFIT = "benefit"        # Higher values are better
     COST = "cost"             # Lower values are better
     CONSTRAINT = "constraint"  # Must meet minimum threshold
@@ -55,13 +56,13 @@ class CriteriaType(str, Enum):
 
 class RiskLevel(str, Enum):
     """Risk assessment levels"""
-    
+
     VERY_LOW = "very_low"
     LOW = "low"
     MODERATE = "moderate"
     HIGH = "high"
     VERY_HIGH = "very_high"
-    
+
     @property
     def numeric_value(self) -> float:
         """Get numeric risk multiplier"""
@@ -77,48 +78,48 @@ class RiskLevel(str, Enum):
 
 class DecisionCriteria(BaseModel):
     """Individual decision criterion with weight and type"""
-    
+
     name: str = Field(
         ...,
         description="Name of the criterion",
         min_length=3,
         max_length=100
     )
-    
-    description: Optional[str] = Field(
+
+    description: str | None = Field(
         None,
         description="Detailed description of the criterion",
         max_length=300
     )
-    
+
     weight: float = Field(
         ...,
         ge=0.0,
         le=1.0,
         description="Relative weight/importance of this criterion (0-1)"
     )
-    
+
     criteria_type: CriteriaType = Field(
         CriteriaType.BENEFIT,
         description="Type of criterion (benefit, cost, constraint, preference)"
     )
-    
-    measurement_unit: Optional[str] = Field(
+
+    measurement_unit: str | None = Field(
         None,
         description="Unit of measurement for this criterion",
         max_length=50
     )
-    
-    minimum_threshold: Optional[float] = Field(
+
+    minimum_threshold: float | None = Field(
         None,
         description="Minimum acceptable value (for constraint criteria)"
     )
-    
-    maximum_threshold: Optional[float] = Field(
+
+    maximum_threshold: float | None = Field(
         None,
         description="Maximum acceptable value (for constraint criteria)"
     )
-    
+
     @field_validator('name')
     @classmethod
     def validate_name(cls, v):
@@ -130,47 +131,47 @@ class DecisionCriteria(BaseModel):
 
 class DecisionOption(BaseModel):
     """Decision alternative with scores and metadata"""
-    
+
     name: str = Field(
         ...,
         description="Name of the option",
         min_length=3,
         max_length=100
     )
-    
-    description: Optional[str] = Field(
+
+    description: str | None = Field(
         None,
         description="Detailed description of the option",
         max_length=500
     )
-    
-    scores: Dict[str, float] = Field(
+
+    scores: dict[str, float] = Field(
         ...,
         description="Scores for each criterion (criterion_name -> score)"
     )
-    
-    raw_values: Optional[Dict[str, Union[float, str]]] = Field(
+
+    raw_values: dict[str, float | str] | None = Field(
         None,
         description="Raw values before normalization"
     )
-    
-    confidence_scores: Optional[Dict[str, float]] = Field(
+
+    confidence_scores: dict[str, float] | None = Field(
         None,
         description="Confidence in each score (criterion_name -> confidence)"
     )
-    
-    risks: Optional[List[str]] = Field(
+
+    risks: list[str] | None = Field(
         None,
         description="Identified risks for this option",
-        max_items=8
+        max_length=8
     )
-    
-    assumptions: Optional[List[str]] = Field(
+
+    assumptions: list[str] | None = Field(
         None,
         description="Key assumptions for this option",
-        max_items=6
+        max_length=6
     )
-    
+
     @field_validator('name')
     @classmethod
     def validate_name(cls, v):
@@ -178,22 +179,22 @@ class DecisionOption(BaseModel):
         if not v or v.strip() == "":
             raise ValueError("Option name cannot be empty")
         return v.strip()
-    
+
     @field_validator('scores')
     @classmethod
     def validate_scores(cls, v):
         """Validate scores are reasonable (supports both 0-1 and 0-10 scales)"""
         if not v:
             raise ValueError("Scores dictionary cannot be empty")
-        
+
         for criterion, score in v.items():
-            if not isinstance(score, (int, float)):
+            if not isinstance(score, int | float):
                 raise ValueError(f"Score for '{criterion}' must be numeric")
             if not 0.0 <= score <= 10.0:
                 raise ValueError(f"Score for '{criterion}' must be between 0.0 and 10.0")
-        
+
         return v
-    
+
     @field_validator('confidence_scores')
     @classmethod
     def validate_confidence_scores(cls, v, info):
@@ -210,94 +211,94 @@ class DecisionOption(BaseModel):
 
 class DecisionMatrix(BaseModel):
     """Decision matrix with normalized scores and calculations"""
-    
-    criteria: List[str] = Field(
+
+    criteria: list[str] = Field(
         ...,
         description="List of criterion names in order",
-        min_items=2,
-        max_items=20
+        min_length=2,
+        max_length=20
     )
-    
-    options: List[str] = Field(
+
+    options: list[str] = Field(
         ...,
         description="List of option names in order",
-        min_items=2,
-        max_items=15
+        min_length=2,
+        max_length=15
     )
-    
-    scores_matrix: List[List[float]] = Field(
+
+    scores_matrix: list[list[float]] = Field(
         ...,
         description="Normalized scores matrix (options x criteria)"
     )
-    
-    weights_vector: List[float] = Field(
+
+    weights_vector: list[float] = Field(
         ...,
         description="Weights for each criterion"
     )
-    
-    weighted_scores: Optional[List[List[float]]] = Field(
+
+    weighted_scores: list[list[float]] | None = Field(
         None,
         description="Weighted scores matrix (scores * weights)"
     )
-    
-    option_totals: Optional[List[float]] = Field(
+
+    option_totals: list[float] | None = Field(
         None,
         description="Total weighted scores for each option"
     )
-    
-    rankings: Optional[List[int]] = Field(
+
+    rankings: list[int] | None = Field(
         None,
         description="Rankings of options (1 = best)"
     )
-    
+
     @field_validator('scores_matrix')
     @classmethod
     def validate_scores_matrix(cls, v, info):
         """Validate matrix dimensions and values"""
         if not v:
             raise ValueError("Scores matrix cannot be empty")
-        
+
         criteria_count = len(info.data.get('criteria', []))
         options_count = len(info.data.get('options', []))
-        
+
         if len(v) != options_count:
             raise ValueError(f"Matrix must have {options_count} rows (one per option)")
-        
+
         for i, row in enumerate(v):
             if len(row) != criteria_count:
                 raise ValueError(f"Row {i} must have {criteria_count} columns (one per criterion)")
-            
+
             for j, score in enumerate(row):
-                if not isinstance(score, (int, float)):
+                if not isinstance(score, int | float):
                     raise ValueError(f"Score at [{i}][{j}] must be numeric")
                 if not 0.0 <= score <= 10.0:
                     raise ValueError(f"Score at [{i}][{j}] must be between 0.0 and 10.0")
-        
+
         return v
-    
+
     @field_validator('weights_vector')
     @classmethod
     def validate_weights_vector(cls, v, info):
         """Validate weights sum to 1.0"""
         if not v:
             raise ValueError("Weights vector cannot be empty")
-        
+
         criteria_count = len(info.data.get('criteria', []))
         if len(v) != criteria_count:
             raise ValueError(f"Weights vector must have {criteria_count} elements")
-        
+
         for weight in v:
-            if not isinstance(weight, (int, float)):
+            if not isinstance(weight, int | float):
                 raise ValueError("All weights must be numeric")
             if not 0.0 <= weight <= 1.0:
                 raise ValueError("All weights must be between 0.0 and 1.0")
-        
+
         total_weight = sum(v)
         if not 0.95 <= total_weight <= 1.05:  # Allow small rounding errors
             raise ValueError(f"Weights must sum to 1.0 (got {total_weight:.3f})")
-        
+
         return v
-    
+
     def calculate_weighted_scores(self) -> 'DecisionMatrix':
         """Calculate weighted scores and rankings"""
         # Calculate weighted scores
@@ -305,17 +306,17 @@ class DecisionMatrix(BaseModel):
         for row in self.scores_matrix:
             weighted_row = [score * weight for score, weight in zip(row, self.weights_vector)]
             weighted_scores.append(weighted_row)
-        
+
         # Calculate option totals
         option_totals = [sum(row) for row in weighted_scores]
-        
+
         # Calculate rankings (1 = highest score)
-        sorted_indices = sorted(range(len(option_totals)), 
+        sorted_indices = sorted(range(len(option_totals)),
                               key=lambda i: option_totals[i], reverse=True)
         rankings = [0] * len(option_totals)
         for rank, index in enumerate(sorted_indices, 1):
             rankings[index] = rank
-        
+
         # Return updated instance
         self.weighted_scores = weighted_scores
         self.option_totals = option_totals
@@ -325,154 +326,154 @@ class DecisionMatrix(BaseModel):
 
 class RiskAssessment(BaseModel):
     """Risk evaluation for decision options"""
-    
+
     option_name: str = Field(
         ...,
         description="Name of the option being assessed"
     )
-    
-    risk_factors: List[Dict[str, Any]] = Field(
+
+    risk_factors: list[dict[str, Any]] = Field(
         ...,
         description="List of risk factors with details",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
-    
+
     overall_risk_level: RiskLevel = Field(
         ...,
         description="Overall risk level for this option"
     )
-    
+
     risk_score: float = Field(
         ...,
         ge=0.0,
         le=1.0,
         description="Quantified risk score (0 = no risk, 1 = maximum risk)"
     )
-    
-    mitigation_strategies: Optional[List[str]] = Field(
+
+    mitigation_strategies: list[str] | None = Field(
         None,
         description="Suggested risk mitigation strategies",
-        max_items=8
+        max_length=8
     )
-    
-    contingency_plans: Optional[List[str]] = Field(
+
+    contingency_plans: list[str] | None = Field(
         None,
         description="Contingency plans for high-risk scenarios",
-        max_items=5
+        max_length=5
     )
-    
+
     @field_validator('risk_factors')
     @classmethod
     def validate_risk_factors(cls, v):
         """Validate risk factors structure"""
         if not v:
             raise ValueError("At least one risk factor is required")
-        
+
         required_keys = ['name', 'description', 'probability', 'impact']
-        
+
         for i, factor in enumerate(v):
             if not isinstance(factor, dict):
                 raise ValueError(f"Risk factor {i} must be a dictionary")
-            
+
             missing_keys = [key for key in required_keys if key not in factor]
             if missing_keys:
                 raise ValueError(f"Risk factor {i} missing keys: {missing_keys}")
-            
+
             # Validate probability and impact are numeric and in range
             for key in ['probability', 'impact']:
                 value = factor[key]
-                if not isinstance(value, (int, float)):
+                if not isinstance(value, int | float):
                     raise ValueError(f"Risk factor {i} '{key}' must be numeric")
                 if not 0.0 <= value <= 1.0:
                     raise ValueError(f"Risk factor {i} '{key}' must be between 0.0 and 1.0")
-        
+
         return v
 
 
 class TradeOffAnalysis(BaseModel):
     """Trade-off comparison between options"""
-    
+
     option_a: str = Field(
         ...,
         description="Name of first option"
     )
-    
+
     option_b: str = Field(
         ...,
         description="Name of second option"
     )
-    
-    trade_offs: List[Dict[str, str]] = Field(
+
+    trade_offs: list[dict[str, str]] = Field(
         ...,
         description="List of trade-off comparisons",
-        min_items=1,
-        max_items=10
+        min_length=1,
+        max_length=10
     )
-    
-    winner_by_criteria: Dict[str, str] = Field(
+
+    winner_by_criteria: dict[str, str] = Field(
         ...,
         description="Which option wins for each criterion"
     )
-    
-    overall_recommendation: Optional[str] = Field(
+
+    overall_recommendation: str | None = Field(
         None,
         description="Overall recommendation based on trade-offs"
     )
-    
-    rationale: Optional[str] = Field(
+
+    rationale: str | None = Field(
         None,
         description="Explanation of the recommendation",
         max_length=500
     )
-    
+
     @field_validator('trade_offs')
     @classmethod
     def validate_trade_offs(cls, v):
         """Validate trade-offs structure"""
         if not v:
             raise ValueError("At least one trade-off is required")
-        
+
         required_keys = ['criterion', 'option_a_value', 'option_b_value', 'analysis']
-        
+
         for i, trade_off in enumerate(v):
             if not isinstance(trade_off, dict):
                 raise ValueError(f"Trade-off {i} must be a dictionary")
-            
+
             missing_keys = [key for key in required_keys if key not in trade_off]
             if missing_keys:
                 raise ValueError(f"Trade-off {i} missing keys: {missing_keys}")
-        
+
         return v
 
 
 class SensitivityAnalysis(BaseModel):
     """Sensitivity analysis for decision robustness"""
-    
-    base_scenario: Dict[str, float] = Field(
+
+    base_scenario: dict[str, float] = Field(
         ...,
         description="Base case option scores"
     )
-    
-    weight_variations: List[Dict[str, Any]] = Field(
+
+    weight_variations: list[dict[str, Any]] = Field(
         ...,
         description="Results under different weight scenarios",
-        min_items=1,
-        max_items=20
+        min_length=1,
+        max_length=20
     )
-    
-    threshold_analysis: Optional[Dict[str, float]] = Field(
+
+    threshold_analysis: dict[str, float] | None = Field(
         None,
         description="Weight thresholds where ranking changes"
     )
-    
+
     robustness_score: float = Field(
         ...,
         ge=0.0,
         le=1.0,
         description="How robust the decision is to weight changes"
     )
-    
+
     stability_assessment: str = Field(
         ...,
         description="Assessment of decision stability"
@@ -481,71 +482,71 @@ class SensitivityAnalysis(BaseModel):
 
 class DecisionFrameworkContext(BaseModel):
     """Context for decision framework analysis"""
-    
+
     problem: str = Field(
         ...,
         description="The decision problem or question to analyze",
         min_length=20,
         max_length=2000
     )
-    
+
     decision_method: DecisionMethodType = Field(
         DecisionMethodType.WEIGHTED_SCORING,
         description="Decision analysis method to use"
     )
-    
-    criteria: List[DecisionCriteria] = Field(
+
+    criteria: list[DecisionCriteria] = Field(
         ...,
         description="Decision criteria with weights",
-        min_items=2,
-        max_items=20
+        min_length=2,
+        max_length=20
     )
-    
-    options: List[DecisionOption] = Field(
+
+    options: list[DecisionOption] = Field(
         ...,
         description="Decision options to evaluate",
-        min_items=2,
-        max_items=15
+        min_length=2,
+        max_length=15
     )
-    
+
     complexity_level: ComplexityLevel = Field(
         ComplexityLevel.MODERATE,
         description="Complexity level of analysis to perform"
     )
-    
+
     include_risk_analysis: bool = Field(
         True,
         description="Whether to include risk assessment"
     )
-    
+
     include_sensitivity_analysis: bool = Field(
         False,
         description="Whether to perform sensitivity analysis"
     )
-    
+
     include_trade_off_analysis: bool = Field(
         True,
         description="Whether to include trade-off analysis"
     )
-    
-    decision_timeline: Optional[str] = Field(
+
+    decision_timeline: str | None = Field(
         None,
         description="Timeline for making the decision",
         max_length=100
     )
-    
-    stakeholders: Optional[List[str]] = Field(
+
+    stakeholders: list[str] | None = Field(
         None,
         description="Key stakeholders in the decision",
-        max_items=10
+        max_length=10
     )
-    
-    constraints: Optional[List[str]] = Field(
+
+    constraints: list[str] | None = Field(
         None,
         description="Hard constraints or limitations",
-        max_items=8
+        max_length=8
     )
-    
+
     @field_validator('problem')
     @classmethod
     def validate_problem(cls, v):
@@ -554,192 +555,192 @@ class DecisionFrameworkContext(BaseModel):
         if len(v) < 20:
             raise ValueError("Problem description must be at least 20 characters")
         return v
-    
+
     @model_validator(mode='after')
     def validate_criteria_weights(self):
         """Validate criteria weights sum to approximately 1.0"""
         if not self.criteria:
             raise ValueError("At least 2 criteria are required")
-        
+
         total_weight = sum(criterion.weight for criterion in self.criteria)
         if not 0.95 <= total_weight <= 1.05:  # Allow small rounding errors
             raise ValueError(f"Criteria weights must sum to 1.0 (got {total_weight:.3f})")
-        
+
         # Check for duplicate criterion names
         names = [criterion.name.lower() for criterion in self.criteria]
         if len(names) != len(set(names)):
             raise ValueError("Criterion names must be unique")
-        
+
         return self
-    
+
     @model_validator(mode='after')
     def validate_options_completeness(self):
         """Validate options have scores for all criteria"""
         if not self.options:
             raise ValueError("At least 2 options are required")
-        
+
         criterion_names = {criterion.name for criterion in self.criteria}
-        
+
         for option in self.options:
             option_criteria = set(option.scores.keys())
             missing_criteria = criterion_names - option_criteria
             if missing_criteria:
                 raise ValueError(f"Option '{option.name}' missing scores for: {missing_criteria}")
-            
+
             extra_criteria = option_criteria - criterion_names
             if extra_criteria:
                 raise ValueError(f"Option '{option.name}' has scores for unknown criteria: {extra_criteria}")
-        
+
         # Check for duplicate option names
         names = [option.name.lower() for option in self.options]
         if len(names) != len(set(names)):
             raise ValueError("Option names must be unique")
-        
+
         return self
 
 
 class DecisionFrameworkResult(BaseModel):
     """Result of decision framework analysis"""
-    
+
     method_used: DecisionMethodType = Field(
         ...,
         description="Decision method that was applied"
     )
-    
+
     decision_matrix: DecisionMatrix = Field(
         ...,
         description="Complete decision matrix with calculations"
     )
-    
+
     recommended_option: str = Field(
         ...,
         description="Name of the recommended option"
     )
-    
-    option_rankings: List[Dict[str, Any]] = Field(
+
+    option_rankings: list[dict[str, Any]] = Field(
         ...,
         description="Ranked list of options with scores",
-        min_items=2
+        min_length=2
     )
-    
-    key_insights: List[str] = Field(
+
+    key_insights: list[str] = Field(
         ...,
         description="Key insights from the analysis",
-        min_items=1,
-        max_items=8
+        min_length=1,
+        max_length=8
     )
-    
-    risk_assessments: Optional[List[RiskAssessment]] = Field(
+
+    risk_assessments: list[RiskAssessment] | None = Field(
         None,
         description="Risk assessments for each option"
     )
-    
-    trade_off_analyses: Optional[List[TradeOffAnalysis]] = Field(
+
+    trade_off_analyses: list[TradeOffAnalysis] | None = Field(
         None,
         description="Trade-off analyses between top options"
     )
-    
-    sensitivity_analysis: Optional[SensitivityAnalysis] = Field(
+
+    sensitivity_analysis: SensitivityAnalysis | None = Field(
         None,
         description="Sensitivity analysis results"
     )
-    
+
     decision_rationale: str = Field(
         ...,
         description="Detailed rationale for the recommendation",
         min_length=100,
         max_length=1000
     )
-    
-    implementation_considerations: Optional[List[str]] = Field(
+
+    implementation_considerations: list[str] | None = Field(
         None,
         description="Key considerations for implementing the decision",
-        max_items=8
+        max_length=8
     )
-    
-    monitoring_metrics: Optional[List[str]] = Field(
+
+    monitoring_metrics: list[str] | None = Field(
         None,
         description="Metrics to monitor after implementation",
-        max_items=6
+        max_length=6
     )
-    
-    alternative_scenarios: Optional[List[str]] = Field(
+
+    alternative_scenarios: list[str] | None = Field(
         None,
         description="Alternative scenarios to consider",
-        max_items=5
+        max_length=5
     )
-    
-    confidence_factors: Optional[Dict[str, float]] = Field(
+
+    confidence_factors: dict[str, float] | None = Field(
         None,
         description="Confidence scores for different aspects of the analysis"
     )
-    
+
     processing_time_ms: int = Field(
         0,
         description="Time taken to process in milliseconds"
     )
-    
+
     @field_validator('option_rankings')
     @classmethod
     def validate_option_rankings(cls, v):
         """Validate option rankings structure"""
         if not v:
             raise ValueError("Option rankings cannot be empty")
-        
+
         required_keys = ['option', 'score', 'rank']
-        
+
         for i, ranking in enumerate(v):
             if not isinstance(ranking, dict):
                 raise ValueError(f"Ranking {i} must be a dictionary")
-            
+
             missing_keys = [key for key in required_keys if key not in ranking]
             if missing_keys:
                 raise ValueError(f"Ranking {i} missing keys: {missing_keys}")
-            
+
             # Validate score is numeric and in range
             score = ranking.get('score')
-            if not isinstance(score, (int, float)):
+            if not isinstance(score, int | float):
                 raise ValueError(f"Ranking {i} score must be numeric")
             if not 0.0 <= score <= 10.0:
                 raise ValueError(f"Ranking {i} score must be between 0.0 and 10.0")
-            
+
             # Validate rank is positive integer
             rank = ranking.get('rank')
             if not isinstance(rank, int) or rank < 1:
                 raise ValueError(f"Ranking {i} rank must be positive integer")
-        
+
         # Sort by rank
         return sorted(v, key=lambda x: x['rank'])
-    
+
     @field_validator('decision_rationale')
     @classmethod
     def validate_decision_rationale(cls, v):
         """Validate rationale is comprehensive"""
         if not v or not v.strip():
             raise ValueError("Decision rationale cannot be empty")
-        
+
         cleaned = ' '.join(v.split())
-        
+
         if len(cleaned) < 100:
             raise ValueError("Decision rationale must be at least 100 characters")
-        
+
         return cleaned
-    
-    def get_top_options(self, n: int = 3) -> List[Dict[str, Any]]:
+
+    def get_top_options(self, n: int = 3) -> list[dict[str, Any]]:
         """Get top N options by ranking"""
         return self.option_rankings[:n]
-    
-    def get_option_score(self, option_name: str) -> Optional[float]:
+
+    def get_option_score(self, option_name: str) -> float | None:
         """Get score for a specific option"""
         for ranking in self.option_rankings:
             if ranking['option'] == option_name:
                 return ranking['score']
         return None
-    
-    def get_decision_summary(self) -> Dict[str, Any]:
+
+    def get_decision_summary(self) -> dict[str, Any]:
         """Get concise decision summary"""
         top_option = self.option_rankings[0] if self.option_rankings else None
-        
+
         return {
             'recommended_option': self.recommended_option,
             'method_used': self.method_used.value,
@@ -753,89 +754,89 @@ class DecisionFrameworkResult(BaseModel):
 # Utility functions for decision framework processing
 class DecisionFrameworkUtils:
     """Utility functions for decision framework processing"""
-    
+
     @staticmethod
-    def normalize_scores(scores: List[float], criteria_type: CriteriaType) -> List[float]:
+    def normalize_scores(scores: list[float], criteria_type: CriteriaType) -> list[float]:
         """Normalize scores to 0-1 range based on criteria type"""
         if not scores:
             return scores
-        
+
         min_score = min(scores)
         max_score = max(scores)
-        
+
         if min_score == max_score:
             return [0.5] * len(scores)  # All equal
-        
+
         if criteria_type == CriteriaType.COST:
             # For cost criteria, lower is better - invert the normalization
             return [(max_score - score) / (max_score - min_score) for score in scores]
         else:
             # For benefit criteria, higher is better
             return [(score - min_score) / (max_score - min_score) for score in scores]
-    
+
     @staticmethod
     def calculate_topsis_scores(
         decision_matrix: DecisionMatrix,
-        criteria_types: List[CriteriaType]
-    ) -> List[float]:
+        criteria_types: list[CriteriaType]
+    ) -> list[float]:
         """Calculate TOPSIS scores for options"""
         scores_matrix = decision_matrix.scores_matrix
         weights = decision_matrix.weights_vector
-        
+
         # Weighted normalized matrix
         weighted_matrix = []
         for row in scores_matrix:
             weighted_row = [score * weight for score, weight in zip(row, weights)]
             weighted_matrix.append(weighted_row)
-        
+
         # Ideal and negative ideal solutions
         ideal_solution = []
         negative_ideal_solution = []
-        
+
         for j in range(len(weights)):
             column_values = [weighted_matrix[i][j] for i in range(len(weighted_matrix))]
-            
+
             if criteria_types[j] == CriteriaType.COST:
                 ideal_solution.append(min(column_values))
                 negative_ideal_solution.append(max(column_values))
             else:
                 ideal_solution.append(max(column_values))
                 negative_ideal_solution.append(min(column_values))
-        
+
         # Calculate distances and TOPSIS scores
         topsis_scores = []
         for i in range(len(weighted_matrix)):
             # Distance to ideal solution
-            dist_ideal = sum((weighted_matrix[i][j] - ideal_solution[j]) ** 2 
+            dist_ideal = sum((weighted_matrix[i][j] - ideal_solution[j]) ** 2
                            for j in range(len(weights))) ** 0.5
-            
+
             # Distance to negative ideal solution
-            dist_negative = sum((weighted_matrix[i][j] - negative_ideal_solution[j]) ** 2 
+            dist_negative = sum((weighted_matrix[i][j] - negative_ideal_solution[j]) ** 2
                               for j in range(len(weights))) ** 0.5
-            
+
             # TOPSIS score
             if dist_ideal + dist_negative == 0:
                 topsis_score = 0.5
             else:
                 topsis_score = dist_negative / (dist_ideal + dist_negative)
-            
+
             topsis_scores.append(topsis_score)
-        
+
         return topsis_scores
-    
+
     @staticmethod
     def validate_decision_consistency(
-        criteria: List[DecisionCriteria],
-        options: List[DecisionOption]
-    ) -> List[str]:
+        criteria: list[DecisionCriteria],
+        options: list[DecisionOption]
+    ) -> list[str]:
         """Validate consistency of decision inputs"""
         issues = []
-        
+
         # Check weight consistency
         total_weight = sum(criterion.weight for criterion in criteria)
         if not 0.95 <= total_weight <= 1.05:
             issues.append(f"Criteria weights sum to {total_weight:.3f}, should be 1.0")
-        
+
         # Check score completeness
         criterion_names = {criterion.name for criterion in criteria}
         for option in options:
@@ -843,17 +844,17 @@ class DecisionFrameworkUtils:
             missing = criterion_names - option_criteria
             if missing:
                 issues.append(f"Option '{option.name}' missing scores for: {missing}")
-        
+
         # Check for unrealistic confidence combinations
         for option in options:
             if option.confidence_scores:
-                low_confidence_count = sum(1 for conf in option.confidence_scores.values() 
+                low_confidence_count = sum(1 for conf in option.confidence_scores.values()
                                          if conf < 0.3)
                 if low_confidence_count > len(option.confidence_scores) * 0.5:
                     issues.append(f"Option '{option.name}' has low confidence in >50% of scores")
-        
+
         return issues
-    
+
     @staticmethod
     def suggest_decision_method(
         criteria_count: int,
@@ -862,17 +863,17 @@ class DecisionFrameworkUtils:
         complexity_level: ComplexityLevel
     ) -> DecisionMethodType:
         """Suggest appropriate decision method based on problem characteristics"""
-        
+
         if complexity_level == ComplexityLevel.SIMPLE and criteria_count <= 5:
             return DecisionMethodType.WEIGHTED_SCORING
-        
+
         if has_uncertainty:
             return DecisionMethodType.RISK_ADJUSTED
-        
+
         if criteria_count > 8 or options_count > 10:
             return DecisionMethodType.TOPSIS
-        
+
         if complexity_level == ComplexityLevel.COMPLEX:
             return DecisionMethodType.AHP
-        
+
         return DecisionMethodType.WEIGHTED_SCORING

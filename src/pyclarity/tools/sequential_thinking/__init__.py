@@ -1,23 +1,22 @@
 """
 Sequential Thinking Cognitive Tool
 
-Step-by-step problem decomposition and reasoning with dynamic thought 
+Step-by-step problem decomposition and reasoning with dynamic thought
 progression, branching capabilities, and revision tracking.
 """
 
+from .analyzer import SequentialThinkingAnalyzer
 from .models import (
-    ComplexityLevel,
-    ThoughtStepType,
     BranchStrategy,
-    ThoughtStepStatus,
-    ThoughtStep,
-    ThoughtRevision,
-    ThoughtBranch,
+    ComplexityLevel,
     SequentialThinkingContext,
     SequentialThinkingResult,
+    ThoughtBranch,
+    ThoughtRevision,
+    ThoughtStep,
+    ThoughtStepStatus,
+    ThoughtStepType,
 )
-
-from .analyzer import SequentialThinkingAnalyzer
 
 __all__ = [
     # Enums
@@ -27,7 +26,7 @@ __all__ = [
     "ThoughtStepStatus",
     # Models
     "ThoughtStep",
-    "ThoughtRevision", 
+    "ThoughtRevision",
     "ThoughtBranch",
     "SequentialThinkingContext",
     "SequentialThinkingResult",

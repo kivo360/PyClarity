@@ -1,1 +1,0 @@
-# Clear Thinking FastMCP Server - Tests Package
