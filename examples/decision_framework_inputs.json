@@ -1,0 +1,163 @@
+{
+  "tool_name": "decision_framework",
+  "description": "Evaluate complex decisions using multiple criteria and weighted scoring",
+  "examples": [
+    {
+      "name": "hire_senior_engineer",
+      "description": "Evaluate candidates for a senior engineering position",
+      "input": {
+        "decision": "Choose between three senior engineer candidates",
+        "options": [
+          {
+            "name": "Candidate A",
+            "description": "10 years experience, strong technical skills, startup background"
+          },
+          {
+            "name": "Candidate B",
+            "description": "8 years experience, excellent leadership, enterprise background"
+          },
+          {
+            "name": "Candidate C",
+            "description": "6 years experience, AI/ML specialist, academic background"
+          }
+        ],
+        "criteria": [
+          {
+            "name": "Technical Skills",
+            "weight": 0.3,
+            "description": "Depth and breadth of technical expertise"
+          },
+          {
+            "name": "Team Fit",
+            "weight": 0.25,
+            "description": "Cultural alignment and collaboration potential"
+          },
+          {
+            "name": "Leadership Potential",
+            "weight": 0.2,
+            "description": "Ability to mentor and guide others"
+          },
+          {
+            "name": "Domain Expertise",
+            "weight": 0.15,
+            "description": "Relevant industry and problem domain knowledge"
+          },
+          {
+            "name": "Growth Potential",
+            "weight": 0.1,
+            "description": "Capacity for learning and adaptation"
+          }
+        ],
+        "context": {
+          "team_size": 12,
+          "current_needs": ["technical leadership", "AI expertise"],
+          "company_stage": "Series B startup"
+        }
+      }
+    },
+    {
+      "name": "technology_stack",
+      "description": "Choose technology stack for new project",
+      "input": {
+        "decision": "Select the primary technology stack for our new real-time analytics platform",
+        "options": [
+          {
+            "name": "Node.js + TypeScript + PostgreSQL",
+            "description": "Familiar stack with strong team expertise"
+          },
+          {
+            "name": "Go + ClickHouse + Kafka",
+            "description": "Performant stack optimized for real-time processing"
+          },
+          {
+            "name": "Rust + ScyllaDB + Pulsar",
+            "description": "Cutting-edge stack with maximum performance"
+          }
+        ],
+        "criteria": [
+          {
+            "name": "Performance",
+            "weight": 0.25
+          },
+          {
+            "name": "Team Expertise",
+            "weight": 0.25
+          },
+          {
+            "name": "Ecosystem Maturity",
+            "weight": 0.2
+          },
+          {
+            "name": "Operational Complexity",
+            "weight": 0.15
+          },
+          {
+            "name": "Long-term Maintainability",
+            "weight": 0.15
+          }
+        ],
+        "constraints": [
+          "Must handle 1M events/second",
+          "Team has 6 months to deliver",
+          "Limited ops support available"
+        ]
+      }
+    },
+    {
+      "name": "market_expansion",
+      "description": "Decide which market to expand into next",
+      "input": {
+        "decision": "Choose the next geographic market for expansion",
+        "options": [
+          {
+            "name": "European Union",
+            "description": "Large market, GDPR compliance required, competitive landscape"
+          },
+          {
+            "name": "Southeast Asia",
+            "description": "Fast-growing market, diverse regulations, mobile-first users"
+          },
+          {
+            "name": "Latin America",
+            "description": "Emerging market, payment infrastructure challenges, high growth potential"
+          }
+        ],
+        "criteria": [
+          {
+            "name": "Market Size",
+            "weight": 0.2
+          },
+          {
+            "name": "Growth Rate",
+            "weight": 0.2
+          },
+          {
+            "name": "Regulatory Complexity",
+            "weight": 0.15
+          },
+          {
+            "name": "Competition",
+            "weight": 0.15
+          },
+          {
+            "name": "Cultural Fit",
+            "weight": 0.1
+          },
+          {
+            "name": "Infrastructure Readiness",
+            "weight": 0.1
+          },
+          {
+            "name": "Partnership Opportunities",
+            "weight": 0.1
+          }
+        ],
+        "scoring_guidance": {
+          "use_data": true,
+          "confidence_intervals": true,
+          "sensitivity_analysis": true
+        }
+      }
+    }
+  ]
+}

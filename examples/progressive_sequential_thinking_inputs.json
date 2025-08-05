@@ -1,0 +1,107 @@
+{
+  "tool_name": "progressive_sequential_thinking",
+  "description": "Process thoughts one at a time with session state persistence",
+  "examples": [
+    {
+      "name": "simple_problem_solving",
+      "description": "Basic step-by-step problem decomposition",
+      "input": {
+        "thought": "Let me analyze this problem step by step. The key components appear to be user retention, feature adoption, and overall satisfaction metrics.",
+        "thought_number": 1,
+        "total_thoughts": 5,
+        "next_thought_needed": true
+      }
+    },
+    {
+      "name": "continue_analysis",
+      "description": "Continue from a previous thought in an existing session",
+      "input": {
+        "session_id": "550e8400-e29b-41d4-a716-446655440000",
+        "thought": "Building on my previous analysis, I can see three main factors affecting the outcome: technical complexity, user experience design, and market timing.",
+        "thought_number": 2,
+        "total_thoughts": 5,
+        "next_thought_needed": true
+      }
+    },
+    {
+      "name": "branch_exploration",
+      "description": "Create a branch to explore an alternative hypothesis",
+      "input": {
+        "session_id": "550e8400-e29b-41d4-a716-446655440000",
+        "thought": "Let me explore an alternative hypothesis: What if the issue isn't with our product features but with our onboarding process?",
+        "thought_number": 3,
+        "total_thoughts": 7,
+        "branch_from_thought": 2,
+        "branch_id": "onboarding-hypothesis",
+        "next_thought_needed": true
+      }
+    },
+    {
+      "name": "thought_revision",
+      "description": "Revise a previous thought based on new information",
+      "input": {
+        "session_id": "550e8400-e29b-41d4-a716-446655440000",
+        "thought": "Upon further reflection and new data, I need to revise my earlier assessment. The user experience design is actually performing well; the issue is primarily with feature discoverability.",
+        "thought_number": 4,
+        "total_thoughts": 6,
+        "is_revision": true,
+        "revises_thought": 2,
+        "next_thought_needed": true
+      }
+    },
+    {
+      "name": "final_conclusion",
+      "description": "Conclude the thinking session with actionable insights",
+      "input": {
+        "session_id": "550e8400-e29b-41d4-a716-446655440000",
+        "thought": "Based on my analysis, here are the key recommendations: 1) Simplify the onboarding flow, 2) Add contextual feature hints, 3) Implement progressive disclosure for advanced features. Expected improvement: 35-40% in user activation.",
+        "thought_number": 5,
+        "total_thoughts": 5,
+        "next_thought_needed": false
+      }
+    },
+    {
+      "name": "complex_branching",
+      "description": "Multiple branches exploring different aspects",
+      "input": {
+        "session_id": "550e8400-e29b-41d4-a716-446655440000",
+        "thought": "Let me also consider the technical architecture angle. Perhaps our microservices design is creating latency that affects user perception.",
+        "thought_number": 4,
+        "total_thoughts": 8,
+        "branch_from_thought": 1,
+        "branch_id": "technical-architecture",
+        "next_thought_needed": true,
+        "metadata": {
+          "analysis_type": "technical",
+          "priority": "high"
+        }
+      }
+    },
+    {
+      "name": "evidence_based_thinking",
+      "description": "Thought with supporting evidence and confidence adjustment",
+      "input": {
+        "session_id": "550e8400-e29b-41d4-a716-446655440000",
+        "thought": "The data strongly supports my hypothesis. User surveys show 73% cite 'confusing interface' as their primary concern. This gives me high confidence in the UX-focused solution.",
+        "thought_number": 3,
+        "total_thoughts": 5,
+        "next_thought_needed": true,
+        "metadata": {
+          "evidence_strength": "strong",
+          "data_sources": ["user_surveys", "analytics", "support_tickets"]
+        }
+      }
+    },
+    {
+      "name": "exploratory_thinking",
+      "description": "Open-ended exploration needing more thoughts",
+      "input": {
+        "thought": "This problem is more complex than initially anticipated. I'll need to explore multiple dimensions including technical, business, and user experience aspects.",
+        "thought_number": 1,
+        "total_thoughts": 3,
+        "needs_more_thoughts": true,
+        "next_thought_needed": true
+      }
+    }
+  ]
+}

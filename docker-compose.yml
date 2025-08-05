@@ -6,6 +6,30 @@ services:
     volumes:
       - ..:/workspaces
       - command-history-volume:/home/user/.history/
+    environment:
+      - DATABASE_URL=postgresql://pyclarity:pyclarity@postgres:5432/pyclarity
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pyclarity
+      POSTGRES_PASSWORD: pyclarity
+      POSTGRES_DB: pyclarity
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pyclarity"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   command-history-volume:
+  postgres_data:

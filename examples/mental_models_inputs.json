@@ -1,0 +1,61 @@
+{
+  "tool_name": "mental_models",
+  "description": "Apply different mental models to analyze situations from multiple perspectives",
+  "examples": [
+    {
+      "name": "product_strategy",
+      "description": "Analyze a product strategy decision using multiple models",
+      "input": {
+        "situation": "We need to decide whether to add AI features to our existing project management tool. Competitors are rapidly adding AI, but our core users value simplicity.",
+        "models": ["first_principles", "second_order_effects", "opportunity_cost"],
+        "depth": "comprehensive"
+      }
+    },
+    {
+      "name": "team_conflict",
+      "description": "Understanding team dynamics and conflict resolution",
+      "input": {
+        "situation": "Two senior engineers on the team have conflicting architectural visions. One favors microservices, the other advocates for a monolith. This is causing delays.",
+        "models": ["incentives", "game_theory", "systems_thinking"],
+        "specific_questions": [
+          "What are the underlying incentives driving each position?",
+          "How might this conflict actually benefit the team long-term?"
+        ]
+      }
+    },
+    {
+      "name": "market_entry",
+      "description": "Evaluate market entry strategy",
+      "input": {
+        "situation": "Considering expanding our B2B SaaS into the Asian market. We have strong product-market fit in the US but no local presence or cultural expertise.",
+        "models": ["circle_of_competence", "margin_of_safety", "asymmetric_risk_reward", "local_global_maxima"]
+      }
+    },
+    {
+      "name": "technical_debt",
+      "description": "Analyze technical debt trade-offs",
+      "input": {
+        "situation": "Our codebase has accumulated significant technical debt. We can either spend 3 months refactoring or continue adding features with increasing difficulty.",
+        "models": ["compound_interest", "opportunity_cost", "reversible_irreversible", "technical_debt_quadrant"],
+        "constraints": {
+          "timeline": "6 months to next funding round",
+          "team_size": 8,
+          "current_velocity": "decreasing 5% monthly"
+        }
+      }
+    },
+    {
+      "name": "innovation_paradox",
+      "description": "Navigate the innovator's dilemma",
+      "input": {
+        "situation": "Our profitable enterprise product is being threatened by simpler, cheaper alternatives. Should we cannibalize our own product?",
+        "models": ["innovators_dilemma", "jobs_to_be_done", "disruption_theory", "S_curves"],
+        "context": {
+          "market_share": "35%",
+          "profit_margin": "68%",
+          "customer_churn": "increasing"
+        }
+      }
+    }
+  ]
+}
