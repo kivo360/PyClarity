@@ -9,6 +9,7 @@ from rich.console import Console
 
 from pyclarity.config import MCPConfig
 from pyclarity.server.mcp_server import PyClarityMCPServer
+from pyclarity.cli_examples import examples_command
 
 app = typer.Typer(help="PyClarity - Cognitive Tools for Strategic Thinking")
 console = Console()
@@ -121,3 +122,7 @@ def analyze(
     # This would integrate with the actual analyzers
     console.print("[yellow]Analysis functionality coming soon![/yellow]")
     console.print("[dim]For now, use the MCP server mode: pyclarity server[/dim]")
+
+
+# Add the examples command to the CLI
+app.command(name="examples")(examples_command)
