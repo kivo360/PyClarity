@@ -97,7 +97,7 @@ class MemoryThoughtStore(BaseThoughtStore):
         """Save a new thought."""
         thought_data.id = self._next_id
         self._next_id += 1
-        key = f"{thought_data.session_id}:{thought_data.step_number}"
+        key = f"{thought_data.session_id}:{thought_data.thought_number}"
         self._thoughts[key] = thought_data
         return thought_data
     
@@ -108,9 +108,9 @@ class MemoryThoughtStore(BaseThoughtStore):
                 return thought
         return None
     
-    async def get_thought_by_step(self, session_id: str, step_number: int) -> Optional[ThoughtData]:
-        """Get a specific thought by session and step."""
-        key = f"{session_id}:{step_number}"
+    async def get_thought_by_step(self, session_id: str, thought_number: int) -> Optional[ThoughtData]:
+        """Get a specific thought by session and thought number."""
+        key = f"{session_id}:{thought_number}"
         return self._thoughts.get(key)
     
     async def get_session_thoughts(self, session_id: str, branch_id: Optional[str] = None) -> List[ThoughtData]:
@@ -193,5 +193,5 @@ class MemoryThoughtStore(BaseThoughtStore):
             t for t in self._thoughts.values()
             if t.session_id == session_id and t.branch_id == branch_id
         ]
-        thoughts.sort(key=lambda t: t.step_number)
+        thoughts.sort(key=lambda t: t.thought_number)
         return thoughts

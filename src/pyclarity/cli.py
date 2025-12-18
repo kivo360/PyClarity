@@ -93,17 +93,24 @@ def server(
 @app.command()
 def list_tools() -> None:
     """List all available cognitive tools."""
-    from pyclarity.tools import __all__
-
-    console.print("[bold blue]PyClarity Cognitive Tools[/bold blue]")
-    console.print("\n[bold]Analyzers:[/bold]")
-
-    analyzers = [tool for tool in __all__ if tool.endswith("Analyzer")]
-    for analyzer in sorted(analyzers):
-        tool_name = analyzer.replace("Analyzer", "").replace("_", " ").title()
-        console.print(f"  • {tool_name}")
-
-    console.print(f"\n[dim]Total: {len(analyzers)} cognitive tools available[/dim]")
+    try:
+        server = PyClarityMCPServer()
+        tools = server.tools.tools
+        
+        console.print("[bold blue]PyClarity Cognitive Tools[/bold blue]")
+        console.print("\n[bold]Analyzers:[/bold]")
+        
+        for tool_name, tool in sorted(tools.items()):
+            # Format tool name nicely
+            display_name = tool_name.replace("_", " ").title()
+            description = getattr(tool, 'description', 'No description available')
+            console.print(f"  • [bold]{display_name}[/bold]: {description}")
+        
+        console.print(f"\n[dim]Total: {len(tools)} cognitive tools available[/dim]")
+        
+    except Exception as e:
+        console.print(f"[red]Error loading tools: {e}[/red]")
+        console.print("[dim]Total: 0 cognitive tools available[/dim]")
 
 
 @app.command()
